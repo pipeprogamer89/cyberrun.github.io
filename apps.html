@@ -13,15 +13,14 @@
         }
 
         :root {
-            --neon-cyan: #00f3ff;
-            --neon-pink: #ff00ff;
-            --neon-purple: #bd00ff;
-            --neon-yellow: #ffee00;
-            --dark-bg: #0a0a0a;
-            --darker-bg: #050505;
-            --card-bg: rgba(25, 25, 35, 0.6);
-            --text-color: #ffffff;
-            --text-glow: 0 0 10px currentColor, 0 0 20px currentColor;
+            --primary-blue: #0066cc;
+            --primary-purple: #8a2be2;
+            --accent-teal: #20b2aa;
+            --dark-bg: #121212;
+            --darker-bg: #0a0a0a;
+            --card-bg: rgba(40, 40, 50, 0.8);
+            --text-color: #f0f0f0;
+            --text-secondary: #b0b0b0;
         }
 
         body {
@@ -31,26 +30,22 @@
             overflow-x: hidden;
             line-height: 1.6;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(189, 0, 255, 0.1) 0%, transparent 30%),
-                radial-gradient(circle at 90% 70%, rgba(0, 243, 255, 0.1) 0%, transparent 30%),
                 linear-gradient(to bottom, var(--darker-bg) 0%, var(--dark-bg) 100%);
             min-height: 100vh;
         }
 
-        /* Scrollbar cyberpunk */
+        /* Scrollbar optimizado */
         ::-webkit-scrollbar {
-            width: 12px;
+            width: 10px;
         }
 
         ::-webkit-scrollbar-track {
             background: var(--darker-bg);
-            box-shadow: inset 0 0 6px rgba(0, 243, 255, 0.3);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            border-radius: 6px;
-            border: 2px solid var(--darker-bg);
+            background: var(--primary-blue);
+            border-radius: 4px;
         }
 
         /* Header estilizado */
@@ -59,12 +54,11 @@
             width: 100%;
             top: 0;
             padding: 20px 50px;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
             transition: all 0.3s ease;
-            border-bottom: 1px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            border-bottom: 1px solid var(--primary-blue);
         }
 
         nav {
@@ -78,18 +72,8 @@
         .logo {
             font-size: 28px;
             font-weight: bold;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: var(--text-glow);
-            animation: pulse 3s infinite;
+            color: var(--primary-blue);
             letter-spacing: 1px;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
         }
 
         .nav-links {
@@ -116,16 +100,15 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-pink));
+            background: var(--primary-blue);
             transition: width 0.3s ease;
-            box-shadow: 0 0 8px var(--neon-cyan);
         }
 
         .nav-links a:hover::after {
             width: 100%;
         }
 
-        /* Hero Section futurista */
+        /* Hero Section optimizada */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -136,84 +119,26 @@
             overflow: hidden;
         }
 
-        .cyber-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            perspective: 1000px;
-            z-index: -1;
-        }
-
-        .cyber-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            box-shadow: 0 0 20px var(--neon-cyan);
-            animation: scanline 4s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { bottom: 100%; }
-            100% { bottom: -10px; }
-        }
-
         .hero-content {
             text-align: center;
             max-width: 900px;
-            animation: fadeInUp 1.5s ease;
             z-index: 2;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         h1 {
-            font-size: 5em;
+            font-size: 4em;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple), var(--neon-yellow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            background-size: 300% auto;
-            animation: gradient 5s linear infinite, glow 2s ease-in-out infinite alternate;
+            color: var(--primary-blue);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-weight: 900;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(0, 243, 255, 0.7); }
-            to { text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 30px rgba(255, 0, 255, 0.5); }
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .subtitle {
             font-size: 1.5em;
-            color: #ccc;
+            color: var(--text-secondary);
             margin-bottom: 40px;
-            text-shadow: 0 0 10px rgba(204, 204, 204, 0.7);
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         /* Apps Section */
@@ -225,14 +150,10 @@
         }
 
         h2 {
-            font-size: 3.5em;
+            font-size: 3em;
             text-align: center;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: var(--text-glow);
+            color: var(--primary-blue);
             text-transform: uppercase;
             letter-spacing: 2px;
             position: relative;
@@ -248,16 +169,14 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
-            box-shadow: 0 0 15px var(--neon-pink);
+            background: var(--primary-blue);
         }
 
         .section-subtitle {
             text-align: center;
-            color: #aaa;
+            color: var(--text-secondary);
             margin-bottom: 80px;
             font-size: 1.2em;
-            text-shadow: 0 0 10px rgba(170, 170, 170, 0.5);
             letter-spacing: 1px;
         }
 
@@ -271,65 +190,34 @@
 
         .app-card {
             background: var(--card-bg);
-            border: 1px solid rgba(0, 243, 255, 0.3);
+            border: 1px solid rgba(0, 102, 204, 0.3);
             border-radius: 15px;
             padding: 40px;
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
             backdrop-filter: blur(10px);
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
-        }
-
-        .app-card::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            z-index: -1;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-purple), var(--neon-yellow));
-            border-radius: 16px;
-            animation: border-glow 3s linear infinite;
-        }
-
-        @keyframes border-glow {
-            0% { filter: hue-rotate(0deg) blur(10px); }
-            100% { filter: hue-rotate(360deg) blur(10px); }
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
         }
 
         .app-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 243, 255, 0.3);
-            border-color: var(--neon-cyan);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 102, 204, 0.2);
+            border-color: var(--primary-blue);
         }
 
         .app-icon {
             width: 100px;
             height: 100px;
             margin: 0 auto 25px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
             border-radius: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 40px;
             color: white;
-            box-shadow: 0 0 25px var(--neon-cyan);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .app-icon::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255,255,255,0.2), rgba(255,255,255,0));
-            transform: rotate(45deg);
+            box-shadow: 0 0 15px rgba(0, 102, 204, 0.5);
         }
 
         .app-title {
@@ -337,12 +225,11 @@
             margin-bottom: 20px;
             color: var(--text-color);
             text-align: center;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
             letter-spacing: 1px;
         }
 
         .app-description {
-            color: #ccc;
+            color: var(--text-secondary);
             line-height: 1.7;
             margin-bottom: 25px;
             text-align: center;
@@ -355,10 +242,10 @@
 
         .app-features li {
             padding: 12px 0;
-            color: #aaa;
+            color: var(--text-secondary);
             position: relative;
             padding-left: 35px;
-            border-bottom: 1px dashed rgba(0, 243, 255, 0.2);
+            border-bottom: 1px dashed rgba(0, 102, 204, 0.2);
         }
 
         .app-features li:last-child {
@@ -369,9 +256,8 @@
             content: '➤';
             position: absolute;
             left: 0;
-            color: var(--neon-cyan);
+            color: var(--primary-blue);
             font-weight: bold;
-            text-shadow: 0 0 8px var(--neon-cyan);
         }
 
         .app-details {
@@ -381,7 +267,7 @@
             padding: 15px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
-            border: 1px solid rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 102, 204, 0.2);
         }
 
         .detail-item {
@@ -391,14 +277,13 @@
 
         .detail-value {
             font-size: 1.2em;
-            color: var(--neon-cyan);
-            text-shadow: 0 0 8px var(--neon-cyan);
+            color: var(--primary-blue);
             font-weight: bold;
         }
 
         .detail-label {
             font-size: 0.9em;
-            color: #888;
+            color: var(--text-secondary);
             margin-top: 5px;
         }
 
@@ -419,41 +304,37 @@
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
-            position: relative;
-            overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .btn-primary {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-purple));
+            background: var(--primary-blue);
             color: var(--text-color);
-            box-shadow: 0 5px 20px rgba(0, 243, 255, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 102, 204, 0.4);
         }
 
         .btn-secondary {
             background: transparent;
-            color: var(--neon-cyan);
-            border: 2px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
         }
 
         .btn-secondary:hover {
-            background: var(--neon-cyan);
+            background: var(--primary-blue);
             color: var(--dark-bg);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.8);
         }
 
-        /* Footer futurista */
+        /* Footer optimizado */
         footer {
             text-align: center;
             padding: 70px 50px 40px;
-            border-top: 1px solid rgba(0, 243, 255, 0.3);
+            border-top: 1px solid rgba(0, 102, 204, 0.3);
             background: var(--darker-bg);
             margin-top: 100px;
             position: relative;
@@ -466,19 +347,14 @@
             left: 0;
             width: 100%;
             height: 3px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
-            box-shadow: 0 0 20px var(--neon-pink);
+            background: var(--primary-blue);
         }
 
         .footer-logo {
             font-size: 2.5em;
             font-weight: bold;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-blue);
             margin-bottom: 25px;
-            text-shadow: var(--text-glow);
         }
 
         .social-links {
@@ -496,23 +372,21 @@
             justify-content: center;
             border-radius: 50%;
             background: var(--card-bg);
-            color: var(--neon-cyan);
+            color: var(--primary-blue);
             font-size: 24px;
             transition: all 0.3s ease;
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            border: 1px solid rgba(0, 102, 204, 0.3);
             text-decoration: none;
         }
 
         .social-links a:hover {
-            transform: translateY(-8px) scale(1.1);
-            color: var(--neon-pink);
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 25px rgba(255, 0, 255, 0.4);
+            transform: translateY(-5px);
+            color: var(--primary-purple);
+            border-color: var(--primary-purple);
         }
 
         .footer-info {
-            color: #888;
+            color: var(--text-secondary);
             margin-top: 30px;
             line-height: 1.8;
         }
@@ -520,55 +394,14 @@
         .back-link {
             display: inline-block;
             margin-top: 30px;
-            color: var(--neon-cyan);
+            color: var(--primary-blue);
             text-decoration: none;
             font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.7);
             transition: all 0.3s ease;
         }
 
         .back-link:hover {
-            color: var(--neon-pink);
-            text-shadow: 0 0 15px rgba(255, 0, 255, 0.7);
-        }
-
-        /* Efectos de partículas */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: var(--neon-cyan);
-            border-radius: 50%;
-            animation: float 15s infinite linear;
-            opacity: 0;
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.7;
-            }
-            90% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
+            color: var(--primary-purple);
         }
 
         /* Responsive */
@@ -579,11 +412,11 @@
             }
             
             h1 {
-                font-size: 3.5em;
+                font-size: 3em;
             }
             
             h2 {
-                font-size: 2.8em;
+                font-size: 2.5em;
             }
         }
 
@@ -605,11 +438,11 @@
             }
             
             h1 {
-                font-size: 2.8em;
+                font-size: 2.5em;
             }
             
             h2 {
-                font-size: 2.2em;
+                font-size: 2em;
             }
             
             .app-card {
@@ -629,20 +462,6 @@
     </style>
 </head>
 <body>
-    <!-- Efectos de partículas -->
-    <div class="particles">
-        <div class="particle" style="left: 5%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 15%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 25%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 35%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 45%; animation-delay: 8s;"></div>
-        <div class="particle" style="left: 55%; animation-delay: 10s;"></div>
-        <div class="particle" style="left: 65%; animation-delay: 12s;"></div>
-        <div class="particle" style="left: 75%; animation-delay: 14s;"></div>
-        <div class="particle" style="left: 85%; animation-delay: 16s;"></div>
-        <div class="particle" style="left: 95%; animation-delay: 18s;"></div>
-    </div>
-
     <!-- Header -->
     <header>
         <nav>
@@ -659,8 +478,6 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <div class="cyber-grid"></div>
-        <div class="cyber-line"></div>
         <div class="hero-content">
             <h1>Aplicaciones Java</h1>
             <p class="subtitle">Soluciones de alto rendimiento con tecnología de vanguardia y alternativas para todos</p>
@@ -680,14 +497,14 @@
                 </div>
                 <h3 class="app-title">CyberCalc</h3>
                 <p class="app-description">
-                    Aplicaciòn de calculadora para Android hecha completamente en Java.
+                    Aplicación de calculadora para Android hecha completamente en Java.
                 </p>
                 <ul class="app-features">
                     <li>Diseño intuitivo</li>
-                    <li>Liviana, optimizada y ràpida</li>
-                    <li>Calculadora bàsica</li>
+                    <li>Liviana, optimizada y rápida</li>
+                    <li>Calculadora básica</li>
                     <li>Capaz de ejecutarse en cualquier tipo de hardware</li>
-                    <li>Operaciones ràpidas</li>
+                    <li>Operaciones rápidas</li>
                 </ul>
                 <div class="app-details">
                     <div class="detail-item">
@@ -704,7 +521,7 @@
                     </div>
                 </div>
                 <div class="app-buttons">
-                    <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="download-btn" download>Descargar APK</a>
+                    <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="btn btn-primary" download>Descargar APK</a>
                 </div>
             </div>
 
@@ -715,10 +532,10 @@
                 </div>
                 <h3 class="app-title">NexTune</h3>
                 <p class="app-description">
-                    Reproductor de mùsica avanzado, gratis y ràpido para Android.
+                    Reproductor de música avanzado, gratis y rápido para Android.
                 </p>
                 <ul class="app-features">
-                    <li>Reproductor de mùsica local</li>
+                    <li>Reproductor de música local</li>
                     <li>Sin anuncios</li>
                     <li>Sin compras integradas</li>
                     <li>Capaz de ajustar el tono y velocidad de las canciones</li>
@@ -739,7 +556,7 @@
                     </div>
                 </div>
                 <div class="app-buttons">
-            <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="download-btn" download>Descargar APK</a>
+                    <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="btn btn-primary" download>Descargar APK</a>
                 </div>
             </div>
 
@@ -750,12 +567,12 @@
                 </div>
                 <h3 class="app-title">Muse AI</h3>
                 <p class="app-description">
-                    Aplicaciòn que genera imàgenes con IA a partir de texto.
+                    Aplicación que genera imágenes con IA a partir de texto.
                 </p>
                 <ul class="app-features">
                     <li>Gratis, e ilimitada.</li>
                     <li>Sin anuncios</li>
-                    <li>Ràpida y fàcil de utilizar</li>
+                    <li>Rápida y fácil de utilizar</li>
                     <li>Hecha en Java para Android</li>
                     <li>Sin compras integradas, API Ilimitada</li>
                 </ul>
@@ -774,7 +591,7 @@
                     </div>
                 </div>
                 <div class="app-buttons">
-   <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="download-btn" download>Descargar APK</a>
+                    <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="btn btn-primary" download>Descargar APK</a>
                 </div>
             </div>
         </div>
@@ -798,16 +615,15 @@
         
         <p class="footer-info">
             cyberrun.03@gmail.com | +57 234 567 890<br>
-            <span style="color: var(--neon-cyan);">© 2024 CyberRun - Todos los derechos reservados</span>
+            <span style="color: var(--primary-blue);">© 2024 CyberRun - Todos los derechos reservados</span>
         </p>
         
         <a href="index.html" class="back-link">← Volver a la página principal</a>
     </footer>
 
     <script>
-        // Efectos de interacción
+        // Animación de las tarjetas al hacer scroll
         document.addEventListener('DOMContentLoaded', function() {
-            // Animación de las tarjetas al hacer scroll
             const appCards = document.querySelectorAll('.app-card');
             
             const observer = new IntersectionObserver((entries) => {
@@ -821,26 +637,10 @@
             
             appCards.forEach(card => {
                 card.style.opacity = '0';
-                card.style.transform = 'translateY(50px)';
-                card.style.transition = 'all 0.8s ease';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
                 observer.observe(card);
             });
-            
-            // Efecto de escritura en el título
-            const title = document.querySelector('h1');
-            const originalText = title.textContent;
-            title.textContent = '';
-            
-            let i = 0;
-            function typeWriter() {
-                if (i < originalText.length) {
-                    title.textContent += originalText.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 100);
-                }
-            }
-            
-            setTimeout(typeWriter, 1000);
         });
     </script>
 </body>
