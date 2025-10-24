@@ -226,6 +226,45 @@
             box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
         }
 
+        /* About Section */
+        .about-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 60px;
+            margin-top: 80px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            position: relative;
+        }
+
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: slide 3s infinite;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: var(--light);
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -256,48 +295,74 @@
             .games-grid {
                 grid-template-columns: 1fr;
             }
+
+            .about-section {
+                padding: 40px 20px;
+            }
         }
 
-          /* Estilos para el modal */
+        /* Estilos para el modal */
         #termsModal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 2000;
+            padding: 20px;
         }
 
         #termsContent {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 600px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a0044 100%);
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 212, 255, 0.2);
+            color: var(--light);
         }
 
         #termsContent h2 {
-            margin-top: 0;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        #termsContent h3 {
+            color: var(--primary);
+            margin: 25px 0 15px 0;
+            font-size: 1.3em;
+        }
+
+        #termsContent p {
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
 
         #acceptTerms {
-            background-color: #4CAF50;
-            color: white;
+            display: block;
+            margin: 30px auto 0;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: var(--light);
             border: none;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 10px 0;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1em;
             cursor: pointer;
-            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        #acceptTerms:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.5);
         }
     </style>
 </head>
@@ -369,61 +434,91 @@
                 <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="download-btn" download>Descargar APK</a>
             </div>
         </div>
-         <!-- Modal de Términos y Condiciones -->
+
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="about-content">
+                <h2>Sobre CyberRun</h2>
+                <div class="about-text">
+                    <p>En <span class="highlight">CyberRun</span> somos apasionados por la tecnología y la innovación. Nuestro equipo combina creatividad con experiencia técnica para crear soluciones digitales que marcan la diferencia.</p>
+                    
+                    <p><span class="highlight">CyberRun</span> se especializa en desarrollar y publicar aplicaciones y juegos para Android. Trabajamos con el apoyo de la comunidad para brindar al mundo una experiencia mejor, transformando ideas en productos que impactan a miles de usuarios en todo el mundo.</p>
+                    
+                    <p>Creemos en el poder de la colaboración y la tecnología para crear experiencias únicas. Cada aplicación y juego que desarrollamos lleva nuestro compromiso con la calidad, la innovación y la satisfacción del usuario.</p>
+                    
+                    <p>¡Trabajemos juntos! Ayudamos a transformar ideas en realidad, creando productos que entretienen, solucionan problemas y mejoran la vida digital de las personas.</p>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Modal de Términos y Condiciones -->
     <div id="termsModal">
         <div id="termsContent">
             <h2>Términos y Condiciones de CyberRun</h2>
-            <p><strong>Última actualización:</strong> [Fecha]</p>
+            <p><strong>Última actualización:</strong> 24 de octubre de 2024</p>
 
             <h3>1. ACEPTACIÓN DE TÉRMINOS</h3>
-            <p>Al acceder y utilizar cualquier producto, aplicación o servicio desarrollado por CyberRun ("nosotros", "nuestra empresa"), usted acepta cumplir con estos Términos y Condiciones en su totalidad. Si no está de acuerdo con alguno de estos términos, no podrá acceder a nuestros productos.</p>
+            <p>Al utilizar cualquier producto, aplicación o servicio desarrollado por CyberRun ("nosotros", "nuestra empresa"), usted acepta cumplir con estos Términos y Condiciones en su totalidad.</p>
 
             <h3>2. LICENCIA DE USO</h3>
-            <p><strong>2.1. Aplicaciones y Juegos:</strong><br>
-            Concedemos una licencia limitada, no exclusiva, no transferible y revocable para utilizar nuestras aplicaciones y juegos en dispositivos Android, únicamente para uso personal y no comercial.</p>
+            <p><strong>2.1. Aplicaciones y Software:</strong><br>
+            Concedemos licencia limitada, no exclusiva e intransferible para uso personal/no comercial</p>
 
-            <p><strong>2.2. Restricciones:</strong><br>
-            No está permitido modificar, descompilar, realizar ingeniería inversa, alquilar, arrendar, prestar, distribuir o crear obras derivadas basadas en nuestros productos, ni explotarlos comercialmente.</p>
+            <p><strong>2.2. Productos Empresariales:</strong><br>
+            Licencias sujetas a contratos específicos</p>
 
             <h3>3. PROPIEDAD INTELECTUAL</h3>
-            <p>CyberRun conserva todos los derechos de propiedad intelectual sobre sus productos, incluyendo pero no limitado a: código fuente, gráficos, diseños, logotipos, marcas registradas (como "CyberRun", "CyberCalc", "NexTune", "Muse AI", etc.) y cualquier contenido incluido en las aplicaciones y videojuegos.</p>
+            <p><strong>CyberRun conserva todos los derechos sobre:</strong><br>
+            - Código fuente, gráficos, diseños<br>
+            - Marcas registradas "CyberRun", "CyberCalc", "NexTune", "Muse AI"<br>
+            - Contenido de aplicaciones y videojuegos</p>
 
             <h3>4. LIMITACIÓN DE RESPONSABILIDAD</h3>
-            <p><strong>4.1. Aplicaciones y Juegos:</strong><br>
-            Nuestros productos se proporcionan "tal cual" y "según disponibilidad". No garantizamos que el funcionamiento será ininterrumpido o libre de errores. Usted utiliza nuestros productos bajo su propio riesgo. En la máxima medida permitida por la ley, CyberRun no será responsable por daños directos, indirectos, incidentales, especiales o consecuentes.</p>
-
-            <p><strong>4.2. Contenido de Terceros:</strong><br>
-            Algunos productos pueden mostrar contenido de terceros o enlazar a sitios web externos. No somos responsables por el contenido, políticas o prácticas de privacidad de terceros.</p>
+            <p><strong>4.1. Aplicaciones de Entretenimiento:</strong><br>
+            - Uso bajo su propio riesgo<br>
+            - No garantizamos disponibilidad continua<br>
+            - No nos hacemos responsables por daños indirectos</p>
 
             <h3>5. POLÍTICA DE PRIVACIDAD</h3>
-            <p><strong>5.1. Información Recopilada:</strong><br>
-            Podemos recopilar información anónima sobre el uso de nuestros productos para mejorar la experiencia del usuario. Esto puede incluir datos de analytics, información técnica del dispositivo y patrones de uso.</p>
+            <p><strong>5.1. Datos Recopilados:</strong><br>
+            - Información de uso y analytics anónimos<br>
+            - Datos técnicos para mejora de productos<br>
+            - En juegos: progreso, puntuaciones, preferencias</p>
 
-            <p><strong>5.2. Terceros:</strong><br>
-            Utilizamos servicios de terceros (como Google Analytics, Unity Analytics) que pueden recopilar información para ayudarnos a analizar el uso de nuestros productos.</p>
+            <h3>6. CONTENIDO DE USUARIO</h3>
+            <p><strong>6.1. Muse AI:</strong><br>
+            - Usted conserva derechos sobre textos ingresados<br>
+            - Nosotros conservamos derechos sobre imágenes generadas<br>
+            - Prohibido generar contenido ilegal o inapropiado</p>
 
-            <h3>6. CONTENIDO GENERADO POR EL USUARIO</h3>
-            <p>En aplicaciones como Muse AI, usted conserva los derechos sobre los textos que ingresa, pero nos otorga el derecho de utilizar las imágenes generadas para mejorar nuestros servicios. Es su responsabilidad no generar contenido ilegal, ofensivo o que infrinja derechos de terceros.</p>
-
-            <h3>7. PAGOS Y COMPRAS INTEGRADAS</h3>
-            <p>Algunos de nuestros productos pueden incluir compras integradas o publicidad. Usted acepta cumplir con los términos de pago y las políticas de los proveedores de pagos (como Google Play Store).</p>
+            <h3>7. PAGOS Y SUSCRIPCIONES</h3>
+            <p><strong>7.1. Productos Actuales:</strong><br>
+            - Aplicaciones gratuitas con posible monetización futura<br>
+            - Juegos potencialmente con compras in-app</p>
 
             <h3>8. TERMINACIÓN</h3>
-            <p>Podemos terminar o suspender su acceso a nuestros productos inmediatamente, sin previo aviso, si incumple estos Términos y Condiciones.</p>
+            <p>Podemos suspender acceso si:<br>
+            - Viola estos términos<br>
+            - Realiza uso fraudulento<br>
+            - Infringe derechos de propiedad intelectual</p>
 
-            <h3>9. MODIFICACIONES</h3>
-            <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Las actualizaciones se publicarán en esta página y su uso continuado de nuestros productos después de los cambios constituye su aceptación de los nuevos términos.</p>
+            <h3>9. ACTUALIZACIONES</h3>
+            <p>- Nos reservamos derecho de modificar términos<br>
+            - Notificaremos cambios importantes<br>
+            - Uso continuado implica aceptación de modificaciones</p>
 
             <h3>10. LEGISLACIÓN APLICABLE</h3>
-            <p>Estos Términos y Condiciones se rigen por las leyes de [País] y cualquier disputa se resolverá en los tribunales de [Ciudad, País].</p>
+            <p>Estos términos se rigen por las leyes de Colombia y cualquier disputa se resolverá en los tribunales de Bogotá, Colombia.</p>
 
             <h3>11. CONTACTO</h3>
-            <p>Si tiene alguna pregunta sobre estos Términos y Condiciones, contáctenos en: cyberrun.03@gmail.com</p>
+            <p><strong>CyberRun</strong><br>
+            Email: cyberrun.03@gmail.com<br>
+            Sitio web: www.cyberrun.com</p>
 
             <button id="acceptTerms">Acepto los Términos y Condiciones</button>
         </div>
     </div>
-    </section>
 
     <!-- Footer -->
     <footer>
@@ -431,7 +526,7 @@
         <p style="color: #666; margin-bottom: 30px;">© 2024 CyberRun. Todos los derechos reservados.</p>
         
         <p style="color: #666; margin-top: 30px;">
-            cyberrun.03@gmail.com | +57 234 567 890
+            cyberrun.03@gmail.com
         </p>
         <p style="color: #666; margin-top: 10px;">
             <a href="index.html" style="color: #00d4ff;">Volver a la página principal</a>
@@ -460,23 +555,20 @@
             } else {
                 header.style.boxShadow = 'none';
             }
-             // Cuando se hace clic en el botón de aceptar
+        });
+
+        // Modal functionality
         document.getElementById('acceptTerms').addEventListener('click', function() {
-            // Ocultar el modal
             document.getElementById('termsModal').style.display = 'none';
-            // Mostrar el contenido principal
-            document.getElementById('mainContent').style.display = 'block';
-            // Opcional: Guardar en localStorage que el usuario aceptó
             localStorage.setItem('termsAccepted', 'true');
         });
 
-        // Opcional: Si el usuario ya aceptó los términos en una visita anterior, no mostrar el modal
+        // Check if terms were already accepted
         window.onload = function() {
-            if (localStorage.getItem('termsAccepted') === 'true') {
-                document.getElementById('termsModal').style.display = 'none';
-                document.getElementById('mainContent').style.display = 'block';
+            if (localStorage.getItem('termsAccepted') !== 'true') {
+                document.getElementById('termsModal').style.display = 'flex';
             }
-        });
+        };
     </script>
 </body>
 </html>
