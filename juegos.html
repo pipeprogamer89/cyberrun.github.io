@@ -257,6 +257,48 @@
                 grid-template-columns: 1fr;
             }
         }
+
+          /* Estilos para el modal */
+        #termsModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #termsContent {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #termsContent h2 {
+            margin-top: 0;
+        }
+
+        #acceptTerms {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -327,6 +369,60 @@
                 <a href="https://www.mediafire.com/file/tu-codigo-de-archivo/tu-juego.apk" class="download-btn" download>Descargar APK</a>
             </div>
         </div>
+         <!-- Modal de Términos y Condiciones -->
+    <div id="termsModal">
+        <div id="termsContent">
+            <h2>Términos y Condiciones de CyberRun</h2>
+            <p><strong>Última actualización:</strong> [Fecha]</p>
+
+            <h3>1. ACEPTACIÓN DE TÉRMINOS</h3>
+            <p>Al acceder y utilizar cualquier producto, aplicación o servicio desarrollado por CyberRun ("nosotros", "nuestra empresa"), usted acepta cumplir con estos Términos y Condiciones en su totalidad. Si no está de acuerdo con alguno de estos términos, no podrá acceder a nuestros productos.</p>
+
+            <h3>2. LICENCIA DE USO</h3>
+            <p><strong>2.1. Aplicaciones y Juegos:</strong><br>
+            Concedemos una licencia limitada, no exclusiva, no transferible y revocable para utilizar nuestras aplicaciones y juegos en dispositivos Android, únicamente para uso personal y no comercial.</p>
+
+            <p><strong>2.2. Restricciones:</strong><br>
+            No está permitido modificar, descompilar, realizar ingeniería inversa, alquilar, arrendar, prestar, distribuir o crear obras derivadas basadas en nuestros productos, ni explotarlos comercialmente.</p>
+
+            <h3>3. PROPIEDAD INTELECTUAL</h3>
+            <p>CyberRun conserva todos los derechos de propiedad intelectual sobre sus productos, incluyendo pero no limitado a: código fuente, gráficos, diseños, logotipos, marcas registradas (como "CyberRun", "CyberCalc", "NexTune", "Muse AI", etc.) y cualquier contenido incluido en las aplicaciones y videojuegos.</p>
+
+            <h3>4. LIMITACIÓN DE RESPONSABILIDAD</h3>
+            <p><strong>4.1. Aplicaciones y Juegos:</strong><br>
+            Nuestros productos se proporcionan "tal cual" y "según disponibilidad". No garantizamos que el funcionamiento será ininterrumpido o libre de errores. Usted utiliza nuestros productos bajo su propio riesgo. En la máxima medida permitida por la ley, CyberRun no será responsable por daños directos, indirectos, incidentales, especiales o consecuentes.</p>
+
+            <p><strong>4.2. Contenido de Terceros:</strong><br>
+            Algunos productos pueden mostrar contenido de terceros o enlazar a sitios web externos. No somos responsables por el contenido, políticas o prácticas de privacidad de terceros.</p>
+
+            <h3>5. POLÍTICA DE PRIVACIDAD</h3>
+            <p><strong>5.1. Información Recopilada:</strong><br>
+            Podemos recopilar información anónima sobre el uso de nuestros productos para mejorar la experiencia del usuario. Esto puede incluir datos de analytics, información técnica del dispositivo y patrones de uso.</p>
+
+            <p><strong>5.2. Terceros:</strong><br>
+            Utilizamos servicios de terceros (como Google Analytics, Unity Analytics) que pueden recopilar información para ayudarnos a analizar el uso de nuestros productos.</p>
+
+            <h3>6. CONTENIDO GENERADO POR EL USUARIO</h3>
+            <p>En aplicaciones como Muse AI, usted conserva los derechos sobre los textos que ingresa, pero nos otorga el derecho de utilizar las imágenes generadas para mejorar nuestros servicios. Es su responsabilidad no generar contenido ilegal, ofensivo o que infrinja derechos de terceros.</p>
+
+            <h3>7. PAGOS Y COMPRAS INTEGRADAS</h3>
+            <p>Algunos de nuestros productos pueden incluir compras integradas o publicidad. Usted acepta cumplir con los términos de pago y las políticas de los proveedores de pagos (como Google Play Store).</p>
+
+            <h3>8. TERMINACIÓN</h3>
+            <p>Podemos terminar o suspender su acceso a nuestros productos inmediatamente, sin previo aviso, si incumple estos Términos y Condiciones.</p>
+
+            <h3>9. MODIFICACIONES</h3>
+            <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Las actualizaciones se publicarán en esta página y su uso continuado de nuestros productos después de los cambios constituye su aceptación de los nuevos términos.</p>
+
+            <h3>10. LEGISLACIÓN APLICABLE</h3>
+            <p>Estos Términos y Condiciones se rigen por las leyes de [País] y cualquier disputa se resolverá en los tribunales de [Ciudad, País].</p>
+
+            <h3>11. CONTACTO</h3>
+            <p>Si tiene alguna pregunta sobre estos Términos y Condiciones, contáctenos en: cyberrun.03@gmail.com</p>
+
+            <button id="acceptTerms">Acepto los Términos y Condiciones</button>
+        </div>
+    </div>
     </section>
 
     <!-- Footer -->
@@ -363,6 +459,22 @@
                 header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.5)';
             } else {
                 header.style.boxShadow = 'none';
+            }
+             // Cuando se hace clic en el botón de aceptar
+        document.getElementById('acceptTerms').addEventListener('click', function() {
+            // Ocultar el modal
+            document.getElementById('termsModal').style.display = 'none';
+            // Mostrar el contenido principal
+            document.getElementById('mainContent').style.display = 'block';
+            // Opcional: Guardar en localStorage que el usuario aceptó
+            localStorage.setItem('termsAccepted', 'true');
+        });
+
+        // Opcional: Si el usuario ya aceptó los términos en una visita anterior, no mostrar el modal
+        window.onload = function() {
+            if (localStorage.getItem('termsAccepted') === 'true') {
+                document.getElementById('termsModal').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
             }
         });
     </script>
