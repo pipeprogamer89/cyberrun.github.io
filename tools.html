@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herramientas Android - CyberRun</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-cyan: #00ffff;
+            --primary-magenta: #ff00ff;
+            --primary-purple: #8a2be2;
+            --accent-teal: #20b2aa;
+            --dark-bg: #0a0a12;
+            --darker-bg: #050508;
+            --card-bg: rgba(30, 30, 45, 0.7);
+            --text-color: #f0f0f0;
+            --text-secondary: #b0b0b0;
+            --neon-glow: 0 0 10px var(--primary-cyan), 0 0 20px var(--primary-cyan), 0 0 30px var(--primary-cyan);
+        }
+
+        body {
+            font-family: 'Orbitron', 'Exo 2', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+            min-height: 100vh;
+            cursor: none;
+        }
+
+        /* Canvas para partículas de fondo */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Cursor personalizado */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-cyan);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-magenta);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s;
+        }
+
+        /* Scrollbar optimizado */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--primary-cyan), var(--primary-magenta));
+            border-radius: 6px;
+        }
+
+        /* Header estilizado */
+        header {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            padding: 20px 50px;
+            background: rgba(10, 10, 18, 0.85);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--primary-cyan);
+            box-shadow: var(--neon-glow);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-cyan);
+            letter-spacing: 1px;
+            text-shadow: var(--neon-glow);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 14px;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-cyan);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 8px var(--primary-cyan);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Reloj geométrico */
+        .floating-clock {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--primary-cyan);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            box-shadow: var(--neon-glow);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-clock .time {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary-cyan);
+        }
+
+        .floating-clock .date {
+            font-size: 10px;
+            color: var(--text-secondary);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        /* Hero Section optimizada */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 120px 50px 50px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            color: var(--primary-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            text-shadow: var(--neon-glow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 3px solid var(--primary-cyan);
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary-cyan) }
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .subtitle::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-cyan), var(--primary-magenta));
+        }
+
+        /* Apps Section */
+        .apps-section {
+            padding: 100px 50px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            text-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-cyan), var(--primary-magenta));
+            box-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 80px;
+            font-size: 1.2em;
+            letter-spacing: 1px;
+        }
+
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 60px;
+            margin-top: 60px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-cyan), var(--primary-magenta), var(--primary-purple), var(--primary-cyan));
+            z-index: -1;
+            border-radius: 17px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 15px 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .app-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            background: linear-gradient(45deg, var(--primary-cyan), var(--primary-magenta));
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .app-card:hover .app-icon::after {
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        .app-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            text-align: center;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px var(--primary-cyan);
+        }
+
+        .app-description {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .app-features {
+            list-style: none;
+            margin: 25px 0;
+        }
+
+        .app-features li {
+            padding: 12px 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 35px;
+            border-bottom: 1px dashed rgba(0, 255, 255, 0.2);
+        }
+
+        .app-features li:last-child {
+            border-bottom: none;
+        }
+
+        .app-features li::before {
+            content: '➤';
+            position: absolute;
+            left: 0;
+            color: var(--primary-cyan);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--primary-cyan);
+        }
+
+        .app-details {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .detail-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .detail-value {
+            font-size: 1.2em;
+            color: var(--primary-cyan);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--primary-cyan);
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        .app-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-cyan), var(--primary-magenta));
+            z-index: -1;
+            transition: transform 0.5s;
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+
+        .btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .btn-primary {
+            background: var(--primary-cyan);
+            color: var(--dark-bg);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.5);
+            color: var(--dark-bg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-cyan);
+            border: 2px solid var(--primary-cyan);
+        }
+
+        .btn-secondary:hover {
+            color: var(--dark-bg);
+        }
+
+        /* Footer optimizado */
+        footer {
+            text-align: center;
+            padding: 70px 50px 40px;
+            border-top: 1px solid rgba(0, 255, 255, 0.3);
+            background: var(--darker-bg);
+            margin-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-cyan);
+            box-shadow: 0 0 10px var(--primary-cyan);
+        }
+
+        .waves {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%2300ffff' opacity='0.2'%3E%3C/path%3E%3C/svg%3E");
+            background-size: 1200px 100px;
+            animation: waves 12s linear infinite;
+        }
+
+        @keyframes waves {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+
+        .footer-logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--primary-cyan);
+            margin-bottom: 25px;
+            text-shadow: var(--neon-glow);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin: 40px 0;
+        }
+
+        .social-links a {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--card-bg);
+            color: var(--primary-cyan);
+            font-size: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-cyan), var(--primary-magenta));
+            z-index: -1;
+            transform: scale(0);
+            transition: transform 0.3s;
+            border-radius: 50%;
+        }
+
+        .social-links a:hover::before {
+            transform: scale(1);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            color: var(--dark-bg);
+            border-color: var(--primary-magenta);
+        }
+
+        .footer-info {
+            color: var(--text-secondary);
+            margin-top: 30px;
+            line-height: 1.8;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: var(--primary-cyan);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .back-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-cyan);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 5px var(--primary-cyan);
+        }
+
+        .back-link:hover::after {
+            width: 100%;
+        }
+
+        /* Formas abstractas (portales) */
+        .portal {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,255,0.1) 0%, rgba(255,0,255,0.05) 70%, transparent 100%);
+            filter: blur(20px);
+            z-index: -1;
+            animation: pulse 8s infinite alternate;
+        }
+
+        .portal-1 {
+            top: 10%;
+            left: 5%;
+        }
+
+        .portal-2 {
+            bottom: 10%;
+            right: 5%;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            h1 {
+                font-size: 3em;
+            }
+            
+            h2 {
+                font-size: 2.5em;
+            }
+
+            .floating-clock {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 100px 20px 40px;
+            }
+            
+            .apps-section {
+                padding: 60px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            h2 {
+                font-size: 2em;
+            }
+            
+            .app-card {
+                padding: 30px 20px;
+            }
+            
+            .app-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Canvas para partículas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Cursor personalizado -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Portales abstractos -->
+    <div class="portal portal-1"></div>
+    <div class="portal portal-2"></div>
+
+    <!-- Reloj geométrico -->
+    <div class="floating-clock">
+        <div class="time" id="current-time">00:00</div>
+        <div class="date" id="current-date">01/01/2024</div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index.html" class="logo">CyberRun</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#products">Productos</a></li>
+                <li><a href="juegos.html">Juegos</a></li>
+                <li><a href="index.html#about">Nosotros</a></li>
+                <li><a href="index.html#contact">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1><span class="typewriter">Herramientas Android</span></h1>
+            <p class="subtitle">Diagnóstico, módulos Magisk y utilidades root de última generación</p>
+        </div>
+    </section>
+
+    <!-- Apps Section -->
+    <section class="apps-section">
+        <h2>Nuestras Herramientas</h2>
+        <p class="section-subtitle">Potentes utilidades Android para usuarios avanzados.</p>
+        
+        <div class="apps-grid">
+            <!-- App 1 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://i.ibb.co/LzZb664N/photo-2025-10-24-16-58-18.jpg" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                </div>
+                <h3 class="app-title">SysScope</h3>
+                <p class="app-description">
+                    Herramienta de diagnóstico completo para Android con análisis en tiempo real.
+                </p>
+                <ul class="app-features">
+                    <li>Monitorización de hardware.</li>
+                    <li>Análisis de rendimiento del sistema</li>
+                    <li>Diagnóstico de batería y temperatura</li>
+                    <li>Informes detallados de rendimiento</li>
+                    <li>Compatibilidad con root para funciones avanzadas</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v2.5</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">45 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 7+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://github.com/pipeprogamer89/SysScope/releases/download/v1.0/com.sys.scope_.1_1.0.apk" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+
+            <!-- App 2 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://i.ibb.co/HLQn44TX/photo-2024-11-13-13-20-45.jpg" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                </div>
+                <h3 class="app-title">LM-V500N Spoofer</h3>
+                <p class="app-description">
+                    Módulo magisk que spoofea tu dispositivo magisk como un LG V50.
+                </p>
+                <ul class="app-features">
+                    <li>Seguridad</li>
+                    <li>Instalación fácil</li>
+                    <li>Código abierto</li>
+                    <li>Soluciona problemas en imagenes del sistema genericas</li>
+                    <li>Compatibilidad con los últimos dispositivos</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v3.1</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">1 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 8+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://download1351.mediafire.com/ibejz7lue8eg9zEfg_6Fm_LHNvgodkFyyzkRGQlpb0maShXOzx2rKVsjWvIS_4RmZHdvuKw4ZRceLS4Itjv8-WRxy1az41Ep5eWXG7FeGnoTyf1nR-aI035s65VnSt0nQ1bnrPUyjzcub7MopU52Muxbobp9HvKlZhOIp8INomWj/lgvqdtq5ybxarc2/LM-V500+Spoofer.zip" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+
+            <!-- App 3 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://i.ibb.co/SwSQK1vm/photo-2025-10-24-17-38-15.jpg" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="app-title">4 GB ZRAM + DEFLATE</h3>
+                <p class="app-description">
+                    Activa hasta 4 GB de memoria ZRAM en el sistema Android y cambia la compresión a deflate para una mayor eficiencia.
+                </p>
+                <ul class="app-features">
+                    <li>Ajuste de memoria ram</li>
+                    <li>Gestión de procesos y memoria</li>
+                    <li>Mejor compresión de recursos</li>
+                    <li>ZRAM MODIFICADA</li>
+                    <li>Compatibilidad con kernels personalizados</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v1.8</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">52 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 9+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://download943.mediafire.com/2swefqoddeggNawYxqQGpfnvVhA82nGFXDaM2qicxwBECdHb-njPt-ZkyO1vRga6r6Yej_Le9ExYjq6Qcqzh--_2DWOuV5Vo131ddrpdK3ft0CohthB-GI2Z0rNA5Iu_Qb3R6TMr6tr28PN2t6KnbLagIoTLJJZhFXBGHXRyQbOW/z0xb22dnclw0pgx/4GB+ZRAM+for+LG+v50+Openela.zip" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+
+            <!-- App 4 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://play-lh.googleusercontent.com/egKIb9tvcDsJXpBJf0sx7ABxYbB_0_Ec7-DRcU0ZrfnybfJtwAkE51JAy60v3t1-Zk4=w526-h296-rw" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                    <i class="fas fa-network-wired"></i>
+                </div>
+                <h3 class="app-title">Touch Booster</h3>
+                <p class="app-description">
+                    Aumenta la sensibilidad y el nivel de respuesta de tu dispositivo a niveles extremos
+                </p>
+                <ul class="app-features">
+                    <li>Mejora de la respuesta táctil</li>
+                    <li>Mejor touch en el dispositivo</li>
+                    <li>Sistema operativo más suave y dinámico</li>
+                    <li>Modulo Magisk actualizado</li>
+                    <li>Seguridad y estabilidad</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v2.2</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">1 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 7+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://download1529.mediafire.com/u4r80lfytapgH1hxoC5vv2VUoboAebT3saOSAipG9LIOutv-FsA953yJvHHueVJCutjTbqgyBN3JIxb-jS_CEN4-JtcVbOlwOagzTkiyHoay2ue3yNHDYZP1Iv0Vzylqzrl0iTUvSiR45OkaWp9CIq_anWmD6D0HebdDPkPLgImF/kddzqlbqjbwhoip/Sensibilidad+Extrema+v1.zip" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+
+            <!-- App 5 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://i.ibb.co/zCr2cwg/photo-2024-12-09-22-43-24.jpg" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                    <i class="fas fa-hdd"></i>
+                </div>
+                <h3 class="app-title">OpenELA Custom Boot Kernel for LGE V50</h3>
+                <p class="app-description">
+                    Mejora de rendimiento en el Kernel OpenELA para el dispositivo flashlmdd.
+                </p>
+                <ul class="app-features">
+                    <li>Versión del kernel Linux más nueva</li>
+                    <li>Root preconfigurado incluye Kitsune Mask</li>
+                    <li>Overclock hasta 810mhz en la GPU</li>
+                    <li>Actualizaciones de seguridad para BlissROM</li>
+                    <li>Seguridad y confianza</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v1.5</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">100 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 8+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://download1638.mediafire.com/dnuq6t83q7ngTJNIUP1GFMqy87_p1lLPFJOY67EVkRX4aMycw5bV_0SVTxZugKaZ6a04zkxHYTiTRqf-gdfHmw1jRmYASliJm4O2n7zKJiMM8IfT8Lll2CU3hRhDmvmgyrqqSK0LwZMnuvhUHvVIyU9hBi3k3ZzqbsfpeaOA_Plt/low2kfptcumjlqb/Kernel_4_14_352_OpenELA_Perf%2B_BlissROM_Ported_by_%40PipeCitoOficial.img" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+
+            <!-- App 6 -->
+            <div class="app-card">
+                <div class="app-icon">
+                    <img src="https://i.ibb.co/MxTgScvc/photo-2025-04-18-21-48-09.jpg" alt="SysScope Logo" style="width: 100px; height: 100px; border-radius: 25px;">
+                    <i class="fas fa-battery-full"></i>
+                </div>
+                <h3 class="app-title">V50 Booster</h3>
+                <p class="app-description">
+                    Optimiza el sistema para mayor rendimiento, fluidez y ahorro de batería. Ideal para usuarios avanzados que buscan exprimir al máximo su V50.
+                </p>
+                <ul class="app-features">
+                    <li>Desactiva zram y swap innecesarios (mejor gestión de RAM)  </li>
+                    <li>Aumenta el límite de apps en segundo plano (*fluidez multitarea*)  </li>
+                    <li>Apaga logs del sistema para evitar procesos inútiles  </li>
+                    <li>Detiene sensores y servicios que drenan batería  </li>
+                    <li>Mejora notable del consumo en reposo y uso diario</li>
+                </ul>
+                <div class="app-details">
+                    <div class="detail-item">
+                        <div class="detail-value">v2.0</div>
+                        <div class="detail-label">Versión</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">35 MB</div>
+                        <div class="detail-label">Tamaño</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-value">Android 7+</div>
+                        <div class="detail-label">Requisito</div>
+                    </div>
+                </div>
+                <div class="app-buttons">
+                    <a href="https://download1592.mediafire.com/nux5bkuwozqg2m4SQQ1WkboxVHRV-J7WLTXEjcmDeYgiubGRW9CUPGH3etdhmbNxKVGIP73bNkE5FREBt_pBFFnOMmj5ropC0h2qztB_WQednrByFWF8xjtgH0LrB1L-g4TjGiEIlqB20mCJExR_NI7fAzMhpFbXBA-6x7y0geoE/uede1z5gn8y27ch/V50+Boost.zip" class="btn btn-primary" download>Descargar APK</a>
+                    <a href="#" class="btn btn-secondary">Más información</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="waves"></div>
+        <div class="footer-logo">CyberRun</div>
+        <p class="footer-info">
+            Desarrollamos herramientas Android de alto rendimiento<br>
+            Transformando dispositivos desde 2023
+        </p>
+        
+        <div class="social-links">
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fas fa-envelope"></i></a>
+        </div>
+        
+        <p class="footer-info">
+            cyberrun.03@gmail.com | +57 234 567 890<br>
+            <span style="color: var(--primary-cyan);">© 2024 CyberRun - Todos los derechos reservados</span>
+        </p>
+        
+        <a href="index.html" class="back-link">← Volver a la página principal</a>
+    </footer>
+
+    <script>
+        // Sistema de partículas para el fondo
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Ajustar tamaño del canvas
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Configuración de partículas
+            const particles = [];
+            const particleCount = 150;
+            const colors = ['#00ffff', '#ff00ff', '#8a2be2', '#20b2aa'];
+            
+            // Crear partículas
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: (Math.random() - 0.5) * 0.5,
+                    speedY: (Math.random() - 0.5) * 0.5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    opacity: Math.random() * 0.5 + 0.2
+                });
+            }
+            
+            // Dibujar partículas
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.globalAlpha = particle.opacity;
+                    ctx.fill();
+                    
+                    // Actualizar posición
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // Rebotar en los bordes
+                    if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+                });
+                
+                requestAnimationFrame(drawParticles);
+            }
+            
+            drawParticles();
+            
+            // Cursor personalizado
+            const cursor = document.querySelector('.cursor');
+            const cursorFollower = document.querySelector('.cursor-follower');
+            
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                
+                setTimeout(() => {
+                    cursorFollower.style.left = e.clientX + 'px';
+                    cursorFollower.style.top = e.clientY + 'px';
+                }, 100);
+            });
+            
+            // Efecto de distorsión en botones
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'scale(2)';
+                    cursorFollower.style.transform = 'scale(1.5)';
+                });
+                
+                button.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'scale(1)';
+                    cursorFollower.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Reloj en tiempo real
+            function updateClock() {
+                const now = new Date();
+                const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+                const date = now.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                
+                document.getElementById('current-time').textContent = time;
+                document.getElementById('current-date').textContent = date;
+            }
+            
+            setInterval(updateClock, 1000);
+            updateClock();
+            
+            // Animación de entrada para las tarjetas
+            const appCards = document.querySelectorAll('.app-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            appCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
