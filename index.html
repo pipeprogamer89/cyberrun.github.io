@@ -292,7 +292,124 @@
             object-fit: cover;
             pointer-events: none;
         }
-
+        
+        /* === 🔥 NUEVO ESTILO PARA EL BANNER PROMOCIONAL === */
+        .game-banner-section {
+            max-width: 1400px;
+            margin: -50px auto 60px;
+            padding: 0 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        .game-banner-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6),
+                        0 0 80px rgba(240,98,146,0.4);
+            border: 2px solid rgba(77,208,225,0.3);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: rgba(20, 20, 35, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        .game-banner-container:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.7),
+                        0 0 100px rgba(240,98,146,0.6),
+                        0 0 120px rgba(77,208,225,0.3);
+        }
+        .game-banner-link {
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-banner-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .game-banner-container:hover .game-banner-image {
+            transform: scale(1.03);
+        }
+        .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(149,117,205,0.2), rgba(240,98,146,0.15));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+        .game-banner-container:hover .banner-overlay {
+            opacity: 1;
+        }
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+        }
+        .banner-title {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--cyan-soft), var(--pink-soft));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(77,208,225,0.5);
+            animation: bannerTitleGlow 3s ease-in-out infinite;
+        }
+        @keyframes bannerTitleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(77,208,225,0.5); }
+            50% { text-shadow: 0 0 30px rgba(240,98,146,0.7); }
+        }
+        .banner-subtitle {
+            color: white;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            margin-bottom: 20px;
+            font-weight: 500;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+        .banner-cta {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--pink-soft), var(--cyan-soft));
+            color: #000;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(240,98,146,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-cta::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--cyan-soft), var(--purple-soft));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .banner-cta:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(240,98,146,0.7),
+                        0 0 30px rgba(77,208,225,0.4);
+        }
+        .banner-cta:hover::before {
+            opacity: 0.3;
+        }
+        
         /* === 🔥 ANIMACIONES DE TEXTO MEJORADAS === */
         h1{
             font-size: clamp(2.8rem, 8vw, 5.5rem);
@@ -755,7 +872,6 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
         /* === 🔥 ESPACIO PARA VIDEO ANTES DEL CONTACTO === */
         .promo-video-section {
             padding: 80px 20px;
@@ -820,7 +936,6 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-
         .contact{ 
             max-width:900px; 
             margin:60px auto; 
@@ -1029,6 +1144,21 @@
             .promo-video-container video {
                 max-height: 50vh;
             }
+            
+            /* Responsive para el banner */
+            .game-banner-section {
+                margin: -30px auto 40px;
+            }
+            .banner-title {
+                font-size: 1.8rem;
+            }
+            .banner-subtitle {
+                font-size: 1rem;
+            }
+            .banner-cta {
+                padding: 10px 25px;
+                font-size: 0.95rem;
+            }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { 
@@ -1123,6 +1253,22 @@
                 </div>
             </div>
         </section>
+        
+        <!-- === 🔥 BANNER PROMOCIONAL PARA ECHO === -->
+        <section class="game-banner-section">
+            <div class="game-banner-container">
+                <a href="game.html" class="game-banner-link" aria-label="Descubre Echo: Nuestro nuevo videojuego">
+                    <img src="https://i.ibb.co/FLJvKMz1/Nuevo-proyecto-23-A91-DADB.png" alt="Echo - Nuevo videojuego de CyberRun" class="game-banner-image">
+                    <div class="banner-overlay"></div>
+                    <div class="banner-content">
+                        <h3 class="banner-title">ECHO</h3>
+                        <p class="banner-subtitle">Nuestro nuevo videojuego revolucionario está llegando</p>
+                        <span class="banner-cta">Descubrir más</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
         <section id="products">
             <h2>Nuestros Productos</h2>
             <p class="section-subtitle">Soluciones tecnológicas que impulsan tu vida</p>
@@ -1247,29 +1393,21 @@
             <div class="about-content fade-in">
                 <p style="margin-bottom:20px; font-size:1.1rem;">
                     Somos un equipo de desarrolladores apasionados donde la creatividad se fusiona con experiencia técnica de vanguardia. Cada línea de código que escribimos, cada diseño que creamos, lleva impregnado nuestro compromiso con la excelencia y la calidad.
-
 Nuestra esencia está en el desarrollo y publicación de aplicaciones y juegos Android, pero nuestro propósito va mucho más allá. Creemos en el poder transformador de las ideas cuando se unen con la tecnología adecuada. Por eso, trabajamos codo a codo con nuestra comunidad, escuchando sus necesidades y feedback para crear productos que realmente importan.
                     Nuestro modelo de desarrollo se basa en una colaboración constante. Ustedes, nuestra comunidad, nos inspiran con sus ideas y nosotros las convertimos en realidad a través de:
-
 - Desarrollo ágil y especializado
-
 - Tecnologías cutting-edge
-
 - Metodologías centradas en el usuario
-
 - Juntos hemos demostrado que cuando las ideas se encuentran con la ejecución técnica adecuada, pueden nacer productos extraordinarios que impactan positivamente a miles de usuarios alrededor del mundo. Desde calculadoras intuitivas hasta juegos inmersivos y herramientas con IA, cada producto CyberRun lleva ese ADN de colaboración e innovación.
                 </p>
                 <p style="font-size:1.1rem;">
                    ¡El viaje recién comienza!
 Invitamos a desarrolladores, creativos y soñadores a unirse a nosotros en esta misión de transformar el panorama digital android. Tu idea, combinada con nuestra experiencia técnica, puede convertirse en el próximo producto que millones de usuarios amen.
-
 Trabajemos juntos, creemos juntos, impactemos juntos.
-
 🚀 CyberRun - Donde las ideas toman vida en Android
                 </p>
             </div>
         </section>
-
         <!-- === 🔥 SECCIÓN DE VIDEO PROMOCIONAL ANTES DEL CONTACTO === -->
         <section class="promo-video-section">
             <h2 class="promo-title">Mira Nuestra Tecnología en Acción</h2>
@@ -1288,7 +1426,6 @@ Trabajemos juntos, creemos juntos, impactemos juntos.
                 </video>
             </div>
         </section>
-
         <section id="contact" class="contact">
             <h2>Hablemos de tu Proyecto</h2>
             <p class="section-subtitle">Estamos listos para llevar tu idea al siguiente nivel</p>
@@ -1474,7 +1611,6 @@ Trabajemos juntos, creemos juntos, impactemos juntos.
 document.addEventListener('DOMContentLoaded', function() {
     // Verificar si ya existe un canvas de rayos para evitar duplicados
     if (document.getElementById('lightningCanvas')) return;
-    
     // Crear el canvas para los rayos
     const canvas = document.createElement('canvas');
     canvas.id = 'lightningCanvas';
@@ -1487,24 +1623,19 @@ document.addEventListener('DOMContentLoaded', function() {
     canvas.style.pointerEvents = 'none'; // Permitir interacción con elementos debajo
     canvas.style.mixBlendMode = 'screen'; // Mezcla para no oscurecer el fondo
     document.body.appendChild(canvas);
-    
     const ctx = canvas.getContext('2d');
-    
     // Ajustar el tamaño del canvas
     function resizeCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
     }
-    
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-    
     // Variables para controlar los rayos
     let lightningBolts = [];
     const minInterval = 3000;
     const maxInterval = 10000;
     let animationId;
-    
     // Clase para representar un rayo
     class LightningBolt {
         constructor() {
@@ -1515,44 +1646,34 @@ document.addEventListener('DOMContentLoaded', function() {
             this.life = 0;
             this.maxLife = 30; // Vida máxima en frames
         }
-        
         createBolt() {
             const startX = Math.random() * canvas.width;
             const startY = 0;
             // Hacer que los rayos vayan más hacia abajo
             const endX = startX + (Math.random() - 0.5) * 400;
             const endY = canvas.height;
-            
             this.createSegment(startX, startY, endX, endY, 10);
-            
             // Añadir ramificaciones (menos para mejor rendimiento)
             for (let i = 0; i < 2; i++) {
                 const segmentIndex = Math.floor(Math.random() * this.segments.length);
                 const segment = this.segments[segmentIndex];
                 const midPointX = (segment.x1 + segment.x2) / 2;
                 const midPointY = (segment.y1 + segment.y2) / 2;
-                
                 const branchX = midPointX + (Math.random() - 0.5) * 150;
                 const branchY = midPointY + (Math.random() - 0.5) * 150;
-                
                 this.createSegment(midPointX, midPointY, branchX, branchY, 5);
             }
         }
-        
         createSegment(x1, y1, x2, y2, segments) {
             const points = [{x: x1, y: y1}];
-            
             const dx = (x2 - x1) / segments;
             const dy = (y2 - y1) / segments;
-            
             for (let i = 1; i < segments; i++) {
                 const x = x1 + dx * i + (Math.random() - 0.5) * 50;
                 const y = y1 + dy * i + (Math.random() - 0.5) * 50;
                 points.push({x, y});
             }
-            
             points.push({x: x2, y: y2});
-            
             for (let i = 0; i < points.length - 1; i++) {
                 this.segments.push({
                     x1: points[i].x,
@@ -1562,31 +1683,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         }
-        
         update() {
             this.life++;
             this.alpha -= this.fadeSpeed;
             return this.alpha > 0 && this.life < this.maxLife;
         }
-        
         draw() {
             // Usar mezcla de colores para no tapar el fondo
             ctx.strokeStyle = `rgba(100, 150, 255, ${this.alpha})`;
             ctx.lineWidth = 1.5;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
-            
             for (const segment of this.segments) {
                 ctx.beginPath();
                 ctx.moveTo(segment.x1, segment.y1);
                 ctx.lineTo(segment.x2, segment.y2);
                 ctx.stroke();
             }
-            
             // Efecto de brillo más suave
             ctx.strokeStyle = `rgba(200, 220, 255, ${this.alpha * 0.5})`;
             ctx.lineWidth = 0.8;
-            
             for (const segment of this.segments) {
                 ctx.beginPath();
                 ctx.moveTo(segment.x1, segment.y1);
@@ -1595,26 +1711,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     }
-    
     // Función para crear un nuevo rayo
     function createLightning() {
         if (lightningBolts.length < 5) { // Limitar cantidad de rayos simultáneos
             lightningBolts.push(new LightningBolt());
-            
             // Efecto de destello muy suave
             ctx.fillStyle = 'rgba(150, 180, 255, 0.03)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
-        
         const nextTime = Math.random() * (maxInterval - minInterval) + minInterval;
         setTimeout(createLightning, nextTime);
     }
-    
     // Función de animación optimizada
     function animate() {
         // Limpiar solo lo necesario con un color muy transparente
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
         // Actualizar y dibujar todos los rayos
         for (let i = lightningBolts.length - 1; i >= 0; i--) {
             if (!lightningBolts[i].update()) {
@@ -1623,14 +1734,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 lightningBolts[i].draw();
             }
         }
-        
         animationId = requestAnimationFrame(animate);
     }
-    
     // Iniciar la animación y el primer rayo
     animate();
     setTimeout(createLightning, 2000);
-    
     // Función para detener el efecto si es necesario
     window.stopLightningEffect = function() {
         if (animationId) {
