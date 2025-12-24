@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberRun - Apoya a Julián Osorio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos base y reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #00f3ff;
+            --secondary: #ff00ff;
+            --accent: #00ff9d;
+            --dark: #0a0a16;
+            --darker: #050510;
+            --light: #f0f0ff;
+            --neon-glow: 0 0 10px, 0 0 20px, 0 0 30px;
+        }
+
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 243, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 255, 0.05) 0%, transparent 20%);
+        }
+
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        /* Contenedor principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Encabezado y navegación */
+        header {
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon {
+            color: var(--primary);
+            font-size: 2.5rem;
+            text-shadow: var(--neon-glow) var(--primary);
+            animation: pulse 2s infinite alternate;
+        }
+
+        .logo-text {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-left: 70px;
+            text-shadow: 0 0 5px var(--accent);
+        }
+
+        /* Sección hero */
+        .hero {
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #b0b0ff;
+        }
+
+        .age-badge {
+            display: inline-block;
+            background-color: var(--darker);
+            color: var(--accent);
+            padding: 8px 20px;
+            border-radius: 30px;
+            border: 1px solid var(--accent);
+            font-weight: bold;
+            margin: 15px 0;
+            text-shadow: 0 0 5px var(--accent);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+        }
+
+        /* Sección de donaciones */
+        .donation-section {
+            background-color: rgba(5, 5, 16, 0.8);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 15px;
+            padding: 50px;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .donation-section::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 17px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .donation-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .paypal-container {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 30px;
+            margin: 30px 0;
+            border: 1px solid rgba(255, 0, 255, 0.3);
+        }
+
+        .paypal-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto;
+            text-align: center;
+            text-decoration: none;
+            padding: 20px 40px;
+            background: linear-gradient(90deg, #003087, #009cde, #012169);
+            color: white;
+            border-radius: 10px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .paypal-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 48, 135, 0.7);
+            border-color: var(--accent);
+        }
+
+        .paypal-button:active {
+            transform: translateY(-2px);
+        }
+
+        .paypal-button i {
+            margin-right: 10px;
+            font-size: 1.6rem;
+        }
+
+        .paypal-button .pulse-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            animation: paypal-pulse 2s infinite;
+        }
+
+        .donation-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .donation-amount {
+            background-color: rgba(10, 10, 22, 0.7);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            color: var(--light);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .donation-amount:hover {
+            background-color: rgba(0, 243, 255, 0.2);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .donation-amount.highlighted {
+            background-color: rgba(0, 255, 157, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .donation-note {
+            text-align: center;
+            margin-top: 25px;
+            color: #aaaaff;
+            font-style: italic;
+        }
+
+        /* Sección de proyectos */
+        .projects-section {
+            margin: 60px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            color: var(--secondary);
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .project-card {
+            background-color: rgba(10, 10, 22, 0.7);
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 243, 255, 0.1);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .project-icon {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        .project-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Pie de página */
+        footer {
+            background-color: rgba(5, 5, 16, 0.9);
+            border-top: 1px solid rgba(0, 243, 255, 0.2);
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .copyright {
+            color: #8888cc;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        /* Efectos de animación */
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; text-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary); }
+        }
+
+        @keyframes paypal-pulse {
+            0% { opacity: 0; transform: scale(1); }
+            50% { opacity: 0.4; }
+            100% { opacity: 0; transform: scale(1.05); }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .glitch-effect {
+            animation: glitch 0.5s infinite;
+            animation-play-state: paused;
+        }
+
+        .glitch-effect:hover {
+            animation-play-state: running;
+        }
+
+        /* Responsividad */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+                padding: 0 10px;
+            }
+            
+            .donation-section {
+                padding: 30px 20px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo-text {
+                font-size: 2.2rem;
+            }
+            
+            .paypal-button {
+                font-size: 1.2rem;
+                padding: 18px 30px;
+            }
+        }
+
+        /* Efectos de texto neón */
+        .neon-text {
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+        }
+
+        /* Efecto de escaneo */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            z-index: 1000;
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Efecto de línea de escaneo -->
+    <div class="scan-line"></div>
+    
+    <!-- Fondo de cuadrícula cyberpunk -->
+    <div class="cyber-grid"></div>
+    
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Encabezado -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-bolt"></i></div>
+                <div class="logo-text glitch-effect">CyberRun</div>
+            </div>
+            <div class="tagline neon-text" style="color: var(--accent);">Donaciones para Julián Osorio</div>
+        </header>
+        
+        <!-- Sección principal -->
+        <section class="hero">
+            <h1 class="neon-text">Apoya a un Joven Entusiasta de 15 Años</h1>
+            <div class="age-badge">15 Años • Desarrollador • Investigador</div>
+            <p>
+                Hola, soy Julián Osorio, un joven apasionado por la informática, programación y ciberseguridad. 
+                Con solo 15 años, ya he iniciado múltiples proyectos de software, videojuegos, servidores y 
+                herramientas de investigación. Tu apoyo, incluso con un centavo, me ayuda a mantener servidores, 
+                adquirir recursos y continuar desarrollando proyectos que puedan beneficiar a la comunidad.
+            </p>
+        </section>
+        
+        <!-- Sección de donaciones -->
+        <section class="donation-section">
+            <h2 class="donation-title neon-text">Haz tu Donación</h2>
+            <p style="text-align: center; margin-bottom: 25px; font-size: 1.2rem;">
+                Cada centavo cuenta y será invertido en mis proyectos de informática, servidores, 
+                desarrollo de software y herramientas de investigación. ¡Tu apoyo hace la diferencia!
+            </p>
+            
+            <div class="paypal-container">
+                <h3 style="color: var(--accent); margin-bottom: 20px; text-align: center;">
+                    <i class="fab fa-paypal"></i> Donación via PayPal
+                </h3>
+                
+                <!-- Botón de PayPal con tu enlace -->
+                <a href="https://www.paypal.com/donate/?hosted_button_id=25RFBFGSJT5XJ" target="_blank" class="paypal-button">
+                    <div class="pulse-effect"></div>
+                    <i class="fab fa-paypal"></i> Donar con PayPal
+                </a>
+                
+                <div class="donation-options">
+                    <div class="donation-amount" data-amount="0.01">$0.01</div>
+                    <div class="donation-amount" data-amount="1">$1</div>
+                    <div class="donation-amount highlighted" data-amount="5">$5</div>
+                    <div class="donation-amount" data-amount="10">$10</div>
+                    <div class="donation-amount" data-amount="20">$20</div>
+                    <div class="donation-amount" data-amount="50">$50</div>
+                </div>
+                
+                <p class="donation-note">
+                    <i class="fas fa-info-circle"></i> Puedes elegir cualquier cantidad, incluso solo un centavo es de gran ayuda.
+                </p>
+                
+                <p style="text-align: center; margin-top: 20px; color: #aaaaff;">
+                    Las donaciones son para <strong>Julián Osorio</strong> para garantizar un futuro de proyectos innovadores.
+                </p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p><i class="fas fa-hand-holding-heart" style="color: var(--secondary);"></i> <strong>¿En qué se usarán las donaciones?</strong></p>
+                <p style="margin-top: 10px; color: #b0b0ff;">
+                    Mantenimiento de servidores • Dominios y hosting • Licencias de software • 
+                    Hardware para desarrollo • Investigación en ciberseguridad • Recursos educativos
+                </p>
+            </div>
+        </section>
+        
+        <!-- Sección de proyectos -->
+        <section class="projects-section">
+            <h2 class="section-title">Mis Proyectos e Intereses</h2>
+            
+            <div class="projects-grid">
+                <!-- Proyecto 1 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Desarrollo de Videojuegos</h3>
+                    <p>Creación de videojuegos independientes con motores como Unity y Godot, enfocados en experiencias únicas y mecánicas innovadoras.</p>
+                </div>
+                
+                <!-- Proyecto 2 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-server"></i></div>
+                    <h3>Servidores de Minecraft</h3>
+                    <p>Configuración y mantenimiento de servidores de Minecraft personalizados con plugins únicos y experiencias multijugador innovadoras.</p>
+                </div>
+                
+                <!-- Proyecto 3 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-microchip"></i></div>
+                    <h3>Custom ROMs & Software Modificado</h3>
+                    <p>Desarrollo y personalización de ROMs para dispositivos Android y modificación de software existente para optimización y nuevas funcionalidades.</p>
+                </div>
+                
+                <!-- Proyecto 4 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Pentesting & Ciberseguridad</h3>
+                    <p>Investigación en seguridad informática, pruebas de penetración ética y desarrollo de herramientas para análisis de vulnerabilidades.</p>
+                </div>
+                
+                <!-- Proyecto 5 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-code"></i></div>
+                    <h3>Desarrollo de Plugins & Software</h3>
+                    <p>Creación de plugins para diversas plataformas y desarrollo de software utilitario para automatización y productividad.</p>
+                </div>
+                
+                <!-- Proyecto 6 -->
+                <div class="project-card">
+                    <div class="project-icon"><i class="fas fa-flask"></i></div>
+                    <h3>Investigación en Informática</h3>
+                    <p>Estudio e investigación en nuevas tecnologías, algoritmos y metodologías de desarrollo de software y hardware.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Pie de página -->
+        <footer>
+            <div class="footer-logo">CyberRun</div>
+            <p style="max-width: 600px; margin: 0 auto 20px; color: #aaaaff;">
+                Plataforma de donaciones para apoyar los proyectos de Julián Osorio, un joven de 15 años 
+                apasionado por la tecnología y el desarrollo de software.
+            </p>
+            <p style="color: var(--primary);">
+                <i class="fas fa-heart" style="color: var(--secondary);"></i> 
+                ¡Gracias por tu apoyo, incluso el más pequeño!
+            </p>
+            <div class="copyright">
+                &copy; 2023 CyberRun - Donaciones para Julián Osorio. Todos los proyectos son de código abierto y para la comunidad.
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Efectos interactivos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efecto de parpadeo aleatorio para elementos neón
+            const neonElements = document.querySelectorAll('.neon-text');
+            
+            setInterval(() => {
+                neonElements.forEach(el => {
+                    if (Math.random() > 0.7) {
+                        el.style.opacity = '0.7';
+                        setTimeout(() => {
+                            el.style.opacity = '1';
+                        }, 50);
+                    }
+                });
+            }, 300);
+            
+            // Efecto de hover para las tarjetas de proyecto
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.borderColor = 'var(--primary)';
+                    const icon = this.querySelector('.project-icon');
+                    icon.style.transform = 'scale(1.2)';
+                    icon.style.transition = 'transform 0.3s';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.borderColor = 'rgba(0, 243, 255, 0.2)';
+                    const icon = this.querySelector('.project-icon');
+                    icon.style.transform = 'scale(1)';
+                });
+            });
+            
+            // Efecto para los botones de cantidad de donación
+            const donationAmounts = document.querySelectorAll('.donation-amount');
+            donationAmounts.forEach(amount => {
+                amount.addEventListener('click', function() {
+                    // Remover highlight de todos
+                    donationAmounts.forEach(a => a.classList.remove('highlighted'));
+                    
+                    // Añadir highlight al seleccionado
+                    this.classList.add('highlighted');
+                    
+                    // Efecto visual
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1.05)';
+                    }, 150);
+                    
+                    // Mostrar mensaje
+                    const selectedAmount = this.getAttribute('data-amount');
+                    showDonationMessage(selectedAmount);
+                });
+            });
+            
+            // Efecto de escritura para el título principal
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.textContent;
+            heroTitle.textContent = '';
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < originalText.length) {
+                    heroTitle.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                }
+            }
+            
+            // Iniciar efecto de escritura después de un breve retraso
+            setTimeout(typeWriter, 500);
+            
+            // Función para mostrar mensaje al seleccionar cantidad
+            function showDonationMessage(amount) {
+                const messages = {
+                    "0.01": "¡Incluso un centavo ayuda a mantener los servidores!",
+                    "1": "¡$1 puede ayudar a pagar el dominio por un día!",
+                    "5": "¡$5 ayuda a mantener un servidor por una semana!",
+                    "10": "¡$10 contribuye al desarrollo de nuevos proyectos!",
+                    "20": "¡$20 permite adquirir herramientas de desarrollo!",
+                    "50": "¡$50 ayuda significativamente en investigación y desarrollo!"
+                };
+                
+                const message = messages[amount] || "¡Cualquier cantidad es de gran ayuda para mis proyectos!";
+                
+                // Crear o actualizar elemento de mensaje
+                let messageEl = document.querySelector('.donation-note');
+                if (!messageEl) {
+                    messageEl = document.createElement('p');
+                    messageEl.className = 'donation-note';
+                    document.querySelector('.paypal-container').appendChild(messageEl);
+                }
+                
+                messageEl.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+                
+                // Efecto visual
+                messageEl.style.color = 'var(--accent)';
+                messageEl.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    messageEl.style.transform = 'scale(1)';
+                }, 300);
+            }
+            
+            // Efecto especial para el botón de PayPal
+            const paypalButton = document.querySelector('.paypal-button');
+            paypalButton.addEventListener('mouseenter', function() {
+                this.style.background = 'linear-gradient(90deg, #009cde, #003087, #012169)';
+            });
+            
+            paypalButton.addEventListener('mouseleave', function() {
+                this.style.background = 'linear-gradient(90deg, #003087, #009cde, #012169)';
+            });
+            
+            // Efecto de consola de información
+            const infoMessages = [
+                "Tu donación ayudará a mantener servidores activos",
+                "Cada centavo se invierte en proyectos de tecnología",
+                "¡Los proyectos son de código abierto para la comunidad!",
+                "También acepto sugerencias para nuevos proyectos",
+                "Sígueme en mis redes para ver los avances"
+            ];
+            
+            let infoIndex = 0;
+            const infoElement = document.querySelector('.donation-note');
+            
+            setInterval(() => {
+                if (infoElement) {
+                    infoElement.innerHTML = `<i class="fas fa-info-circle"></i> ${infoMessages[infoIndex]}`;
+                    infoIndex = (infoIndex + 1) % infoMessages.length;
+                    
+                    // Efecto de brillo
+                    infoElement.style.textShadow = '0 0 8px var(--accent)';
+                    setTimeout(() => {
+                        infoElement.style.textShadow = 'none';
+                    }, 800);
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
