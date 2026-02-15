@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VanGuardian · GNU/Linux</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple-50: #f5f0ff;
+            --purple-100: #e0d0ff;
+            --purple-200: #c9a9ff;
+            --purple-300: #b27aff;
+            --purple-400: #9b4dff;
+            --purple-500: #841aff;
+            --purple-600: #6a0dad;
+            --purple-700: #4a0a7a;
+            --purple-800: #2a0647;
+            --purple-900: #150224;
+            --purple-950: #0a0112;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f5f5f5;
+            --neutral-200: #e5e5e5;
+            --neutral-300: #d4d4d4;
+            --neutral-400: #a3a3a3;
+            --neutral-500: #737373;
+            --neutral-600: #525252;
+            --neutral-700: #404040;
+            --neutral-800: #262626;
+            --neutral-900: #171717;
+            
+            --bg-dark: #0a0a0f;
+            --bg-card: rgba(20, 10, 25, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.4);
+            --accent: #b27aff;
+            --accent-glow: rgba(178, 122, 255, 0.3);
+            --border-light: rgba(255, 255, 255, 0.05);
+            --border-accent: rgba(178, 122, 255, 0.2);
+            
+            --gradient-1: linear-gradient(135deg, #b27aff, #9b4dff, #841aff);
+            --gradient-2: linear-gradient(45deg, rgba(178, 122, 255, 0.1), rgba(132, 26, 255, 0.05));
+            --gradient-3: linear-gradient(225deg, #841aff, #4a0a7a);
+            
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            --shadow-purple: 0 0 20px rgba(178, 122, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Cursor personalizado mejorado - VISIBLE */
+        .cursor {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s cubic-bezier(0.075, 0.82, 0.165, 1);
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+            opacity: 0.6;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+        }
+
+        .cursor-follower.hover {
+            transform: scale(1.5);
+            opacity: 1;
+        }
+
+        /* Smooth scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Header minimal con animación mejorada */
+        header {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            padding: 12px 24px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: var(--shadow-md);
+            transform: translateX(-50%) translateY(-5px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transform: rotate(45deg);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(405deg);
+        }
+
+        .logo-icon i {
+            transform: rotate(-45deg);
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 100px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 100px;
+            background: rgba(255, 255, 255, 0.05);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        nav a:hover::before {
+            opacity: 1;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .version-badge {
+            background: rgba(178, 122, 255, 0.1);
+            border: 1px solid var(--border-accent);
+            border-radius: 100px;
+            padding: 4px 12px;
+            font-size: 12px;
+            color: var(--accent);
+            animation: pulse-badge 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero section - animaciones mejoradas */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 24px;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .chip {
+            display: inline-block;
+            background: rgba(178, 122, 255, 0.1);
+            border: 1px solid var(--border-accent);
+            border-radius: 100px;
+            padding: 8px 20px;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: var(--accent);
+            backdrop-filter: blur(4px);
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -4px;
+            margin-bottom: 24px;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+        }
+
+        .hero h1 span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(20deg); }
+        }
+
+        .hero p {
+            font-size: clamp(18px, 2vw, 20px);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            justify-content: center;
+            margin-top: 60px;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s both;
+        }
+
+        .stat-item {
+            text-align: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-bg .blob {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: var(--gradient-3);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: blobMove 20s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+        }
+
+        .hero-bg .blob:nth-child(2) {
+            right: 0;
+            bottom: 0;
+            animation-delay: -5s;
+            background: linear-gradient(225deg, #b27aff, #841aff);
+        }
+
+        /* Buttons con animaciones mejoradas */
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.25s both;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 500;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .btn:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: var(--shadow-purple);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 30px var(--accent-glow);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-accent);
+            color: white;
+        }
+
+        .btn-outline:hover {
+            background: rgba(178, 122, 255, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* Sections con parallax mejorado */
+        section {
+            padding: 120px 24px;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-subtitle {
+            color: var(--accent);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-title {
+            font-size: 48px;
+            font-weight: 600;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
+        }
+
+        /* About grid */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .about-feature {
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .about-feature h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .about-feature p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .specs-mini {
+            display: flex;
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .spec-mini-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 24px;
+            flex: 1;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .spec-mini-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        .spec-mini-item i {
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .spec-mini-item .value {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .spec-mini-item .label {
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        .about-visual {
+            position: relative;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .terminal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 32px;
+            backdrop-filter: blur(8px);
+            transform: perspective(1000px) rotateY(-5deg) rotateX(5deg);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .terminal-card:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .terminal-dots span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        .terminal-dots span:nth-child(1) { 
+            background: #ff5f56;
+            animation-delay: 0s;
+        }
+        .terminal-dots span:nth-child(2) { 
+            background: #ffbd2e;
+            animation-delay: 0.2s;
+        }
+        .terminal-dots span:nth-child(3) { 
+            background: #27c93f;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .terminal-line {
+            color: var(--text-secondary);
+            font-family: monospace;
+            margin-bottom: 12px;
+            font-size: 14px;
+            opacity: 0;
+            animation: typeIn 0.5s forwards;
+        }
+
+        .terminal-line:nth-child(2) { animation-delay: 0.1s; }
+        .terminal-line:nth-child(3) { animation-delay: 0.2s; }
+        .terminal-line:nth-child(4) { animation-delay: 0.3s; }
+        .terminal-line:nth-child(5) { animation-delay: 0.4s; }
+        .terminal-line:nth-child(6) { animation-delay: 0.5s; }
+        .terminal-line:nth-child(7) { animation-delay: 0.6s; }
+
+        @keyframes typeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .terminal-line .prompt {
+            color: var(--accent);
+            margin-right: 12px;
+        }
+
+        .terminal-line .command {
+            color: white;
+        }
+
+        /* Features grid - animaciones escalonadas */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2px;
+            background: var(--border-light);
+            border-radius: 32px;
+            overflow: hidden;
+        }
+
+        .feature-item {
+            background: var(--bg-dark);
+            padding: 48px 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .feature-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-2);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .feature-item:hover::before {
+            opacity: 1;
+        }
+
+        .feature-item:hover {
+            background: var(--bg-card);
+            transform: translateY(-5px);
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+            color: var(--accent);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-item p {
+            color: var(--text-secondary);
+            font-size: 15px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Gallery grid - hover mejorado */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 32px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-purple);
+        }
+
+        .gallery-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .gallery-content {
+            opacity: 1;
+        }
+
+        .gallery-content i {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 16px;
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .gallery-content i {
+            transform: translateY(0);
+        }
+
+        .gallery-content span {
+            font-size: 18px;
+            font-weight: 500;
+            transform: translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+        }
+
+        .gallery-item:hover .gallery-content span {
+            transform: translateY(0);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Download section - sin opción de 32 bits */
+        .download-card-single {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 32px;
+            padding: 60px;
+            backdrop-filter: blur(8px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 700px;
+            margin: 60px auto 0;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .download-card-single:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-purple);
+        }
+
+        .download-card-single .edition {
+            font-size: 12px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .download-card-single h3 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        .download-card-single ul {
+            list-style: none;
+            margin-bottom: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .download-card-single ul li {
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .download-card-single ul li i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            padding: 16px 32px;
+            border-radius: 100px;
+            background: var(--gradient-1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-link::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .download-link:hover::before {
+            transform: translateX(100%);
+        }
+
+        .download-link:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .download-info {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-light);
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        /* Installation Guide */
+        .guide-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 48px;
+            padding: 60px;
+            backdrop-filter: blur(8px);
+            max-width: 900px;
+            margin: 60px auto 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .guide-card.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .guide-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-purple);
+            transform: translateY(-4px);
+        }
+
+        .guide-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 48px;
+        }
+
+        .step {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+            flex-shrink: 0;
+            box-shadow: var(--shadow-purple);
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-family: monospace;
+            font-size: 14px;
+            color: var(--accent);
+            overflow-x: auto;
+        }
+
+        .note {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            font-style: italic;
+        }
+
+        .guide-extra {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .live-credentials h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+        }
+
+        .credentials-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+            margin: 16px 0;
+        }
+
+        .credentials-box div {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .credentials-box span {
+            color: var(--text-tertiary);
+            width: 80px;
+        }
+
+        .credentials-box code {
+            background: rgba(0,0,0,0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            color: var(--accent);
+        }
+
+        .beta-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            background: rgba(255, 100, 100, 0.05);
+            border-left: 4px solid #ff6464;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .beta-note i {
+            color: #ff6464;
+            font-size: 24px;
+        }
+
+        .beta-note p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Creator section */
+        .creator-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: 48px;
+            padding: 60px;
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .creator-content:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-purple);
+        }
+
+        .creator-avatar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .creator-info h3 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .creator-info .role {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 24px;
+        }
+
+        .creator-info p {
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+
+        .creator-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-4px) rotate(5deg);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--purple-950);
+            padding: 80px 24px 40px;
+            margin-top: 120px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col .logo {
+            margin-bottom: 24px;
+        }
+
+        .footer-col p {
+            color: var(--text-tertiary);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .footer-col h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-light);
+            padding-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-tertiary);
+            font-size: 14px;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .footer-bottom-links a {
+            color: var(--text-tertiary);
+            text-decoration: none;
+        }
+
+        /* Animaciones principales */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: perspective(1000px) rotateY(-5deg) rotateX(5deg) translateY(0); }
+            50% { transform: perspective(1000px) rotateY(-5deg) rotateX(5deg) translateY(-20px); }
+        }
+
+        @keyframes blobMove {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(200px, 200px) scale(1.5); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 var(--accent-glow); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px var(--accent-glow); }
+        }
+
+        /* Clases de animación */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .creator-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-stats {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .download-card-single ul {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-extra {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                width: 95%;
+                padding: 12px 16px;
+            }
+
+            nav ul {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .footer-bottom-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .creator-content {
+                flex-direction: column;
+                text-align: center;
+                padding: 40px 24px;
+            }
+
+            .creator-social {
+                justify-content: center;
+            }
+
+            .cursor, .cursor-follower {
+                display: none;
+            }
+
+            .step {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .guide-card {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .buttons {
+                flex-direction: column;
+            }
+
+            .specs-mini {
+                flex-direction: column;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+                letter-spacing: -2px;
+            }
+
+            .download-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-shield-halved"></i>
+            </div>
+            <div class="logo-text">Van<span>Guardian</span></div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#about">Filosofía</a></li>
+                <li><a href="#features">Características</a></li>
+                <li><a href="#gallery">Galería</a></li>
+                <li><a href="#download">Descargar</a></li>
+            </ul>
+        </nav>
+        <div class="header-right">
+            <span class="version-badge">v1.0 Beta</span>
+            <button class="menu-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="hero-bg">
+            <div class="blob"></div>
+            <div class="blob"></div>
+        </div>
+        <div class="hero-content">
+            <div class="chip">
+                <i class="fas fa-crown"></i>
+                Basado en Linux Mint
+            </div>
+            <h1>
+                Minimalismo <br>
+                <span>sin concesiones</span>
+            </h1>
+            <p>
+                VanGuardian GNU/Linux hereda la estabilidad de Mint con un diseño único y una optimización extrema. Funciona fluido en 2GB RAM y CPU de 2 núcleos.
+            </p>
+            <div class="buttons">
+                <a href="#download" class="btn btn-primary">
+                    <i class="fas fa-download"></i>
+                    Descargar ISO
+                </a>
+                <a href="#features" class="btn btn-outline">
+                    <i class="fas fa-info-circle"></i>
+                    Características
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">2GB</div>
+                    <div class="stat-label">RAM mínima</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1GHz</div>
+                    <div class="stat-label">CPU dual-core</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10GB</div>
+                    <div class="stat-label">espacio en disco</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-subtitle">Filosofía</div>
+                <h2 class="section-title">Diseñado para <span>todos</span></h2>
+                <p class="section-description">
+                    La misma esencia de VanGuardian UX, ahora en tu PC. Optimización, belleza y usabilidad.
+                </p>
+            </div>
+            <div class="about-grid">
+                <div class="about-content reveal-left">
+                    <div class="about-feature">
+                        <h3>De Windows a Linux sin fricción</h3>
+                        <p>Interfaz familiar, atajos similares y una curva de aprendizaje mínima. Además, incluimos una guía interactiva para nuevos usuarios.</p>
+                    </div>
+                    <div class="about-feature">
+                        <h3>Máxima compatibilidad</h3>
+                        <p>Al estar basado en Linux Mint, puedes instalar cualquier software disponible para Ubuntu/Debian. Controladores incluidos para la mayoría del hardware.</p>
+                    </div>
+                    <div class="specs-mini">
+                        <div class="spec-mini-item">
+                            <i class="fas fa-bolt"></i>
+                            <div class="value">Rápido</div>
+                            <div class="label">inicio en 10s</div>
+                        </div>
+                        <div class="spec-mini-item">
+                            <i class="fas fa-paint-brush"></i>
+                            <div class="value">Único</div>
+                            <div class="label">diseño exclusivo</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual reveal-right">
+                    <div class="terminal-card">
+                        <div class="terminal-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">$</span>
+                            <span class="command">neofetch</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">></span>
+                            <span>OS: VanGuardian 1.0</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">></span>
+                            <span>Kernel: 5.15.x</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">></span>
+                            <span>Shell: zsh 5.8</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">></span>
+                            <span>DE: VanGuardian Desktop</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="prompt">></span>
+                            <span>Theme: VanGuardian-Dark</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-subtitle">Características</div>
+                <h2 class="section-title">Ligero, pero <span>poderoso</span></h2>
+                <p class="section-description">
+                    Todo lo que necesitas, nada que sobre.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-feather"></i></div>
+                    <h3>Ligereza extrema</h3>
+                    <p>Funciona con solo 2GB de RAM gracias a una meticulosa optimización. Ideal para equipos antiguos o recursos limitados.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-palette"></i></div>
+                    <h3>Diseño único</h3>
+                    <p>Tema visual exclusivo, iconos personalizados, animaciones fluidas y una estética que no pasa desapercibida.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-cubes"></i></div>
+                    <h3>SIn Apps preinstaladas</h3>
+                    <p>VanGuardian se enfoca en ser liviano, rapido y optimizado.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-shield"></i></div>
+                    <h3>Seguro por defecto</h3>
+                    <p>Firewall activado, actualizaciones automáticas y políticas de seguridad reforzadas.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3>Optimizado para SSD/HDD</h3>
+                    <p>Ajustes específicos para maximizar el rendimiento tanto en discos sólidos como mecánicos.</p>
+                </div>
+                <div class="feature-item reveal">
+                    <div class="feature-icon"><i class="fas fa-code"></i></div>
+                    <h3>Para usuarios nuevos</h3>
+                    <p>Basado en Linux Mint, compatible con Debian y Ubuntu, la mejor compatibilidad de software.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-subtitle">Galería</div>
+                <h2 class="section-title">Así se ve <span>VanGuardian</span></h2>
+                <p class="section-description">
+                    Capturas de pantalla del sistema en acción.
+                </p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695122620842226/LGV_20260215_154010027.MV.jpg?ex=699381b6&is=69923036&hm=27ee12dc3e929e8ed35ea8731abbd8df866fae8e785a397e5017d1093759352f&=&format=webp&width=965&height=544" alt="Escritorio">
+                    <div class="gallery-content">
+                        <i class="fas fa-desktop"></i>
+                        <span>Escritorio principal</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695122096558329/LGV_20260215_154030149.MV.jpg?ex=699381b6&is=69923036&hm=c0dd206f0ea2d4ffc93e02a9a49c72ac0d24469e9811e5a62556a09242689f08&=&format=webp&width=965&height=544" alt="Terminal">
+                    <div class="gallery-content">
+                        <i class="fas fa-terminal"></i>
+                        <span>Terminal personalizada</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695119852343507/LGV_20260215_154201768.MV.jpg?ex=699381b5&is=69923035&hm=3152046f683f57ec9d483829a63dd542fd1c79f348cb33927a99d5e6d2f01014&=&format=webp&width=965&height=544" alt="Aplicaciones">
+                    <div class="gallery-content">
+                        <i class="fas fa-th"></i>
+                        <span>Centro de aplicaciones</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695120317907055/LGV_20260215_154140196.MV.jpg?ex=699381b6&is=69923036&hm=039a3b244d08c8e4158acf6cde7b20a0da39482d776bac93abbb74135a2807fe&=&format=webp&width=965&height=544" alt="Configuración">
+                    <div class="gallery-content">
+                        <i class="fas fa-cog"></i>
+                        <span>Configuración</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695121668477161/LGV_20260215_154059826.MV.jpg?ex=699381b6&is=69923036&hm=d5702f43c6cb54a57c9b8df2736a8fe720b2daeff0cbeee15848d1000e9893fe&=&format=webp&width=965&height=544" alt="Multimedia">
+                    <div class="gallery-content">
+                        <i class="fas fa-music"></i>
+                        <span>Reproductor multimedia</span>
+                    </div>
+                </div>
+                <div class="gallery-item reveal-scale">
+                    <img src="https://media.discordapp.net/attachments/767483745041121320/1472695121668477161/LGV_20260215_154059826.MV.jpg?ex=699381b6&is=69923036&hm=d5702f43c6cb54a57c9b8df2736a8fe720b2daeff0cbeee15848d1000e9893fe&=&format=webp&width=965&height=544" alt="Gestor archivos">
+                    <div class="gallery-content">
+                        <i class="fas fa-folder"></i>
+                        <span>Gestor de archivos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-subtitle">Descarga</div>
+                <h2 class="section-title">Descarga <span>VanGuardian</span></h2>
+                <p class="section-description">
+                    Versión optimizada para equipos modernos de 64 bits.
+                </p>
+            </div>
+            <div class="download-card-single reveal-scale">
+                <div class="edition">Edición oficial</div>
+                <h3>VanGuardian GNU/Linux<br>64 bits</h3>
+                <ul>
+                    <li><i class="fas fa-check"></i> Arquitectura x86_64</li>
+                    <li><i class="fas fa-check"></i> Soporte UEFI y BIOS Legacy</li>
+                    <li><i class="fas fa-check"></i> Kernel optimizado 5.15.x</li>
+                    <li><i class="fas fa-check"></i> Suite completa de aplicaciones</li>
+                    <li><i class="fas fa-check"></i> Controladores preinstalados</li>
+                    <li><i class="fas fa-check"></i> Herramientas de desarrollo</li>
+                    <li><i class="fas fa-check"></i> Tema VanGuardian Dark</li>
+                    <li><i class="fas fa-check"></i> Actualizaciones automáticas</li>
+                </ul>
+<div class="download-buttons">
+    <a href="https://www.mediafire.com/file/r1biyrklhhku4w5/vanguardian-PC_amd64_2026-02-14_2034.iso/file" class="download-link">
+        <i class="fas fa-download"></i>
+        Descargar ISO (2.4GB)
+    </a>
+</div>
+                <div class="download-info">
+                    <p><strong>Requisitos mínimos:</strong> CPU dual-core 1GHz, 2GB RAM, 10GB disco</p>
+                    <p><strong>Recomendado:</strong> CPU quad-core 2GHz+, 4GB RAM+, 20GB+ SSD</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Guide -->
+    <section id="install">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-subtitle">Guía de instalación</div>
+                <h2 class="section-title">Instala <span>VanGuardian</span> en tu equipo</h2>
+                <p class="section-description">
+                    Sigue estos sencillos pasos para tener el sistema listo en pocos minutos.
+                </p>
+            </div>
+            <div class="guide-card reveal-scale">
+                <div class="guide-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Preparar el instalador</h4>
+                            <p>VanGuardian OS utiliza la tecnología <strong>penguins eggs</strong>. Primero, instala Calamares:</p>
+                            <div class="code-block">
+                                <code>sudo apt install calamares</code>
+                            </div>
+                            <p class="note">Si hay errores de dependencias, corrige con:</p>
+                            <div class="code-block">
+                                <code>sudo apt --fix-broken install</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Configurar Calamares</h4>
+                            <p>Ejecuta el siguiente comando para configurar el instalador:</p>
+                            <div class="code-block">
+                                <code>sudo eggs calamares --install</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Iniciar la instalación</h4>
+                            <p>Lanza el instalador gráfico con permisos de administrador:</p>
+                            <div class="code-block">
+                                <code>sudo calamares</code>
+                            </div>
+                            <p>Sigue el asistente. Al finalizar, puede aparecer un <strong>error visual</strong> (no afecta). Simplemente reinicia y VanGuardian estará listo.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="guide-extra">
+                    <div class="live-credentials">
+                        <h4><i class="fas fa-life-ring"></i> Modo Live CD / USB</h4>
+                        <p>Puedes probar VanGuardian sin instalar. Usa estas credenciales:</p>
+                        <div class="credentials-box">
+                            <div><span>Usuario:</span> <code>vanguardian</code></div>
+                            <div><span>Contraseña:</span> <code>vanguardian</code></div>
+                        </div>
+                        <p class="note">(Necesarias durante la instalación y en el sistema live)</p>
+                    </div>
+                    <div class="beta-note">
+                        <i class="fas fa-flask"></i>
+                        <p><strong>Versión beta:</strong> El sistema es estable, pero pueden existir pequeños fallos visuales. Reporta cualquier incidencia en nuestro grupo de Telegram.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator -->
+    <section id="creator">
+        <div class="section-container">
+            <div class="creator-content reveal-scale">
+                <div class="creator-avatar">
+                    <i class="fas fa-user-astronaut"></i>
+                </div>
+                <div class="creator-info">
+                    <h3>Julian Osorio</h3>
+                    <div class="role">Creador de VanGuardian (pipecitooficial)</div>
+                    <p>Desarrollador y entusiasta del software libre. Creador de VanGuardian UX para LG V50 y ahora de VanGuardian GNU/Linux. Apasionado por la optimización, el diseño y hacer la tecnología accesible para todos.</p>
+                    <div class="creator-social">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                        <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div class="logo-text">Van<span>Guardian</span></div>
+                    </div>
+                    <p>Un sistema operativo basado en Linux Mint, diseñado para ser rápido, hermoso y accesible para todos. La evolución natural de VanGuardian UX.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Enlaces</h4>
+                    <ul>
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#about">Filosofía</a></li>
+                        <li><a href="#features">Características</a></li>
+                        <li><a href="#gallery">Galería</a></li>
+                        <li><a href="#install">Instalación</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#">Documentación</a></li>
+                        <li><a href="#">Foro</a></li>
+                        <li><a href="#">GitHub</a></li>
+                        <li><a href="#">Reportar bug</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacidad</a></li>
+                        <li><a href="#">Términos</a></li>
+                        <li><a href="#">Licencias</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>© 2025 VanGuardian GNU/Linux. Todos los derechos reservados.</div>
+                <div class="footer-bottom-links">
+                    <a href="#">Aviso legal</a>
+                    <a href="#">Cookies</a>
+                    <a href="#">Contacto</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Custom cursor mejorado - SIEMPRE VISIBLE
+        const cursor = document.querySelector('.cursor');
+        const follower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // Smooth cursor movement con interpolación
+            cursorX += (mouseX - cursorX) * 0.3;
+            cursorY += (mouseY - cursorY) * 0.3;
+            followerX += (mouseX - followerX) * 0.15;
+            followerY += (mouseY - followerY) * 0.15;
+
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            follower.style.left = (followerX - 20) + 'px';
+            follower.style.top = (followerY - 20) + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        // Hover effect en elementos clickeables
+        const hoverElements = document.querySelectorAll('a, button, .btn, .gallery-item, .feature-item, .step, .download-card-single, .creator-content, .guide-card');
+        
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                follower.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                follower.classList.remove('hover');
+            });
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.menu-toggle').addEventListener('click', () => {
+            document.querySelector('nav ul').classList.toggle('active');
+        });
+
+        // Sistema de animaciones mejorado con Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                        
+                        // Animaciones especiales para elementos específicos
+                        if (entry.target.classList.contains('section-header')) {
+                            const subtitle = entry.target.querySelector('.section-subtitle');
+                            const title = entry.target.querySelector('.section-title');
+                            const description = entry.target.querySelector('.section-description');
+                            
+                            if (subtitle) subtitle.style.opacity = '1';
+                            if (title) title.style.opacity = '1';
+                            if (description) description.style.opacity = '1';
+                        }
+                        
+                        if (entry.target.classList.contains('about-feature')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateX(0)';
+                        }
+                        
+                        if (entry.target.classList.contains('spec-mini-item')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                        
+                        if (entry.target.classList.contains('about-visual')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateX(0)';
+                        }
+                        
+                        if (entry.target.classList.contains('feature-item')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                        
+                        if (entry.target.classList.contains('gallery-item')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'scale(1)';
+                        }
+                        
+                        if (entry.target.classList.contains('download-card-single')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+
+                        if (entry.target.classList.contains('guide-card')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                        
+                        if (entry.target.classList.contains('creator-content')) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'scale(1)';
+                        }
+                    }, index * 50);
+                }
+            });
+        }, observerOptions);
+
+        // Observar todos los elementos con animación
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale, .section-header, .about-feature, .spec-mini-item, .about-visual, .feature-item, .gallery-item, .download-card-single, .guide-card, .creator-content').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll para anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header dinámico con scroll
+        const header = document.querySelector('header');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Parallax suave en hero blobs
+        window.addEventListener('mousemove', (e) => {
+            const blobs = document.querySelectorAll('.blob');
+            const mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            const mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+
+            blobs.forEach((blob, index) => {
+                const speed = (index + 1) * 15;
+                const x = mouseX * speed;
+                const y = mouseY * speed;
+                blob.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Animación de carga inicial
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+        });
+
+        // Prevenir comportamiento por defecto de enlaces sin href
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
