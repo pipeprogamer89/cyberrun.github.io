@@ -1,787 +1,1212 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echo - Juego de Parkour Emocional</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0a0a12;
-            --bg-card: rgba(25, 25, 45, 0.75);
-            --bg-card-hover: rgba(35, 35, 60, 0.85);
-            --accent: #7e5bef;
-            --accent-hover: #6c5ce7;
-            --text-primary: #f0f0ff;
-            --text-secondary: #a0a0c0;
-            --border-radius: 16px;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECHO Remake · CyberRun × High-End RBJ Studios</title>
+  <meta name="description" content="Remake oficial de ECHO. Historia reinventada, gráficos Unity, multiplataforma. Descarga gratuita para Android, Windows y Linux.">
+  <meta name="keywords" content="ECHO, remake, juego, aventura, cyberpunk, Unity, descargar gratis">
+  <meta name="author" content="CyberRun">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+  <style>
+    /* === Mismas variables y estilos base (optimizados) === */
+    :root {
+      --void: #04040a;
+      --deep: #070712;
+      --surface: #0d0d22;
+      --glass: rgba(13,13,40,0.6);
+      --glass2: rgba(20,20,55,0.4);
+      --neon: #00f5ff;
+      --neon2: #7b2fff;
+      --neon3: #ff2d78;
+      --gold: #ffd060;
+      --text: #e8e8ff;
+      --muted: #6a6a9a;
+      --r: 14px;
+      --glow: 0 0 40px rgba(0,245,255,0.15), 0 0 80px rgba(123,47,255,0.1);
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    body {
+      font-family:'Rajdhani',sans-serif;
+      background:var(--void);
+      color:var(--text);
+      overflow-x:hidden;
+      cursor:default;
+    }
 
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: linear-gradient(135deg, #0f0f1b 0%, #1a1a2e 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
-            position: relative;
-        }
+    /* ── STARFIELD (optimizado) ── */
+    #stars-canvas {
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      z-index:0;pointer-events:none;
+    }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(126, 91, 239, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(88, 101, 242, 0.1) 0%, transparent 20%);
-            z-index: -1;
-        }
+    /* ── AMBIENT BLOBS con parallax ── */
+    .blob {
+      position:fixed;border-radius:50%;filter:blur(120px);
+      z-index:0;pointer-events:none;opacity:0.18;
+      transition:transform 0.1s ease-out;
+    }
+    .b1{width:600px;height:600px;background:radial-gradient(circle,#7b2fff,transparent);top:-200px;left:-150px}
+    .b2{width:500px;height:500px;background:radial-gradient(circle,#00f5ff,transparent);bottom:-150px;right:-100px}
+    .b3{width:400px;height:400px;background:radial-gradient(circle,#ff2d78,transparent);top:50%;left:50%;transform:translate(-50%,-50%)}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar{width:4px}
+    ::-webkit-scrollbar-track{background:var(--void)}
+    ::-webkit-scrollbar-thumb{background:linear-gradient(var(--neon2),var(--neon));border-radius:4px}
 
-        header {
-            text-align: center;
-            padding: 3rem 0 2rem;
-            position: relative;
-        }
+    /* ── NAVBAR ── */
+    nav {
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:1rem 2.5rem;
+      display:flex;align-items:center;justify-content:space-between;
+      background:rgba(4,4,10,0.7);
+      backdrop-filter:blur(24px);
+      border-bottom:1px solid rgba(0,245,255,0.08);
+      transition:background 0.3s;
+    }
+    .nav-logo {
+      font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:900;
+      letter-spacing:4px;color:var(--neon);
+      text-shadow:0 0 20px rgba(0,245,255,0.6);
+    }
+    .nav-links {display:flex;gap:2rem;list-style:none}
+    .nav-links a {
+      color:var(--muted);font-size:0.85rem;letter-spacing:2px;
+      text-decoration:none;text-transform:uppercase;font-weight:600;
+      transition:color .3s;
+    }
+    .nav-links a:hover{color:var(--neon)}
+    .nav-pill {
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      color:#fff;padding:.4rem 1.2rem;border-radius:20px;
+      font-size:.8rem;letter-spacing:1px;font-weight:700;
+      text-decoration:none;text-transform:uppercase;
+      box-shadow:0 0 20px rgba(0,245,255,0.3);
+      transition:all .3s;
+    }
+    .nav-pill:hover{box-shadow:0 0 35px rgba(0,245,255,0.6);transform:translateY(-1px)}
 
-        .game-icon {
-            width: 180px;
-            height: 180px;
-            border-radius: 24px;
-            background: linear-gradient(135deg, #6c5ce7, #00cec9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            box-shadow: 0 10px 30px rgba(126, 91, 239, 0.35);
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(126, 91, 239, 0.4);
-        }
+    /* ── HERO ── */
+    .hero {
+      position:relative;z-index:1;
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      text-align:center;padding:8rem 2rem 4rem;
+      overflow:hidden;
+    }
+    .hero-grid-bg {
+      position:absolute;inset:0;
+      background-image:
+        linear-gradient(rgba(0,245,255,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,245,255,0.03) 1px,transparent 1px);
+      background-size:60px 60px;
+      mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+    }
+    .hero-badge {
+      display:inline-flex;align-items:center;gap:.6rem;
+      background:rgba(123,47,255,0.15);
+      border:1px solid rgba(123,47,255,0.4);
+      color:#c4a0ff;
+      padding:.4rem 1.2rem;border-radius:30px;
+      font-size:.8rem;letter-spacing:2px;font-weight:700;
+      text-transform:uppercase;margin-bottom:1.8rem;
+      animation:fadeDown .8s .1s both;
+    }
+    .badge-dot {
+      width:7px;height:7px;background:var(--neon2);
+      border-radius:50%;box-shadow:0 0 8px var(--neon2);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.4)}}
 
-        .game-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.2), transparent 30%);
-            animation: rotate 4s linear infinite;
-        }
+    .hero-eyebrow {
+      font-family:'Space Mono',monospace;
+      font-size:.75rem;letter-spacing:4px;color:var(--neon);
+      text-transform:uppercase;margin-bottom:.75rem;
+      opacity:.7;animation:fadeDown .8s .2s both;
+    }
 
-        @keyframes rotate {
-            100% { transform: rotate(360deg); }
-        }
+    .hero-title {
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(4rem,14vw,11rem);
+      font-weight:900;line-height:.9;
+      letter-spacing:-4px;
+      animation:fadeDown .8s .3s both;
+      position:relative;display:inline-block;
+    }
+    .hero-title-inner {
+      background:linear-gradient(135deg,#fff 20%,var(--neon) 50%,#a06fff 80%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      filter:drop-shadow(0 0 40px rgba(0,245,255,0.3));
+      position:relative;
+      display:inline-block;
+    }
+    /* Efecto glitch */
+    .hero-title-inner::before,
+    .hero-title-inner::after {
+      content: "ECHO";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg,#fff 20%,var(--neon) 50%,#a06fff 80%);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+      clip: rect(0, 900px, 0, 0);
+      animation: glitch 3s infinite;
+    }
+    .hero-title-inner::before {
+      left: 2px;
+      text-shadow: -2px 0 var(--neon3);
+      animation: glitch-1 2s infinite linear alternate-reverse;
+    }
+    .hero-title-inner::after {
+      left: -2px;
+      text-shadow: 2px 0 var(--neon2);
+      animation: glitch-2 3s infinite linear alternate-reverse;
+    }
+    @keyframes glitch-1 {
+      0% { clip: rect(20px, 900px, 50px, 0); }
+      20% { clip: rect(86px, 900px, 30px, 0); }
+      40% { clip: rect(15px, 900px, 70px, 0); }
+      60% { clip: rect(40px, 900px, 20px, 0); }
+      80% { clip: rect(65px, 900px, 45px, 0); }
+      100% { clip: rect(90px, 900px, 10px, 0); }
+    }
+    @keyframes glitch-2 {
+      0% { clip: rect(65px, 900px, 90px, 0); }
+      20% { clip: rect(12px, 900px, 60px, 0); }
+      40% { clip: rect(45px, 900px, 20px, 0); }
+      60% { clip: rect(70px, 900px, 15px, 0); }
+      80% { clip: rect(25px, 900px, 85px, 0); }
+      100% { clip: rect(5px, 900px, 40px, 0); }
+    }
+    .hero-title-shadow {
+      position:absolute;top:6px;left:6px;
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(4rem,14vw,11rem);
+      font-weight:900;line-height:.9;letter-spacing:-4px;
+      color:transparent;
+      -webkit-text-stroke:1px rgba(0,245,255,0.15);
+      z-index:-1;
+    }
 
-        .game-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 24px;
-        }
+    .hero-remake-tag {
+      display:block;
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(.9rem,2.5vw,1.4rem);
+      font-weight:600;letter-spacing:8px;
+      color:var(--neon3);
+      text-shadow:0 0 20px rgba(255,45,120,0.5);
+      margin-top:.5rem;
+      animation:fadeDown .8s .4s both;
+    }
 
-        .game-icon span {
-            font-family: 'Poppins', sans-serif;
-            font-size: 5rem;
-            font-weight: 800;
-            background: linear-gradient(to right, #fff, #a0a0ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            position: relative;
-            letter-spacing: -3px;
-        }
+    .hero-sub {
+      max-width:680px;font-size:1.1rem;
+      color:rgba(232,232,255,.8); /* Mejor contraste */
+      line-height:1.8;
+      margin:1.8rem auto 2.5rem;font-weight:400;
+      animation:fadeDown .8s .5s both;
+    }
 
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(to right, #fff, #d4d4ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            letter-spacing: -1px;
-        }
+    .hero-cta-group {
+      display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;
+      animation:fadeDown .8s .6s both;
+    }
 
-        .subtitle {
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .btn-primary {
+      display:inline-flex;align-items:center;gap:.8rem;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      color:#fff;text-decoration:none;
+      padding:1rem 2.2rem;border-radius:50px;
+      font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;
+      box-shadow:0 0 40px rgba(0,245,255,0.25),0 0 80px rgba(123,47,255,0.15);
+      transition:all .4s;position:relative;overflow:hidden;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+    .btn-primary::before {
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+      transition:.6s;
+    }
+    .btn-primary:hover::before{left:100%}
+    .btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(0,245,255,0.4),0 0 100px rgba(123,47,255,0.2)}
+    .btn-primary:active{transform:translateY(0)}
 
-        .download-btn {
-            background: linear-gradient(135deg, var(--accent), #5c40ff);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-top: 1rem;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-        }
+    .btn-secondary {
+      display:inline-flex;align-items:center;gap:.8rem;
+      background:transparent;color:var(--text);
+      text-decoration:none;padding:1rem 2.2rem;border-radius:50px;
+      font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;
+      border:1px solid rgba(232,232,255,0.2);
+      backdrop-filter:blur(8px);transition:all .4s;
+    }
+    .btn-secondary:hover{border-color:var(--neon);color:var(--neon);box-shadow:0 0 20px rgba(0,245,255,0.15);transform:translateY(-3px)}
 
-        .download-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: var(--transition);
-        }
+    .hero-platforms {
+      display:flex;align-items:center;gap:1.5rem;margin-top:2.5rem;
+      animation:fadeDown .8s .7s both;
+      flex-wrap:wrap;justify-content:center;
+    }
+    .platform-chip {
+      display:inline-flex;align-items:center;gap:.5rem;
+      background:var(--glass2);border:1px solid rgba(255,255,255,0.07);
+      padding:.4rem 1rem;border-radius:20px;
+      font-size:.8rem;letter-spacing:1px;color:var(--muted);font-weight:600;
+      backdrop-filter:blur(8px);
+    }
+    .platform-chip svg{opacity:.6}
 
-        .download-btn:hover::before {
-            left: 100%;
-        }
+    .hero-scroll {
+      position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:.4rem;
+      color:var(--muted);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+      animation:fadeIn 1s 1.5s both;
+    }
+    .scroll-line {
+      width:1px;height:40px;
+      background:linear-gradient(var(--neon),transparent);
+      animation:scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}50.01%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(108, 92, 231, 0.6);
-        }
+    /* ── ANNOUNCE BANNER ── */
+    .announce {
+      position:relative;z-index:1;
+      background:linear-gradient(90deg,rgba(123,47,255,0.15),rgba(0,245,255,0.1),rgba(255,45,120,0.1),rgba(123,47,255,0.15));
+      border-top:1px solid rgba(0,245,255,0.1);
+      border-bottom:1px solid rgba(0,245,255,0.1);
+      padding:1rem 0;overflow:hidden;
+    }
+    .announce-inner {
+      display:flex;gap:4rem;
+      animation:ticker 30s linear infinite;
+      white-space:nowrap;width:max-content;
+    }
+    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .announce-item {
+      display:inline-flex;align-items:center;gap:.75rem;
+      font-family:'Orbitron',sans-serif;font-size:.7rem;letter-spacing:3px;
+      font-weight:600;color:rgba(232,232,255,.5);text-transform:uppercase;
+    }
+    .announce-dot{width:4px;height:4px;background:var(--neon);border-radius:50%;box-shadow:0 0 6px var(--neon)}
 
-        .download-btn:active {
-            transform: translateY(1px);
-        }
+    /* ── SECTION WRAPPER ── */
+    .section {
+      position:relative;z-index:1;
+      padding:6rem 2rem;max-width:1280px;margin:0 auto;
+    }
+    .section-label {
+      font-family:'Space Mono',monospace;
+      font-size:.7rem;letter-spacing:4px;color:var(--neon);
+      text-transform:uppercase;margin-bottom:.5rem;opacity:.7;
+    }
+    .section-title {
+      font-family:'Orbitron',sans-serif;
+      font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;
+      letter-spacing:-1px;margin-bottom:1rem;
+    }
+    .section-title span{color:var(--neon)}
 
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
+    /* ── FEATURE STRIP ── */
+    .features-strip {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:1.5rem;margin-top:4rem;
+    }
+    .feat-card {
+      background:var(--glass);
+      border:1px solid rgba(0,245,255,0.06);
+      border-radius:var(--r);padding:2rem 1.5rem;
+      backdrop-filter:blur(20px);
+      transition:all .4s;position:relative;overflow:hidden;
+    }
+    .feat-card::before {
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(0,245,255,0.04),transparent);
+      opacity:0;transition:.4s;
+    }
+    .feat-card:hover{transform:translateY(-6px);border-color:rgba(0,245,255,0.2);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .feat-card:hover::before{opacity:1}
+    .feat-icon {
+      width:48px;height:48px;border-radius:12px;
+      background:linear-gradient(135deg,rgba(123,47,255,.2),rgba(0,245,255,.2));
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:1.2rem;font-size:1.5rem;
+    }
+    .feat-title {
+      font-family:'Orbitron',sans-serif;font-size:.85rem;
+      font-weight:700;letter-spacing:1px;margin-bottom:.6rem;color:#fff;
+    }
+    .feat-desc{font-size:.9rem;color:var(--muted);line-height:1.6;font-weight:400}
 
-        .card {
-            background: var(--bg-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            border: 1px solid rgba(126, 91, 239, 0.15);
-        }
+    /* ── SCREENSHOTS ── */
+    .screenshots-section{
+      position:relative;z-index:1;padding:6rem 0;overflow:hidden;
+    }
+    .screenshots-header{padding:0 2rem;max-width:1280px;margin:0 auto 3rem}
+    .screenshots-scroll {
+      display:flex;gap:1.5rem;
+      padding:1rem 2rem 2rem;
+      overflow-x:auto;
+      scroll-snap-type:x mandatory;
+      scrollbar-width:thin;scrollbar-color:var(--neon2) transparent;
+    }
+    .screenshots-scroll::-webkit-scrollbar{height:3px}
+    .screenshots-scroll::-webkit-scrollbar-thumb{background:var(--neon2);border-radius:3px}
+    .ss-item {
+      min-width:420px;height:250px;
+      border-radius:var(--r);
+      background:var(--surface);
+      border:1px solid rgba(0,245,255,0.08);
+      overflow:hidden;flex-shrink:0;
+      scroll-snap-align:start;
+      transition:all .4s;
+      position:relative;
+    }
+    .ss-item:hover{transform:scale(1.02);border-color:rgba(0,245,255,0.25);box-shadow:0 10px 50px rgba(0,0,0,.5)}
+    .ss-item img{width:100%;height:100%;object-fit:cover;transition:.4s}
+    .ss-item:hover img{transform:scale(1.05)}
+    .ss-placeholder {
+      width:100%;height:100%;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;
+      color:var(--muted);font-size:.8rem;letter-spacing:2px;
+    }
+    .ss-placeholder-icon{font-size:2.5rem;opacity:.3}
 
-        .card:hover {
-            transform: translateY(-5px);
-            background: var(--bg-card-hover);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
+    /* ── PLATFORMS / DOWNLOAD ── */
+    .download-section {
+      position:relative;z-index:1;
+      padding:6rem 2rem;
+      background:linear-gradient(135deg,rgba(7,7,18,0.9),rgba(13,13,34,0.9));
+      border-top:1px solid rgba(0,245,255,0.05);
+      border-bottom:1px solid rgba(0,245,255,0.05);
+    }
+    .download-inner{max-width:1280px;margin:0 auto}
+    .download-grid {
+      display:grid;grid-template-columns:1fr 1.2fr;
+      gap:4rem;align-items:center;
+      margin-top:3rem;
+    }
+    @media(max-width:900px){.download-grid{grid-template-columns:1fr}}
+    .platform-cards {display:flex;flex-direction:column;gap:1rem}
+    .platform-card {
+      display:flex;align-items:center;justify-content:space-between;
+      background:var(--glass);border:1px solid rgba(255,255,255,0.06);
+      border-radius:var(--r);padding:1.4rem 1.8rem;
+      backdrop-filter:blur(20px);transition:all .4s;
+      text-decoration:none;color:var(--text);
+    }
+    .platform-card:hover{border-color:var(--neon);background:rgba(0,245,255,0.04);transform:translateX(6px);box-shadow:0 0 40px rgba(0,245,255,0.08)}
+    .platform-left{display:flex;align-items:center;gap:1.2rem}
+    .platform-logo {
+      width:50px;height:50px;border-radius:12px;
+      background:var(--surface);
+      display:flex;align-items:center;justify-content:center;font-size:1.5rem;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    .platform-info-name {
+      font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.2rem;
+    }
+    .platform-info-detail{font-size:.8rem;color:var(--muted);letter-spacing:1px}
+    .platform-badge {
+      font-size:.7rem;letter-spacing:1px;text-transform:uppercase;
+      padding:.35rem .9rem;border-radius:20px;font-weight:700;
+      font-family:'Space Mono',monospace;
+    }
+    .badge-free{background:rgba(0,245,255,.1);color:var(--neon);border:1px solid rgba(0,245,255,.2)}
+    .badge-coming{background:rgba(255,208,96,.1);color:var(--gold);border:1px solid rgba(255,208,96,.2)}
 
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
+    .download-right {
+      background:var(--glass);border:1px solid rgba(123,47,255,0.2);
+      border-radius:var(--r);padding:2.5rem;
+      backdrop-filter:blur(20px);
+      position:relative;overflow:hidden;
+    }
+    .download-right::before {
+      content:'';position:absolute;top:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,var(--neon2),var(--neon),transparent);
+    }
+    .download-logo {
+      width:90px;height:90px;border-radius:18px;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;
+      color:#fff;margin-bottom:1.5rem;
+      box-shadow:0 0 40px rgba(123,47,255,.3);
+      position:relative;overflow:hidden;
+    }
+    .download-logo::after{
+      content:'';position:absolute;inset:0;
+      background:conic-gradient(from 0deg,transparent,rgba(255,255,255,.3),transparent 30%);
+      animation:rotate 3s linear infinite;
+    }
+    @keyframes rotate{100%{transform:rotate(360deg)}}
+    .download-game-name{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;margin-bottom:.3rem}
+    .download-tagline{font-size:.85rem;color:var(--muted);margin-bottom:1.5rem;letter-spacing:1px}
+    .download-meta {display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1.8rem}
+    .meta-chip {
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      padding:.3rem .8rem;border-radius:8px;font-size:.75rem;color:var(--muted);
+      letter-spacing:1px;
+    }
+    .meta-chip strong{color:var(--text)}
+    .btn-download-main {
+      width:100%;display:flex;align-items:center;justify-content:center;gap:.8rem;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      color:#fff;text-decoration:none;
+      padding:1.1rem 2rem;border-radius:10px;
+      font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;
+      letter-spacing:2px;text-transform:uppercase;
+      box-shadow:0 0 40px rgba(0,245,255,.2);
+      transition:all .4s;border:none;cursor:pointer;
+      position:relative;overflow:hidden;
+    }
+    .btn-download-main::before{
+      content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+      transition:.6s;
+    }
+    .btn-download-main:hover::before{left:100%}
+    .btn-download-main:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(0,245,255,.35)}
+    .btn-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.75rem;letter-spacing:1px}
 
-        .card-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(126, 91, 239, 0.2), rgba(88, 101, 242, 0.2));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
+    /* ── REQUIREMENTS ── */
+    .req-grid {
+      display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;
+    }
+    @media(max-width:700px){.req-grid{grid-template-columns:1fr}}
+    .req-box {
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--r);padding:2rem;backdrop-filter:blur(20px);
+      position:relative;overflow:hidden;
+    }
+    .req-box.recommended{border-color:rgba(0,245,255,.12)}
+    .req-box.recommended::before{
+      content:'';position:absolute;inset:0;
+      background:linear-gradient(135deg,rgba(0,245,255,0.03),transparent);
+    }
+    .req-label {
+      font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:3px;
+      text-transform:uppercase;margin-bottom:1.2rem;padding:.3rem .8rem;
+      border-radius:6px;display:inline-block;
+    }
+    .req-label.min{background:rgba(255,255,255,.05);color:var(--muted)}
+    .req-label.rec{background:rgba(0,245,255,.1);color:var(--neon)}
+    .req-list{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+    .req-item{display:flex;align-items:flex-start;gap:.75rem;font-size:.9rem;color:rgba(232,232,255,.75);font-weight:500}
+    .req-icon{color:var(--neon);font-size:.85rem;margin-top:.1rem;flex-shrink:0}
+    .req-item strong{color:var(--text);font-weight:600}
 
-        .card-icon svg {
-            width: 24px;
-            height: 24px;
-            color: var(--accent);
-        }
+    /* ── STORY ── */
+    .story-layout {
+      display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem;
+    }
+    @media(max-width:900px){.story-layout{grid-template-columns:1fr}}
+    .story-visual {
+      position:relative;height:400px;
+    }
+    .story-frame {
+      width:100%;height:100%;
+      border-radius:var(--r);overflow:hidden;
+      background:linear-gradient(135deg,var(--surface),#0d0d2a);
+      border:1px solid rgba(123,47,255,.2);
+      display:flex;align-items:center;justify-content:center;
+      font-size:5rem;opacity:.3;
+    }
+    .story-glow {
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      width:200px;height:200px;
+      background:radial-gradient(circle,rgba(123,47,255,.3),transparent);
+      filter:blur(40px);border-radius:50%;
+    }
+    .story-text p{
+      font-size:1rem;color:rgba(232,232,255,.65);line-height:1.9;margin-bottom:1rem;font-weight:400;
+    }
+    .story-tags{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.5rem}
+    .story-tag{
+      background:rgba(255,45,120,.1);border:1px solid rgba(255,45,120,.2);
+      color:#ff8ab0;padding:.3rem .8rem;border-radius:6px;
+      font-size:.75rem;letter-spacing:1px;font-weight:600;
+    }
 
-        h2 {
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
+    /* ── REVIEWS ── */
+    .reviews-grid {
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+      gap:1.5rem;margin-top:3rem;
+    }
+    .review-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--r);padding:1.8rem;
+      backdrop-filter:blur(20px);transition:all .4s;
+      position:relative;overflow:hidden;
+    }
+    .review-card::after {
+      content:'❝';position:absolute;top:1rem;right:1.5rem;
+      font-size:3rem;color:rgba(0,245,255,.06);font-family:serif;
+    }
+    .review-card:hover{transform:translateY(-4px);border-color:rgba(0,245,255,.12)}
+    .review-stars{color:#ffd060;font-size:1rem;margin-bottom:.8rem;letter-spacing:2px}
+    .review-text{font-size:.9rem;color:rgba(232,232,255,.6);line-height:1.7;margin-bottom:1.2rem;font-weight:400}
+    .review-author{display:flex;align-items:center;gap:.8rem}
+    .review-avatar {
+      width:40px;height:40px;border-radius:50%;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;font-size:.9rem;flex-shrink:0;
+    }
+    .review-name{font-weight:600;font-size:.9rem}
+    .review-date{font-size:.75rem;color:var(--muted);letter-spacing:1px}
 
-        h3 {
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            color: #d4d4ff;
-        }
+    /* ── ENGINE STRIP ── */
+    .engine-strip {
+      position:relative;z-index:1;
+      padding:3rem 2rem;
+      border-top:1px solid rgba(255,255,255,.04);
+      border-bottom:1px solid rgba(255,255,255,.04);
+      background:rgba(7,7,18,.8);
+    }
+    .engine-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
+    .engine-label{font-family:'Space Mono',monospace;font-size:.65rem;letter-spacing:3px;color:var(--muted);text-transform:uppercase}
+    .engine-logos{display:flex;align-items:center;gap:2.5rem;flex-wrap:wrap}
+    .engine-badge {
+      display:flex;align-items:center;gap:.8rem;
+      background:var(--glass);border:1px solid rgba(255,255,255,.07);
+      padding:.8rem 1.4rem;border-radius:10px;
+      backdrop-filter:blur(10px);
+    }
+    .engine-badge-name{font-family:'Orbitron',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:1px}
+    .engine-badge-sub{font-size:.7rem;color:var(--muted);letter-spacing:1px}
 
-        p {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            line-height: 1.7;
-        }
+    /* ── CREDITS ── */
+    .credits-section{position:relative;z-index:1;padding:6rem 2rem}
+    .credits-inner{max-width:1280px;margin:0 auto}
+    .credits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-top:3rem}
+    .credit-card {
+      background:var(--glass);border:1px solid rgba(255,255,255,.06);
+      border-radius:var(--r);padding:1.8rem;
+      backdrop-filter:blur(20px);text-align:center;
+      transition:all .4s;
+    }
+    .credit-card:hover{transform:translateY(-4px);border-color:rgba(123,47,255,.2)}
+    .credit-avatar {
+      width:70px;height:70px;border-radius:50%;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.8rem;margin:0 auto 1rem;
+      box-shadow:0 0 20px rgba(123,47,255,.3);
+    }
+    .credit-name{font-family:'Orbitron',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:.3rem}
+    .credit-role{font-size:.8rem;color:var(--muted);letter-spacing:1px}
+    .credit-special {border-color:rgba(255,208,96,.2)}
+    .credit-special .credit-avatar{background:linear-gradient(135deg,#b8860b,var(--gold));box-shadow:0 0 20px rgba(255,208,96,.3)}
+    .credit-special .credit-name{color:var(--gold)}
 
-        ul {
-            list-style: none;
-            padding-left: 1.5rem;
-        }
+    /* ── ABOUT BOX ── */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem}
+    @media(max-width:700px){.about-grid{grid-template-columns:1fr}}
+    .about-row{display:flex;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9rem}
+    .about-row:last-child{border-bottom:none}
+    .about-key{color:var(--muted);font-weight:500;letter-spacing:1px}
+    .about-val{color:var(--text);font-weight:600;text-align:right}
 
-        li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(160, 160, 192, 0.1);
-            color: var(--text-secondary);
-        }
+    /* ── BACK TO TOP ── */
+    .back-to-top {
+      position:fixed;bottom:2rem;right:2rem;
+      width:48px;height:48px;
+      background:linear-gradient(135deg,var(--neon2),var(--neon));
+      border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      color:#fff;text-decoration:none;
+      box-shadow:0 0 20px rgba(0,245,255,0.3);
+      transition:all .3s;
+      z-index:100;
+      opacity:0;
+      pointer-events:none;
+    }
+    .back-to-top.visible {
+      opacity:1;
+      pointer-events:auto;
+    }
+    .back-to-top:hover{transform:translateY(-4px);box-shadow:0 0 30px rgba(0,245,255,0.6)}
 
-        li:last-child {
-            border-bottom: none;
-        }
+    /* ── FOOTER ── */
+    footer {
+      position:relative;z-index:1;
+      padding:3rem 2rem 2rem;
+      border-top:1px solid rgba(0,245,255,.07);
+      text-align:center;
+    }
+    .footer-logo{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:900;letter-spacing:4px;color:var(--neon);text-shadow:0 0 20px rgba(0,245,255,.4);margin-bottom:.5rem}
+    .footer-sub{font-size:.8rem;color:var(--muted);letter-spacing:2px;margin-bottom:1.5rem}
+    .footer-links{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.5rem}
+    .footer-links a{color:var(--muted);text-decoration:none;font-size:.8rem;letter-spacing:1px;transition:color .3s}
+    .footer-links a:hover{color:var(--neon)}
+    .footer-copy{font-size:.75rem;color:rgba(106,106,154,.5);letter-spacing:1px}
 
-        .reviews-container {
-            grid-column: 1 / -1;
-        }
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
 
-        .review {
-            display: flex;
-            gap: 1.5rem;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid rgba(160, 160, 192, 0.1);
-        }
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s,transform .8s}
+    .reveal.visible{opacity:1;transform:translateY(0)}
 
-        .review:last-child {
-            border-bottom: none;
-        }
+    /* ── 3D TILT (solo escritorio) ── */
+    .tilt-card{transform-style:preserve-3d;transition:transform .1s}
 
-        .reviewer {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 80px;
-        }
-
-        .avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6c5ce7, #00cec9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            font-size: 1.25rem;
-        }
-
-        .rating {
-            color: #ffc107;
-            font-weight: bold;
-        }
-
-        .review-content h4 {
-            margin-bottom: 0.25rem;
-            color: var(--text-primary);
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .gallery-item {
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(126, 91, 239, 0.1);
-            aspect-ratio: 16/9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(126, 91, 239, 0.3);
-            transition: var(--transition);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            border-color: var(--accent);
-        }
-
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-
-        .gallery-placeholder {
-            color: var(--text-secondary);
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .android-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: rgba(61, 220, 132, 0.2);
-            color: #3ddc84;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-weight: 500;
-            margin-top: 0.5rem;
-        }
-
-        @media (max-width: 768px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .game-icon {
-                width: 140px;
-                height: 140px;
-            }
-            
-            .game-icon span {
-                font-size: 3.5rem;
-            }
-        }
-
-        .version-badge {
-            background: rgba(108, 92, 231, 0.2);
-            color: #a291ff;
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-            font-weight: 500;
-        }
-
-        .requirement-item {
-            display: flex;
-            margin-bottom: 0.75rem;
-        }
-
-        .requirement-item svg {
-            color: var(--accent);
-            min-width: 20px;
-            margin-right: 0.75rem;
-            margin-top: 3px;
-        }
-
-        .blur-effect {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            opacity: 0.3;
-        }
-
-        .blur-1 {
-            background: linear-gradient(135deg, #6c5ce7, #00cec9);
-            top: -150px;
-            right: -100px;
-        }
-
-        .blur-2 {
-            background: linear-gradient(135deg, #ff7675, #fd79a8);
-            bottom: -100px;
-            left: -150px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-top: 2rem;
-            border-top: 1px solid rgba(160, 160, 192, 0.1);
-        }
-    </style>
+    @media(max-width:768px){
+      nav .nav-links{display:none}
+      .hero-title{letter-spacing:-2px}
+      .hero-cta-group{flex-direction:column;align-items:center}
+      .back-to-top{bottom:1rem;right:1rem}
+    }
+  </style>
 </head>
 <body>
-    <div class="blur-effect blur-1"></div>
-    <div class="blur-effect blur-2"></div>
+  <canvas id="stars-canvas"></canvas>
+  <div class="blob b1" id="blob1"></div>
+  <div class="blob b2" id="blob2"></div>
+  <div class="blob b3" id="blob3"></div>
 
-    <div class="container">
-        <header>
-            <div class="game-icon" id="game-logo">
-                <!-- El logo se cargará aquí dinámicamente -->
-                <span>E</span>
-            </div>
-            <h1>Echo</h1>
-            <p class="subtitle">Una exploración interactiva sobre el amor prohibido, la pérdida y la búsqueda de uno mismo.</p>
-            <a href="https://github.com/pipeprogamer89/cyberrun.github.io/releases/download/echov1/Echo.apk" class="download-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Descargar
-            </a>
-            <div class="android-badge">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M17 11V7a5 5 0 0 0-10 0v4"></path>
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                </svg>
-                Exclusivo para Android
-            </div>
-            <div class="version-badge">Versión 1.0 • Lanzamiento: 22 Noviembre 2025</div>
-        </header>
+  <!-- NAV -->
+  <nav aria-label="Navegación principal">
+    <div class="nav-logo" aria-label="ECHO">ECHO</div>
+    <ul class="nav-links">
+      <li><a href="#features">Características</a></li>
+      <li><a href="#screenshots">Galería</a></li>
+      <li><a href="#download">Descargar</a></li>
+      <li><a href="#about">Acerca de</a></li>
+    </ul>
+    <a href="#download" class="nav-pill" aria-label="Instalar juego">⬇ Instalar</a>
+  </nav>
 
-        <div class="card-grid">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                    </div>
-                    <h2>Descripción</h2>
-                </div>
-                <p>ECHO no es un juego tradicional.
-Es un viaje emocional en primera persona a través de un bosque de recuerdos,
-donde cada hoja que cae es una frase no dicha,
-cada objeto escondido es un pedazo de tu historia,
-y cada paso que das es una pregunta sin respuesta.</p>
-                <p>Inspirado en experiencias reales de amor adolescente prohibido,
-aislamiento, duelo no resuelto y la lucha por existir en un mundo que niega tu identidad,
-ECHO te invita a:</p>
-                <ul>
-                    <li>Caminar por paisajes que reflejan tu interior</li>
-                    <li>Recolectar fragmentos de una relación que el mundo no dejó vivir</li>
-                    <li>Leer cartas escritas con la tinta del arrepentimiento y la esperanza</li>
-                    <li>Enfrentar los abismos del miedo… y encontrar una salida hecha de luz</li>
-                    <li>Banda sonora atmosférica y efectos de sonido inmersivos</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                    </div>
-                    <h2>Requisitos</h2>
-                </div>
-                <h3>Requisitos Mínimos</h3>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Android 8.1 (Oreo) o superior</span>
-                </div>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>2 GB de RAM</span>
-                </div>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>800 MB de espacio disponible</span>
-                </div>
-
-                <h3 class="mt-4">Recomendados</h3>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Android 11 o superior</span>
-                </div>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>4 GB de RAM</span>
-                </div>
-                <div class="requirement-item">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    <span>Procesador Snapdragon 665 o equivalente</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                            <polyline points="21 15 16 10 5 21"></polyline>
-                        </svg>
-                    </div>
-                    <h2>Galería</h2>
-                </div>
-                <div class="gallery" id="game-gallery">
-                    <!-- Las imágenes se cargarán aquí dinámicamente -->
-                    <div class="gallery-item">
-                        <div class="gallery-placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p>Imagen 1</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="gallery-placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p>Imagen 2</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="gallery-placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p>Imagen 3</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="gallery-placeholder">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                                <polyline points="21 15 16 10 5 21"></polyline>
-                            </svg>
-                            <p>Imagen 4</p>
-                        </div>
-                    </div>
-                </div>
-                <p style="margin-top: 1rem; text-align: center; color: var(--accent);" id="gallery-message">Las imágenes se cargarán automáticamente cuando estén disponibles</p>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 20h9"></path>
-                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
-                        </svg>
-                    </div>
-                    <h2>Reseñas</h2>
-                </div>
-                <div class="reviews-container">
-                    <div class="review">
-                        <div class="reviewer">
-                            <div class="avatar">CR</div>
-                            <div class="rating">★★★★★</div>
-                        </div>
-                        <div class="review-content">
-                            <h4>Carlos Rodríguez</h4>
-                            <p>"No esperaba que un juego de parkour pudiera hacerme sentir tanto. La narrativa es cruda, real y duele en lo más profundo. El nivel 4 con la mecánica de ira es simplemente catártico."</p>
-                        </div>
-                    </div>
-                    <div class="review">
-                        <div class="reviewer">
-                            <div class="avatar">AP</div>
-                            <div class="rating">★★★★☆</div>
-                        </div>
-                        <div class="review-content">
-                            <h4>Ana Pérez</h4>
-                            <p>"Los controles son fluidos y la historia te atrapa desde el primer minuto. Me identifiqué mucho con el tema del amor no correspondido. Solo desearía que fuera un poco más largo."</p>
-                        </div>
-                    </div>
-                    <div class="review">
-                        <div class="reviewer">
-                            <div class="avatar">LM</div>
-                            <div class="rating">★★★★★</div>
-                        </div>
-                        <div class="review-content">
-                            <h4>Laura Martínez</h4>
-                            <p>"Como alguien que ha pasado por una relación tóxica, este juego fue terapéutico. La forma en que representa el rechazo social y la internalización del dolor es magistral. Una obra de arte."</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="4"></circle>
-                            <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
-                        </svg>
-                    </div>
-                    <h2>Acerca de</h2>
-                </div>
-                <div class="about-content">
-                    <div>
-                        <p><strong>Desarrollador:</strong> CyberRun</p>
-                        <p><strong>Lanzamiento:</strong> 22 de Noviembre de 2025</p>
-                        <p><strong>Género:</strong> Aventura, Terror, Historia</p>
-                        <p><strong>Plataforma:</strong> Android (Exclusivo)</p>
-                    </div>
-                    <div>
-                        <p><strong>Idiomas:</strong> Español</p>
-                        <p><strong>Clasificación:</strong> +16 (Temas emocionales intensos, lenguaje fuerte)</p>
-                        <p><strong>Soporte:</strong> cyberrun.03@gmail.com</p>
-                        <p><strong>Web:</strong> www.cyberrun.com</p>
-                    </div>
-                </div>
-            </div>
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid-bg"></div>
+      <div class="hero-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Remake Oficial — Ya Disponible
+      </div>
+      <p class="hero-eyebrow">// CyberRun × High-End RBJ Studios — 2025</p>
+      <div class="hero-title">
+        <div class="hero-title-shadow" aria-hidden="true">ECHO</div>
+        <span class="hero-title-inner" id="hero-title">ECHO</span>
+        <span class="hero-remake-tag">REMAKE</span>
+      </div>
+      <p class="hero-sub">El remake de ECHO ya está aquí con muchas mejoras. Historia reinventada desde cero, mecánicas de nueva generación y una experiencia emocional sin igual. Construido en Unity, para Android, Windows y Linux.</p>
+      <div class="hero-cta-group">
+        <a href="#download" class="btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar Ahora
+        </a>
+        <a href="#features" class="btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          Ver Más
+        </a>
+      </div>
+      <div class="hero-platforms">
+        <div class="platform-chip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 3.99zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          iOS Próximamente
         </div>
+        <div class="platform-chip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.523 15.34l-.002-.002c.002.001.002.002.002.002zm-.002-.002c.375-.343.598-.841.598-1.388v-3.9c0-.547-.223-1.045-.598-1.388L12 4.95V4H6v16h6v-.95l5.521-4.712zm1.479.662H21v-2h-2V7h2V5h-2c0-.552-.448-1-1-1H4c-.552 0-1 .448-1 1v14c0 .552.448 1 1 1h14c.552 0 1-.448 1-1v-2z"/></svg>
+          Windows
+        </div>
+        <div class="platform-chip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Linux
+        </div>
+        <div class="platform-chip" style="color:#3ddc84">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+          Android ✓ Disponible
+        </div>
+      </div>
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </section>
 
-        <footer>
-            <p>© 2025 CyberRun Todos los derechos reservados. Echo es una marca registrada.</p>
-            <p>Política de Privacidad • Términos de Servicio • Contacto</p>
-        </footer>
+    <!-- ANNOUNCE TICKER -->
+    <div class="announce" aria-label="Anuncios destacados">
+      <div class="announce-inner">
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Historia reinventada desde cero</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Nuevo motor Unity</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Mecánicas expandidas</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Gráficos de nueva generación</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Banda sonora original</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Android · Windows · Linux</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> CyberRun × High-End RBJ Studios</span>
+        <!-- duplicado para el efecto infinito -->
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Historia reinventada desde cero</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Nuevo motor Unity</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Mecánicas expandidas</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Gráficos de nueva generación</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Banda sonora original</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> Android · Windows · Linux</span>
+        <span class="announce-item"><span class="announce-dot" aria-hidden="true"></span> CyberRun × High-End RBJ Studios</span>
+      </div>
     </div>
 
-    <script>
-        // CONFIGURACIÓN DE IMÁGENES
-        // Reemplaza estas URLs con los enlaces a tus imágenes PNG
-        const imageConfig = {
-            logoUrl: "https://i.ibb.co/yF2D2QxS/logo.png", // URL del logo del juego (PNG)
-            screenshotUrls: [
-                "https://i.ibb.co/ksbnPRb9/image.png", // URL de la captura 1
-                "https://i.ibb.co/DPwXt4Mh/image.png", // URL de la captura 2
-                "https://i.ibb.co/xtjgbNNb/image.png", // URL de la captura 3
-                "https://i.ibb.co/YF0X4bDd/image.png"  // URL de la captura 4
-            ]
-        };
+    <!-- FEATURES -->
+    <section id="features" class="section reveal" aria-labelledby="features-title">
+      <p class="section-label">// Lo que hay de nuevo</p>
+      <h2 class="section-title" id="features-title">Reimaginado desde <span>cero</span></h2>
+      <p style="color:var(--muted);max-width:560px;line-height:1.8">El remake de ECHO no es solo una actualización visual — es una reinvención completa con mecánicas originales, narrativa nueva y tecnología de vanguardia.</p>
+      <div class="features-strip">
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">🎮</div>
+          <h3 class="feat-title">Mecánicas Nuevas</h3>
+          <p class="feat-desc">Sistemas de movimiento completamente rediseñados. Nuevas interacciones emocionales que responden a tus decisiones en tiempo real.</p>
+        </article>
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">📖</div>
+          <h3 class="feat-title">Historia desde Cero</h3>
+          <p class="feat-desc">Narrativa completamente nueva. El mismo espíritu emocional de ECHO, pero una historia diferente, más profunda y con mayor impacto.</p>
+        </article>
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">🎨</div>
+          <h3 class="feat-title">Gráficos Unity</h3>
+          <p class="feat-desc">Motor Unity con iluminación volumétrica, shaders personalizados y efectos visuales de última generación en cada escena.</p>
+        </article>
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">🎵</div>
+          <h3 class="feat-title">Sonido Inmersivo</h3>
+          <p class="feat-desc">Banda sonora original reimaginada. Efectos 3D espacializados que reaccionan al entorno emocional del personaje.</p>
+        </article>
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">🌍</div>
+          <h3 class="feat-title">Multi-Plataforma</h3>
+          <p class="feat-desc">Disponible en Android, Windows y Linux. Una sola experiencia optimizada para cada plataforma sin compromisos.</p>
+        </article>
+        <article class="feat-card tilt-card">
+          <div class="feat-icon" aria-hidden="true">⚡</div>
+          <h3 class="feat-title">Optimizado al Límite</h3>
+          <p class="feat-desc">Rendimiento superior al original. Carga más rápida, menos consumo de batería, mayor fluidez incluso en hardware modesto.</p>
+        </article>
+      </div>
+    </section>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Cargar logo si está disponible
-            if (imageConfig.logoUrl) {
-                const logoContainer = document.getElementById('game-logo');
-                logoContainer.innerHTML = ''; // Limpiar el placeholder
-                const logoImg = document.createElement('img');
-                logoImg.src = imageConfig.logoUrl;
-                logoImg.alt = 'Logo del juego Echo';
-                logoContainer.appendChild(logoImg);
-            }
+    <!-- SCREENSHOTS -->
+    <section id="screenshots" class="screenshots-section reveal" aria-labelledby="screenshots-title">
+      <div class="screenshots-header">
+        <p class="section-label">// Galería Visual</p>
+        <h2 class="section-title" id="screenshots-title">Capturas del <span>Juego</span></h2>
+      </div>
+      <div class="screenshots-scroll">
+        <figure class="ss-item">
+          <img src="https://i.ibb.co/V0GdQVRQ/image.png" alt="Escena del juego ECHO Remake mostrando un bosque neón" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'ss-placeholder\'><div class=\'ss-placeholder-icon\'>🖼</div><span>Screenshot 1</span></div>'">
+        </figure>
+        <figure class="ss-item">
+          <img src="https://i.ibb.co/1t41KsgX/image.png" alt="Personaje en una habitación con luces de neón" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'ss-placeholder\'><div class=\'ss-placeholder-icon\'>🖼</div><span>Screenshot 2</span></div>'">
+        </figure>
+        <figure class="ss-item">
+          <img src="https://i.ibb.co/3mfg1h9P/image.png" alt="Interfaz de diálogo con efecto glitch" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'ss-placeholder\'><div class=\'ss-placeholder-icon\'>🖼</div><span>Screenshot 3</span></div>'">
+        </figure>
+        <figure class="ss-item">
+          <img src="https://i.ibb.co/YF0X4bDd/image.png" alt="Paisaje urbano cyberpunk" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'ss-placeholder\'><div class=\'ss-placeholder-icon\'>🖼</div><span>Screenshot 4</span></div>'">
+        </figure>
+        <figure class="ss-item" style="background:linear-gradient(135deg,rgba(123,47,255,.1),rgba(0,245,255,.05))">
+          <div class="ss-placeholder">
+            <div class="ss-placeholder-icon">📸</div>
+            <span style="font-family:'Space Mono',monospace;font-size:.7rem;letter-spacing:2px">MÁS PRÓXIMAMENTE</span>
+          </div>
+        </figure>
+      </div>
+    </section>
 
-            // Cargar imágenes de la galería si están disponibles
-            const galleryContainer = document.getElementById('game-gallery');
-            const galleryMessage = document.getElementById('gallery-message');
-            let loadedImages = 0;
+    <!-- DOWNLOAD -->
+    <section id="download" class="download-section reveal" aria-labelledby="download-title">
+      <div class="download-inner">
+        <p class="section-label">// Instalación</p>
+        <h2 class="section-title" id="download-title">Elige tu <span>Plataforma</span></h2>
+        <div class="download-grid">
+          <div class="platform-cards">
+            <a href="#" class="platform-card" target="_blank" rel="noopener">
+              <div class="platform-left">
+                <div class="platform-logo" aria-hidden="true">🤖</div>
+                <div>
+                  <div class="platform-info-name">Android</div>
+                  <div class="platform-info-detail">APK · Android 8.1+ · ~800 MB</div>
+                </div>
+              </div>
+              <span class="platform-badge badge-free">Gratis</span>
+            </a>
+            <a href="#" class="platform-card" target="_blank" rel="noopener">
+              <div class="platform-left">
+                <div class="platform-logo" aria-hidden="true">🪟</div>
+                <div>
+                  <div class="platform-info-name">Windows</div>
+                  <div class="platform-info-detail">EXE · Windows 10/11 · ~1.2 GB</div>
+                </div>
+              </div>
+              <span class="platform-badge badge-free">Gratis</span>
+            </a>
+            <a href="#" class="platform-card" target="_blank" rel="noopener">
+              <div class="platform-left">
+                <div class="platform-logo" aria-hidden="true">🐧</div>
+                <div>
+                  <div class="platform-info-name">Linux</div>
+                  <div class="platform-info-detail">AppImage · Ubuntu/Debian/Arch</div>
+                </div>
+              </div>
+              <span class="platform-badge badge-free">Gratis</span>
+            </a>
+            <div class="platform-card" style="opacity:.5;cursor:default">
+              <div class="platform-left">
+                <div class="platform-logo" aria-hidden="true">🍎</div>
+                <div>
+                  <div class="platform-info-name">iOS / macOS</div>
+                  <div class="platform-info-detail">En desarrollo</div>
+                </div>
+              </div>
+              <span class="platform-badge badge-coming">Pronto</span>
+            </div>
+          </div>
 
-            imageConfig.screenshotUrls.forEach((url, index) => {
-                if (url) {
-                    const galleryItem = galleryContainer.children[index];
-                    galleryItem.innerHTML = ''; // Limpiar el placeholder
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = `Captura de pantalla ${index + 1} del juego Echo`;
-                    img.onload = () => {
-                        loadedImages++;
-                        if (loadedImages === imageConfig.screenshotUrls.filter(u => u).length) {
-                            galleryMessage.textContent = '';
-                        }
-                    };
-                    img.onerror = () => {
-                        // Si la imagen no se carga, mostrar un mensaje de error
-                        galleryItem.innerHTML = `
-                            <div class="gallery-placeholder">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"></circle>
-                                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                                </svg>
-                                <p>Error al cargar</p>
-                            </div>
-                        `;
-                    };
-                    galleryItem.appendChild(img);
-                }
-            });
+          <div class="download-right">
+            <div class="download-logo" aria-hidden="true">E</div>
+            <div class="download-game-name">ECHO Remake</div>
+            <div class="download-tagline">// Una historia reinventada — v2.0.0</div>
+            <div class="download-meta">
+              <div class="meta-chip"><strong>Versión</strong> 2.0.0</div>
+              <div class="meta-chip"><strong>Motor</strong> Unity</div>
+              <div class="meta-chip"><strong>Idioma</strong> Español</div>
+              <div class="meta-chip"><strong>Edad</strong> +16</div>
+              <div class="meta-chip"><strong>Precio</strong> Gratis</div>
+            </div>
+<button onclick="window.open('https://www.mediafire.com/folder/k964x22scm2b6/Echo', '_blank')" class="btn-download-main">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+  Descargar en Mediafire
+</button>
+<p class="btn-note">🔗 Redirige a la carpeta oficial de descarga · Las 3 versiones disponibles</p>
 
-            // Efecto de brillo en el botón de descarga
-            const downloadBtn = document.querySelector('.download-btn');
-            downloadBtn.addEventListener('mousemove', (e) => {
-                const rect = downloadBtn.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                downloadBtn.style.setProperty('--x', `${x}px`);
-                downloadBtn.style.setProperty('--y', `${y}px`);
-            });
-            
-            // Efecto de tarjetas al hacer scroll
-            const cards = document.querySelectorAll('.card');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.style.transform = 'translateY(-5px)';
-                    card.style.boxShadow = '0 15px 50px rgba(0, 0, 0, 0.5)';
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'translateY(0)';
-                    card.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.3)';
-                });
-            });
+        </div>
+      </div>
+    </section>
 
-            // Efecto hover para galería
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
-                item.addEventListener('mouseenter', () => {
-                    item.style.transform = 'scale(1.05)';
-                    item.style.borderColor = 'var(--accent)';
-                });
-                
-                item.addEventListener('mouseleave', () => {
-                    item.style.transform = 'scale(1)';
-                    item.style.borderColor = 'rgba(126, 91, 239, 0.3)';
-                });
-            });
+    <!-- REQUIREMENTS -->
+    <section id="requirements" class="section reveal" aria-labelledby="requirements-title">
+      <p class="section-label">// Especificaciones</p>
+      <h2 class="section-title" id="requirements-title">Requisitos del <span>Sistema</span></h2>
+      <div class="req-grid">
+        <div class="req-box">
+          <span class="req-label min">Mínimos</span>
+          <ul class="req-list">
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>Android:</strong> 10 / <strong>Windows:</strong> 10 (64-bit)</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>RAM:</strong> 3 GB</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>Almacenamiento:</strong> 1500 MB libres</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>CPU Android:</strong> Snapdragon 660 o equiv.</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>CPU PC:</strong> Intel Core i5 / AMD Ryzen 5</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>GPU PC:</strong> Integrada (Intel UHD 620+)</span></li>
+            <li class="req-item"><span class="req-icon" aria-hidden="true">▸</span><span><strong>OpenGL:</strong> ES 3.0 / DirectX 11</span></li>
+          </ul>
+        </div>
+        <div class="req-box recommended">
+          <span class="req-label rec">✦ Recomendados</span>
+          <ul class="req-list">
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>Android:</strong> 12+ / <strong>Windows:</strong> 11 (64-bit)</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>RAM:</strong> 6 GB+</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>Almacenamiento:</strong> 2 GB libres (SSD recomendado)</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>CPU Android:</strong> Snapdragon 778G / Dimensity 900+</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>CPU PC:</strong> Intel Core i5-10th+ / Ryzen 5 5600</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>GPU PC:</strong> GTX 1060 / RX 580 o superior</span></li>
+            <li class="req-item"><span class="req-icon" style="color:var(--neon)" aria-hidden="true">▸</span><span><strong>Auriculares recomendados</strong> para experiencia completa</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- STORY -->
+    <section class="section reveal" aria-labelledby="story-title">
+      <p class="section-label">// Narrativa</p>
+      <h2 class="section-title" id="story-title">Una historia <span>nueva</span></h2>
+      <div class="story-layout">
+        <div class="story-visual">
+          <div class="story-glow"></div>
+          <div class="story-frame" aria-label="Representación artística del bosque">🌲</div>
+        </div>
+        <div class="story-text">
+          <p>ECHO Remake no es una continuación. Es una reimaginación completa desde el primer capítulo. La misma esencia emocional que tocó miles de corazones — el amor prohibido, el duelo, la identidad — ahora contada con una nueva voz y una nueva perspectiva.</p>
+          <p>Camina por paisajes que viven y respiran. Cada objeto oculta una memoria. Cada carta cargada de verdades no dichas. El bosque recuerda lo que tú quieres olvidar.</p>
+          <p>¿Tienes el valor de escuchar tu propio eco?</p>
+          <div class="story-tags">
+            <span class="story-tag">Amor Prohibido</span>
+            <span class="story-tag">Duelo</span>
+            <span class="story-tag">Identidad</span>
+            <span class="story-tag">Soledad</span>
+            <span class="story-tag">Esperanza</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
+    <section class="section reveal" aria-labelledby="reviews-title">
+      <p class="section-label">// Comunidad</p>
+      <h2 class="section-title" id="reviews-title">Lo que dicen los <span>jugadores</span></h2>
+      <div class="reviews-grid">
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+          <p class="review-text">"No esperaba que un juego pudiera hacerme sentir tanto. La narrativa es cruda, real y duele en lo más profundo. El remake llevó todo a otro nivel."</p>
+          <footer class="review-author">
+            <div class="review-avatar" aria-hidden="true">CR</div>
+            <div>
+              <div class="review-name">Carlos R.</div>
+              <div class="review-date">NOV 2025</div>
+            </div>
+          </footer>
+        </article>
+        <article class="review-card">
+          <div class="review-stars" aria-label="4 estrellas">★★★★☆</div>
+          <p class="review-text">"Los controles son fluidos y la historia te atrapa desde el primer minuto. La nueva historia me tomó completamente por sorpresa. Arte interactivo."</p>
+          <footer class="review-author">
+            <div class="review-avatar" aria-hidden="true">AP</div>
+            <div>
+              <div class="review-name">Ana P.</div>
+              <div class="review-date">NOV 2025</div>
+            </div>
+          </footer>
+        </article>
+        <article class="review-card">
+          <div class="review-stars" aria-label="5 estrellas">★★★★★</div>
+          <p class="review-text">"Como alguien que jugó el original, el remake supera todas mis expectativas. La forma en que Unity transformó la visión es magistral. Una obra de arte."</p>
+          <footer class="review-author">
+            <div class="review-avatar" aria-hidden="true">LM</div>
+            <div>
+              <div class="review-name">Laura M.</div>
+              <div class="review-date">DIC 2025</div>
+            </div>
+          </footer>
+        </article>
+      </div>
+    </section>
+
+    <!-- ENGINE STRIP -->
+    <div class="engine-strip">
+      <div class="engine-inner">
+        <div>
+          <div class="engine-label">Desarrollado con</div>
+        </div>
+        <div class="engine-logos">
+          <div class="engine-badge">
+            <span style="font-size:1.5rem" aria-hidden="true">⚙️</span>
+            <div>
+              <div class="engine-badge-name">Unity Engine</div>
+              <div class="engine-badge-sub">Motor de Juego</div>
+            </div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(255,255,255,.06)" aria-hidden="true"></div>
+          <div class="engine-badge">
+            <span style="font-size:1.5rem" aria-hidden="true">🏢</span>
+            <div>
+              <div class="engine-badge-name">CyberRun</div>
+              <div class="engine-badge-sub">Desarrollador Principal</div>
+            </div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(255,255,255,.06)" aria-hidden="true"></div>
+          <div class="engine-badge">
+            <span style="font-size:1.5rem" aria-hidden="true">💎</span>
+            <div>
+              <div class="engine-badge-name">High-End RBJ Studios</div>
+              <div class="engine-badge-sub">Partner Oficial</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CREDITS -->
+    <section class="credits-section reveal" aria-labelledby="credits-title">
+      <div class="credits-inner">
+        <p class="section-label">// El Equipo</p>
+        <h2 class="section-title" id="credits-title">Detrás de <span>ECHO</span></h2>
+        <div class="credits-grid">
+          <article class="credit-card" style="border-color:rgba(0,245,255,.25)">
+            <div class="credit-avatar" style="background:linear-gradient(135deg,var(--neon2),var(--neon));font-size:2rem" aria-hidden="true">👑</div>
+            <h3 class="credit-name" style="color:var(--neon)">Julián Osorio</h3>
+            <p class="credit-role">Creador · Director · Desarrollador</p>
+          </article>
+          <article class="credit-card credit-special">
+            <div class="credit-avatar" aria-hidden="true">🎖</div>
+            <h3 class="credit-name">Brian Joel Atencio</h3>
+            <p class="credit-role" style="color:var(--gold)">Agradecimiento Especial</p>
+          </article>
+          <article class="credit-card credit-special">
+            <div class="credit-avatar" aria-hidden="true">🎖</div>
+            <h3 class="credit-name">Rodrigo López</h3>
+            <p class="credit-role" style="color:var(--gold)">Agradecimiento Especial</p>
+          </article>
+          <article class="credit-card">
+            <div class="credit-avatar" style="font-size:2rem" aria-hidden="true">🏢</div>
+            <h3 class="credit-name">High-End RBJ Studios</h3>
+            <p class="credit-role">Estudio Colaborador</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section reveal" aria-labelledby="about-title">
+      <p class="section-label">// Ficha Técnica</p>
+      <h2 class="section-title" id="about-title">Acerca del <span>Juego</span></h2>
+      <div class="about-grid">
+        <div>
+          <div class="about-row"><span class="about-key">Título</span><span class="about-val">ECHO Remake</span></div>
+          <div class="about-row"><span class="about-key">Desarrollador</span><span class="about-val">Julián Osorio / CyberRun</span></div>
+          <div class="about-row"><span class="about-key">Partner</span><span class="about-val">High-End RBJ Studios</span></div>
+          <div class="about-row"><span class="about-key">Motor</span><span class="about-val">Unity Engine</span></div>
+          <div class="about-row"><span class="about-key">Género</span><span class="about-val">Aventura · Terror · Historia</span></div>
+        </div>
+        <div>
+          <div class="about-row"><span class="about-key">Plataformas</span><span class="about-val">Android · Windows · Linux</span></div>
+          <div class="about-row"><span class="about-key">Idioma</span><span class="about-val">Español</span></div>
+          <div class="about-row"><span class="about-key">Clasificación</span><span class="about-val">+16</span></div>
+          <div class="about-row"><span class="about-key">Precio</span><span class="about-val">Gratuito</span></div>
+          <div class="about-row"><span class="about-key">Soporte</span><span class="about-val">cyberrun.03@gmail.com</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">ECHO</div>
+    <div class="footer-sub">// REMAKE — CyberRun × High-End RBJ Studios — 2025</div>
+    <div class="footer-links">
+      <a href="mailto:cyberrun.03@gmail.com">Soporte</a>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos de Servicio</a>
+      <a href="#download">Descargar</a>
+    </div>
+    <div class="footer-copy">© 2025 CyberRun. Todos los derechos reservados. ECHO es una marca registrada de CyberRun.</div>
+  </footer>
+
+  <!-- BACK TO TOP -->
+  <a href="#" class="back-to-top" aria-label="Volver arriba">↑</a>
+
+  <script>
+    // ── STARFIELD OPTIMIZADO ──
+    const canvas = document.getElementById('stars-canvas');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    let animationFrame;
+    let resizeTimeout;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 180; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: Math.random() * 1.2 + 0.2,
+          o: Math.random() * 0.6 + 0.1,
+          s: Math.random() * 0.3 + 0.05,
+          d: Math.random() > 0.5 ? 1 : -1
         });
-    </script>
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.o += s.s * 0.01 * s.d;
+        if (s.o > 0.7 || s.o < 0.05) s.d *= -1;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200,210,255,${s.o})`;
+        ctx.fill();
+      });
+      animationFrame = requestAnimationFrame(drawStars);
+    }
+
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+      }, 200);
+    });
+
+    resizeCanvas();
+    drawStars();
+
+    // ── SCROLL REVEAL ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => io.observe(el));
+
+    // ── 3D TILT (solo escritorio) ──
+    if (!('ontouchstart' in window)) {
+      document.querySelectorAll('.tilt-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          const rx = ((y - cy) / cy) * 8;
+          const ry = -((x - cx) / cx) * 8;
+          card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+        });
+      });
+    }
+
+    // ── PARALLAX BLOBS ──
+    const blobs = [document.getElementById('blob1'), document.getElementById('blob2'), document.getElementById('blob3')];
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      blobs.forEach((blob, index) => {
+        if (blob) {
+          const speed = 0.1 + index * 0.05;
+          blob.style.transform = `translate(${scrollY * speed}px, ${scrollY * speed * 0.5}px)`;
+        }
+      });
+    });
+
+    // ── NAV SCROLL EFFECT ──
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.style.background = 'rgba(4,4,10,0.92)';
+      } else {
+        nav.style.background = 'rgba(4,4,10,0.7)';
+      }
+    });
+
+    // ── BACK TO TOP ──
+    const backToTop = document.querySelector('.back-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 500) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+  </script>
 </body>
 </html>
