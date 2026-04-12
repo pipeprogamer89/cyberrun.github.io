@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>pipecitooficial · LineageOS 21 · LG V50 (flashlmdd)</title>
+  <!-- Fuentes: Outfit + Raleway -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Raleway:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Font Awesome para iconos (estilo hacker) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --oled-black: #000000;
+      --deep-abyss: #030808;
+      --cyber-cyan: #00f0ff;
+      --neon-mint: #00ffc3;
+      --electric-violet: #b44cff;
+      --blood-glow: #ff2a5f;
+      --matrix-green: #00ff88;
+      --steel-gray: #1a1e2c;
+      --glass-edge: rgba(0, 255, 195, 0.15);
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'Raleway', monospace;
+      --glow-cyan: 0 0 8px #00f0ff, 0 0 20px #00f0ff66;
+      --glow-violet: 0 0 12px #b44cff, 0 0 30px #b44cff55;
+    }
+
+    body {
+      background-color: var(--oled-black);
+      background-image: 
+        linear-gradient(rgba(0, 255, 195, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      color: #e0f2fe;
+      padding: 1.5rem;
+      position: relative;
+      animation: bgPulse 8s infinite alternate;
+    }
+
+    /* Efecto de "ruido" sutil OLED */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-radial-gradient(circle at 20% 30%, rgba(0,255,200,0.01) 0%, transparent 8%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0% { background-color: #010606; }
+      100% { background-color: #000a0a; }
+    }
+
+    /* Contenedor principal — terminal glass */
+    .repo-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(2, 15, 15, 0.65);
+      border: 1px solid rgba(0, 255, 195, 0.25);
+      border-radius: 36px;
+      padding: 2.5rem 2.2rem;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 0 1px rgba(0, 255, 200, 0.1), inset 0 0 40px rgba(0, 240, 255, 0.03);
+      transition: box-shadow 0.4s ease;
+      animation: floatIn 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .repo-container:hover {
+      box-shadow: 0 25px 55px #000, 0 0 0 1px var(--cyber-cyan), inset 0 0 60px rgba(0, 255, 200, 0.08);
+    }
+
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Encabezado hacker */
+    .dev-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 2.2rem;
+      border-bottom: 1px dashed rgba(0, 255, 200, 0.3);
+      padding-bottom: 1.2rem;
+    }
+
+    .identity {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .glitch-wrapper {
+      position: relative;
+    }
+
+    .glitch {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.3rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e0ffff;
+      text-shadow: var(--glow-cyan);
+      position: relative;
+      animation: glitchSkew 6s infinite;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.8;
+    }
+
+    .glitch::before {
+      color: var(--electric-violet);
+      z-index: -1;
+      animation: glitchOne 0.4s infinite alternate;
+      text-shadow: 2px 0 var(--blood-glow);
+      clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    }
+
+    .glitch::after {
+      color: var(--cyber-cyan);
+      z-index: -2;
+      animation: glitchTwo 0.5s infinite alternate-reverse;
+      text-shadow: -2px 0 var(--neon-mint);
+      clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+    }
+
+    @keyframes glitchOne {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-3px); }
+    }
+    @keyframes glitchTwo {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(3px); }
+    }
+    @keyframes glitchSkew {
+      0%, 100% { transform: skew(0deg); }
+      95% { transform: skew(0deg); }
+      96% { transform: skew(2deg); }
+      97% { transform: skew(-2deg); }
+      98% { transform: skew(0deg); }
+    }
+
+    .badge {
+      background: rgba(0, 240, 255, 0.08);
+      border: 1px solid var(--cyber-cyan);
+      border-radius: 40px;
+      padding: 0.25rem 1.1rem;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 0.9rem;
+      color: var(--neon-mint);
+      box-shadow: 0 0 6px #00ffc3;
+      letter-spacing: 1px;
+      backdrop-filter: blur(5px);
+    }
+
+    .maintainer-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      color: #aaccff;
+    }
+
+    .maintainer-tag i {
+      color: var(--cyber-cyan);
+      font-size: 1.2rem;
+    }
+
+    /* Tarjeta del build — estilo repositorio */
+    .build-showcase {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 2rem;
+      margin: 2rem 0 1.8rem;
+    }
+
+    @media (max-width: 700px) {
+      .build-showcase {
+        grid-template-columns: 1fr;
+        gap: 1.8rem;
+      }
+    }
+
+    .device-panel {
+      background: rgba(0, 20, 20, 0.4);
+      border-radius: 28px;
+      padding: 1.8rem 1.8rem;
+      border: 1px solid rgba(0, 255, 200, 0.2);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 30px #00000055, 0 10px 25px -5px #000;
+    }
+
+    .device-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.8rem;
+    }
+
+    .device-title i {
+      font-size: 2.4rem;
+      color: var(--cyber-cyan);
+      filter: drop-shadow(0 0 10px #00f0ff);
+    }
+
+    .device-name {
+      font-size: 2rem;
+      font-weight: 700;
+      font-family: var(--font-display);
+      background: linear-gradient(135deg, #ffffff, #a0f0ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 15px #00b8ff55;
+    }
+
+    .codename {
+      font-family: var(--font-mono);
+      color: var(--neon-mint);
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      border-left: 3px solid var(--electric-violet);
+      padding-left: 12px;
+      margin: 5px 0 20px;
+    }
+
+    .spec-row {
+      display: flex;
+      margin: 14px 0;
+      font-family: var(--font-mono);
+      border-bottom: 1px dotted #2a4a5a;
+      padding-bottom: 8px;
+    }
+
+    .spec-label {
+      width: 100px;
+      color: #8aa9cc;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .spec-value {
+      font-weight: 600;
+      color: #e2f2ff;
+    }
+
+    .highlight {
+      color: var(--matrix-green);
+      text-shadow: 0 0 6px #00ff95;
+    }
+
+    .download-panel {
+      background: rgba(10, 25, 25, 0.5);
+      border-radius: 28px;
+      padding: 1.8rem;
+      border: 1px solid var(--electric-violet);
+      box-shadow: 0 0 30px #6a00ff22, inset 0 0 30px #000000;
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      transition: 0.25s;
+    }
+
+    .download-panel:hover {
+      border-color: var(--cyber-cyan);
+      box-shadow: 0 0 45px #00f0ff33, inset 0 0 30px #000;
+    }
+
+    .build-filename {
+      font-family: 'Raleway', monospace;
+      background: #0b1a1f;
+      padding: 0.9rem 1rem;
+      border-radius: 20px;
+      border: 1px solid #2f6f7a;
+      color: #c6ffff;
+      font-size: 1rem;
+      word-break: break-all;
+      margin: 1.2rem 0;
+      text-align: center;
+      box-shadow: inset 0 0 15px #000, 0 2px 0 #00b8b0;
+    }
+
+    .btn-download {
+      background: transparent;
+      border: 2px solid var(--cyber-cyan);
+      color: var(--cyber-cyan);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.8rem;
+      padding: 1.2rem 0.5rem;
+      border-radius: 60px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 30, 30, 0.4);
+      transition: all 0.25s ease;
+      box-shadow: 0 0 15px #00ffe055, inset 0 0 10px #00ffff22;
+      margin-top: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-download i {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 8px cyan);
+    }
+
+    .btn-download:hover {
+      background: var(--cyber-cyan);
+      color: #000c0c;
+      box-shadow: 0 0 45px #0ff, 0 0 80px #0ff;
+      border-color: #ffffff;
+      transform: scale(1.02);
+      letter-spacing: 6px;
+    }
+
+    .btn-download::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: rotate(25deg);
+    }
+
+    .btn-download:hover::after {
+      opacity: 0.25;
+    }
+
+    .folder-note {
+      margin-top: 1.2rem;
+      font-family: var(--font-mono);
+      color: #b0d0ff;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .folder-note i {
+      color: var(--electric-violet);
+    }
+
+    /* Terminal extras / footer */
+    .repo-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.2rem;
+      flex-wrap: wrap;
+      border-top: 1px dashed #1e4a55;
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .hash-tag {
+      color: #8aa9cc;
+      font-size: 0.9rem;
+      display: flex;
+      gap: 25px;
+    }
+
+    .hash-tag span i {
+      margin-right: 6px;
+      color: var(--matrix-green);
+    }
+
+    .signature {
+      color: var(--electric-violet);
+      font-weight: 500;
+      text-shadow: 0 0 5px #b44cff;
+    }
+
+    .signature i {
+      margin: 0 6px;
+    }
+
+    /* animación de scanline */
+    .scan-effect {
+      position: relative;
+    }
+
+    /* cursor personalizado hacker */
+    .cursor-glow {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 24 28"><circle cx="12" cy="12" r="10" fill="none" stroke="%2300f0ff" stroke-width="1.5" /><line x1="12" y1="2" x2="12" y2="8" stroke="%2300ffc3" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="22" stroke="%2300ffc3" stroke-width="2"/><line x1="2" y1="12" x2="8" y2="12" stroke="%2300ffc3" stroke-width="2"/><line x1="16" y1="12" x2="22" y2="12" stroke="%2300ffc3" stroke-width="2"/></svg>') 12 12, crosshair;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .repo-container { padding: 1.8rem 1.2rem; }
+      .glitch { font-size: 1.8rem; }
+      .device-name { font-size: 1.6rem; }
+      .btn-download { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body class="cursor-glow">
+  <div class="repo-container">
+    
+    <!-- HEADER con glitch -->
+    <div class="dev-header">
+      <div class="identity">
+        <div class="glitch-wrapper">
+          <div class="glitch" data-text="pipecitooficial">pipecitooficial</div>
+        </div>
+        <span class="badge"><i class="fas fa-terminal" style="margin-right: 8px;"></i>UNOFFICIAL</span>
+      </div>
+      <div class="maintainer-tag">
+        <i class="fas fa-user-secret"></i>
+        <span>maintainer · flashlmdd</span>
+        <i class="fas fa-microchip" style="margin-left: 8px;"></i>
+      </div>
+    </div>
+
+    <!-- SHOWCASE PRINCIPAL -->
+    <div class="build-showcase">
+      <!-- Panel izquierdo: info del dispositivo -->
+      <div class="device-panel">
+        <div class="device-title">
+          <i class="fas fa-mobile-alt"></i>
+          <span class="device-name">LG V50 ThinQ</span>
+        </div>
+        <div class="codename">
+          <i class="fas fa-code-branch"></i> flashlmdd · 5G
+        </div>
+        
+        <div class="spec-row">
+          <span class="spec-label">ROM</span>
+          <span class="spec-value highlight">LineageOS 21</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">VERSIÓN</span>
+          <span class="spec-value">Android 14 (Unofficial)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">BUILD DATE</span>
+          <span class="spec-value"><i class="far fa-calendar-alt" style="margin-right: 6px;"></i>2026-04-11</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">COMPILADO</span>
+          <span class="spec-value">pipecitooficial</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">ESTADO</span>
+          <span class="spec-value" style="color: #00ffaa; text-shadow: 0 0 5px #0f0;">● STABLE (testing)</span>
+        </div>
+        <div style="margin-top: 25px;">
+          <div style="display: flex; gap: 15px; font-size: 0.9rem; color: #b0e0ff;">
+            <i class="fas fa-shield-alt"></i> <span>SELinux Enforcing</span>
+            <i class="fas fa-fingerprint"></i> <span>User build</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel derecho: descarga + build name -->
+      <div class="download-panel">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <i class="fas fa-cube" style="color: var(--cyber-cyan); font-size: 1.8rem;"></i>
+          <h3 style="font-weight: 500; letter-spacing: 1px; font-family: Outfit;">REPOSITORIO</h3>
+        </div>
+        
+        <div class="build-filename">
+          <i class="fas fa-file-archive" style="margin-right: 8px; color: #b44cff;"></i>
+          lineage-21.0-20260411-UNOFFICIAL-flashlmdd
+        </div>
+
+        <!-- BOTÓN PRINCIPAL (redirige a MediaFire) -->
+        <a href="https://www.mediafire.com/folder/uqkiephclohbs/lineage-21.0-20260411-UNOFFICIAL-flashlmdd" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-download">
+          <i class="fas fa-download"></i> DESCARGAR
+          <i class="fas fa-external-link-alt" style="font-size: 1.2rem;"></i>
+        </a>
+
+        <div class="folder-note">
+          <i class="fas fa-folder-open"></i>
+          <span>MediaFire · ROM + recovery · archivos adicionales</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+        
+        <!-- mini info extra -->
+        <div style="margin-top: 16px; font-size: 0.8rem; opacity: 0.8; display: flex; justify-content: center; gap: 12px;">
+          <span><i class="far fa-clock"></i> 2026-04-11</span>
+          <span><i class="fas fa-hashtag"></i> lineage-21.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN INFERIOR: detalles técnicos / estilo hacker -->
+    <div class="repo-footer">
+      <div class="hash-tag">
+        <span><i class="fas fa-key"></i> firmado: pipecito</span>
+        <span><i class="fas fa-code"></i> kernel 4.14</span>
+      </div>
+      <div class="signature">
+        <i class="fas fa-bolt"></i> #LineageOS <i class="fas fa-skull"></i> flashlmdd <i class="fas fa-bolt"></i>
+      </div>
+    </div>
+
+    <!-- Nota adicional: instrucción rápida (terminal vibes) -->
+    <div style="margin-top: 28px; background: #041010; border-radius: 18px; padding: 1rem 1.5rem; border-left: 6px solid var(--cyber-cyan); font-family: 'Raleway'; font-size: 0.9rem;">
+      <i class="fas fa-chevron-right" style="color: #0ff; margin-right: 12px;"></i>
+      <span style="color: #b4ecff;">fastboot flash boot boot.img · adb sideload lineage-21*.zip</span>
+      <span style="display: block; margin-top: 6px; color: #7fa9b9;"><i class="far fa-copy"></i> Se recomienda flashear recovery incluido en la carpeta.</span>
+    </div>
+  </div>
+
+  <!-- Efecto de partículas muy sutil (solo estilo) -->
+  <div style="position: fixed; bottom: 20px; right: 20px; opacity: 0.3; z-index: 1; pointer-events: none;">
+    <i class="fas fa-circle" style="color: #0ff; font-size: 6px; margin: 0 8px; animation: pulseGlow 3s infinite;"></i>
+    <i class="fas fa-circle" style="color: #b44cff; font-size: 4px; margin: 0 8px; animation: pulseGlow 4s infinite reverse;"></i>
+  </div>
+  <style>
+    @keyframes pulseGlow {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.8); }
+    }
+  </style>
+</body>
+</html>
