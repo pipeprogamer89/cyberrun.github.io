@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>pipecitooficial · LineageOS 21 · LG V50 (flashlmdd)</title>
+  <title>pipecitooficial · LineageOS 21/22 · LG V50 (flashlmdd)</title>
   <!-- Fuentes: Outfit + Raleway -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Raleway:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
-  <!-- Font Awesome para iconos (estilo hacker) -->
+  <!-- Font Awesome para iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     * {
@@ -31,6 +31,7 @@
       --font-mono: 'Raleway', monospace;
       --glow-cyan: 0 0 8px #00f0ff, 0 0 20px #00f0ff66;
       --glow-violet: 0 0 12px #b44cff, 0 0 30px #b44cff55;
+      --warning-orange: #ffaa33;
     }
 
     body {
@@ -50,7 +51,6 @@
       animation: bgPulse 8s infinite alternate;
     }
 
-    /* Efecto de "ruido" sutil OLED */
     body::before {
       content: "";
       position: fixed;
@@ -65,9 +65,8 @@
       100% { background-color: #000a0a; }
     }
 
-    /* Contenedor principal — terminal glass */
     .repo-container {
-      max-width: 1000px;
+      max-width: 1100px;
       width: 100%;
       position: relative;
       z-index: 10;
@@ -91,7 +90,6 @@
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Encabezado hacker */
     .dev-header {
       display: flex;
       align-items: baseline;
@@ -106,10 +104,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-    }
-
-    .glitch-wrapper {
-      position: relative;
     }
 
     .glitch {
@@ -194,7 +188,6 @@
       font-size: 1.2rem;
     }
 
-    /* Tarjeta del build — estilo repositorio */
     .build-showcase {
       display: grid;
       grid-template-columns: 1.2fr 0.9fr;
@@ -203,8 +196,8 @@
     }
 
     @media (max-width: 700px) {
-      .build-showcase {
-        grid-template-columns: 1fr;
+      .build-showcase, .exp-grid {
+        grid-template-columns: 1fr !important;
         gap: 1.8rem;
       }
     }
@@ -234,7 +227,6 @@
     .device-name {
       font-size: 2rem;
       font-weight: 700;
-      font-family: var(--font-display);
       background: linear-gradient(135deg, #ffffff, #a0f0ff);
       -webkit-background-clip: text;
       background-clip: text;
@@ -367,22 +359,34 @@
       opacity: 0.25;
     }
 
-    .folder-note {
-      margin-top: 1.2rem;
+    /* Estilo experimental / warning */
+    .exp-warning {
+      background: rgba(255, 80, 0, 0.12);
+      border: 1px solid #ff8c00;
+      border-radius: 20px;
+      padding: 0.8rem 1.2rem;
+      margin: 1.2rem 0 0.8rem;
+      color: #ffbb88;
       font-family: var(--font-mono);
-      color: #b0d0ff;
-      font-size: 0.9rem;
       display: flex;
       align-items: center;
-      gap: 8px;
-      justify-content: center;
+      gap: 10px;
+      backdrop-filter: blur(4px);
     }
 
-    .folder-note i {
-      color: var(--electric-violet);
+    .btn-download.exp {
+      border-color: #ffaa33;
+      color: #ffcc88;
+      box-shadow: 0 0 15px #ff990055, inset 0 0 10px #ffaa3322;
     }
 
-    /* Terminal extras / footer */
+    .btn-download.exp:hover {
+      background: #ffaa33;
+      color: #0a0a00;
+      box-shadow: 0 0 45px #ff9900, 0 0 80px #ff7700;
+      border-color: #fff0c0;
+    }
+
     .repo-footer {
       display: flex;
       justify-content: space-between;
@@ -401,32 +405,24 @@
       gap: 25px;
     }
 
-    .hash-tag span i {
-      margin-right: 6px;
-      color: var(--matrix-green);
-    }
-
     .signature {
       color: var(--electric-violet);
       font-weight: 500;
       text-shadow: 0 0 5px #b44cff;
     }
 
-    .signature i {
-      margin: 0 6px;
-    }
-
-    /* animación de scanline */
-    .scan-effect {
-      position: relative;
-    }
-
-    /* cursor personalizado hacker */
+    /* cursor personalizado */
     .cursor-glow {
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 24 28"><circle cx="12" cy="12" r="10" fill="none" stroke="%2300f0ff" stroke-width="1.5" /><line x1="12" y1="2" x2="12" y2="8" stroke="%2300ffc3" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="22" stroke="%2300ffc3" stroke-width="2"/><line x1="2" y1="12" x2="8" y2="12" stroke="%2300ffc3" stroke-width="2"/><line x1="16" y1="12" x2="22" y2="12" stroke="%2300ffc3" stroke-width="2"/></svg>') 12 12, crosshair;
     }
 
-    /* Responsive */
+    .exp-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+
     @media (max-width: 480px) {
       .repo-container { padding: 1.8rem 1.2rem; }
       .glitch { font-size: 1.8rem; }
@@ -438,7 +434,7 @@
 <body class="cursor-glow">
   <div class="repo-container">
     
-    <!-- HEADER con glitch -->
+    <!-- HEADER -->
     <div class="dev-header">
       <div class="identity">
         <div class="glitch-wrapper">
@@ -453,9 +449,8 @@
       </div>
     </div>
 
-    <!-- SHOWCASE PRINCIPAL -->
+    <!-- LINEAGE 21 (STABLE) -->
     <div class="build-showcase">
-      <!-- Panel izquierdo: info del dispositivo -->
       <div class="device-panel">
         <div class="device-title">
           <i class="fas fa-mobile-alt"></i>
@@ -464,7 +459,6 @@
         <div class="codename">
           <i class="fas fa-code-branch"></i> flashlmdd · 5G
         </div>
-        
         <div class="spec-row">
           <span class="spec-label">ROM</span>
           <span class="spec-value highlight">LineageOS 21</span>
@@ -475,7 +469,7 @@
         </div>
         <div class="spec-row">
           <span class="spec-label">BUILD DATE</span>
-          <span class="spec-value"><i class="far fa-calendar-alt" style="margin-right: 6px;"></i>2026-04-11</span>
+          <span class="spec-value"><i class="far fa-calendar-alt"></i> 2026-04-11</span>
         </div>
         <div class="spec-row">
           <span class="spec-label">COMPILADO</span>
@@ -485,69 +479,121 @@
           <span class="spec-label">ESTADO</span>
           <span class="spec-value" style="color: #00ffaa; text-shadow: 0 0 5px #0f0;">● STABLE (testing)</span>
         </div>
-        <div style="margin-top: 25px;">
-          <div style="display: flex; gap: 15px; font-size: 0.9rem; color: #b0e0ff;">
-            <i class="fas fa-shield-alt"></i> <span>SELinux Enforcing</span>
-            <i class="fas fa-fingerprint"></i> <span>User build</span>
-          </div>
-        </div>
       </div>
 
-      <!-- Panel derecho: descarga + build name -->
       <div class="download-panel">
         <div style="display: flex; align-items: center; gap: 10px;">
           <i class="fas fa-cube" style="color: var(--cyber-cyan); font-size: 1.8rem;"></i>
-          <h3 style="font-weight: 500; letter-spacing: 1px; font-family: Outfit;">REPOSITORIO</h3>
+          <h3 style="font-weight: 500; letter-spacing: 1px;">REPOSITORIO</h3>
         </div>
-        
         <div class="build-filename">
           <i class="fas fa-file-archive" style="margin-right: 8px; color: #b44cff;"></i>
           lineage-21.0-20260411-UNOFFICIAL-flashlmdd
         </div>
-
-        <!-- BOTÓN PRINCIPAL (redirige a MediaFire) -->
-        <a href="https://www.mediafire.com/folder/uqkiephclohbs/lineage-21.0-20260411-UNOFFICIAL-flashlmdd" 
-           target="_blank" 
-           rel="noopener noreferrer" 
-           class="btn-download">
+        <a href="https://www.mediafire.com/folder/uqkiephclohbs/lineage-21.0-20260411-UNOFFICIAL-flashlmdd" target="_blank" rel="noopener noreferrer" class="btn-download">
           <i class="fas fa-download"></i> DESCARGAR
           <i class="fas fa-external-link-alt" style="font-size: 1.2rem;"></i>
         </a>
-
-        <div class="folder-note">
-          <i class="fas fa-folder-open"></i>
-          <span>MediaFire · ROM + recovery · archivos adicionales</span>
-          <i class="fas fa-arrow-right"></i>
-        </div>
-        
-        <!-- mini info extra -->
-        <div style="margin-top: 16px; font-size: 0.8rem; opacity: 0.8; display: flex; justify-content: center; gap: 12px;">
-          <span><i class="far fa-clock"></i> 2026-04-11</span>
-          <span><i class="fas fa-hashtag"></i> lineage-21.0</span>
+        <div class="folder-note" style="margin-top: 1rem; justify-content: center; display: flex; gap: 8px;">
+          <i class="fas fa-folder-open" style="color: var(--electric-violet);"></i>
+          <span>MediaFire · ROM + recovery</span>
         </div>
       </div>
     </div>
 
-    <!-- SECCIÓN INFERIOR: detalles técnicos / estilo hacker -->
+    <!-- SEPARADOR + TÍTULO EXPERIMENTAL -->
+    <div style="margin: 2.5rem 0 0.5rem; display: flex; align-items: center; gap: 15px;">
+      <i class="fas fa-flask" style="color: #ffaa33; font-size: 2rem; filter: drop-shadow(0 0 6px #ff9900);"></i>
+      <h2 style="font-family: Outfit; font-weight: 600; color: #ffcc99; text-shadow: 0 0 8px #ff7700;">LineageOS 22.2 · EXPERIMENTAL</h2>
+      <span style="background: #552200; color: #ffaa33; padding: 4px 14px; border-radius: 30px; font-size: 0.8rem; border: 1px solid #ffaa33; letter-spacing: 1px;">UNSTABLE</span>
+    </div>
+
+    <!-- BUILD EXPERIMENTAL 22.2 -->
+    <div class="exp-grid">
+      <div class="device-panel" style="border-left: 3px solid #ff8800;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem;">
+          <i class="fas fa-microchip" style="color: #ffaa33;"></i>
+          <span style="font-size: 1.6rem; font-weight: 600; background: linear-gradient(145deg, #ffe6c7, #ffb56b); -webkit-background-clip: text; background-clip: text; color: transparent;">LG V50</span>
+        </div>
+        <div class="codename" style="border-left-color: #ff8c00;">
+          <i class="fas fa-code-branch"></i> flashlmdd · 5G
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">ROM</span>
+          <span class="spec-value highlight" style="color: #ffbb77;">LineageOS 22.2</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">ANDROID</span>
+          <span class="spec-value">15 (AOSP experimental)</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">BUILD</span>
+          <span class="spec-value"><i class="far fa-calendar-alt"></i> 2026-04-17</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">MAINTAINER</span>
+          <span class="spec-value">@pipecitooficial</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">ESTADO</span>
+          <span class="spec-value" style="color: #ff9966; text-shadow: 0 0 5px #ff5500;">⚠️ EXPERIMENTAL</span>
+        </div>
+        <div style="margin-top: 15px; color: #bbccff; font-size: 0.85rem;">
+          <i class="fas fa-info-circle"></i> Basado en Android 15 · ramdisk modificado
+        </div>
+      </div>
+
+      <div class="download-panel" style="border-color: #ff8c00;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+          <i class="fas fa-skull" style="color: #ff884d;"></i>
+          <span style="font-weight: 500; color: #ffd29e;">BUILD EXPERIMENTAL</span>
+        </div>
+        <div class="build-filename" style="background: #1a140a; border-color: #b85e00; color: #ffdead;">
+          <i class="fas fa-file-code" style="margin-right: 8px; color: #ff9933;"></i>
+          lineage-22.2-20260417-UNOFFICIAL-flashlmdd
+        </div>
+
+        <!-- ADVERTENCIA EXPLÍCITA -->
+        <div class="exp-warning">
+          <i class="fas fa-exclamation-triangle" style="color: #ffaa00; font-size: 1.4rem;"></i>
+          <span><strong>Experimental:</strong> puede contener bugs, inestabilidad o funciones rotas. No se recomienda como daily driver. Flashea bajo tu propio riesgo.</span>
+        </div>
+
+        <a href="https://www.mediafire.com/folder/aqqrc4rji5k0b/lineage-22.2-20260417-UNOFFICIAL-flashlmdd" target="_blank" rel="noopener noreferrer" class="btn-download exp">
+          <i class="fas fa-download"></i> DESCARGAR 22.2
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+        <div class="folder-note" style="margin-top: 1rem; justify-content: center; display: flex; gap: 8px; color: #ccbbaa;">
+          <i class="fas fa-folder-open" style="color: #ff9933;"></i>
+          <span>MediaFire · experimental build</span>
+        </div>
+        <div style="margin-top: 8px; font-size: 0.75rem; opacity: 0.8; text-align: center; color: #bbaa99;">
+          <i class="far fa-clock"></i> 2026-04-17 · lineage-22.2
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER TÉCNICO -->
     <div class="repo-footer">
       <div class="hash-tag">
         <span><i class="fas fa-key"></i> firmado: pipecito</span>
         <span><i class="fas fa-code"></i> kernel 4.14</span>
+        <span><i class="fas fa-tag"></i> 21 / 22.2</span>
       </div>
       <div class="signature">
         <i class="fas fa-bolt"></i> #LineageOS <i class="fas fa-skull"></i> flashlmdd <i class="fas fa-bolt"></i>
       </div>
     </div>
 
-    <!-- Nota adicional: instrucción rápida (terminal vibes) -->
+    <!-- INSTRUCCIONES RÁPIDAS -->
     <div style="margin-top: 28px; background: #041010; border-radius: 18px; padding: 1rem 1.5rem; border-left: 6px solid var(--cyber-cyan); font-family: 'Raleway'; font-size: 0.9rem;">
       <i class="fas fa-chevron-right" style="color: #0ff; margin-right: 12px;"></i>
-      <span style="color: #b4ecff;">fastboot flash boot boot.img · adb sideload lineage-21*.zip</span>
+      <span style="color: #b4ecff;">fastboot flash boot boot.img · adb sideload lineage-*.zip</span>
       <span style="display: block; margin-top: 6px; color: #7fa9b9;"><i class="far fa-copy"></i> Se recomienda flashear recovery incluido en la carpeta.</span>
     </div>
   </div>
 
-  <!-- Efecto de partículas muy sutil (solo estilo) -->
+  <!-- partículas decorativas -->
   <div style="position: fixed; bottom: 20px; right: 20px; opacity: 0.3; z-index: 1; pointer-events: none;">
     <i class="fas fa-circle" style="color: #0ff; font-size: 6px; margin: 0 8px; animation: pulseGlow 3s infinite;"></i>
     <i class="fas fa-circle" style="color: #b44cff; font-size: 4px; margin: 0 8px; animation: pulseGlow 4s infinite reverse;"></i>
