@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>crDroid · TEST BUILD · LG V50 (flashlmdd)</title>
+  <!-- Fuentes Outfit + Raleway -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Raleway:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --oled-black: #000000;
+      --deep-cr: #0c0300;
+      --cr-orange: #ff6b00;
+      --cr-red: #e63946;
+      --cr-amber: #ffb347;
+      --cyber-cyan: #00f0ff;
+      --neon-mint: #00ffc3;
+      --electric-violet: #b44cff;
+      --glass-cr: rgba(255, 70, 0, 0.15);
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'Raleway', monospace;
+    }
+
+    body {
+      background-color: var(--oled-black);
+      background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 100, 0, 0.03) 0%, transparent 30%),
+        linear-gradient(rgba(255, 60, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 120, 0, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      color: #f0e6e0;
+      padding: 1.8rem;
+      position: relative;
+      animation: bgPulseCr 7s infinite alternate;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-radial-gradient(circle at 70% 20%, rgba(255,80,0,0.02) 0%, transparent 10%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulseCr {
+      0% { background-color: #050101; }
+      100% { background-color: #0a0300; }
+    }
+
+    .cr-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(15, 5, 0, 0.6);
+      border: 1px solid rgba(255, 100, 0, 0.35);
+      border-radius: 40px;
+      padding: 2.8rem 2.5rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(255, 80, 0, 0.2), inset 0 0 50px rgba(255, 60, 0, 0.05);
+      transition: box-shadow 0.3s;
+      animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cr-container:hover {
+      box-shadow: 0 30px 70px #000, 0 0 0 1.5px var(--cr-orange), inset 0 0 70px rgba(255, 80, 0, 0.1);
+    }
+
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(40px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header con logo crDroid */
+    .cr-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px dashed rgba(255, 100, 0, 0.5);
+      padding-bottom: 1.5rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .cr-logo {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 15px #ff5500) brightness(1.1);
+      transition: filter 0.2s;
+    }
+
+    .cr-logo:hover {
+      filter: drop-shadow(0 0 25px #ff7700) brightness(1.3);
+    }
+
+    .cr-title {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.6rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(145deg, #ffc8a2, #ff6a00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 20px #ff5e00;
+    }
+
+    .test-badge {
+      background: rgba(230, 57, 70, 0.15);
+      border: 1.5px solid var(--cr-red);
+      border-radius: 60px;
+      padding: 0.3rem 1.4rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ff8a7a;
+      box-shadow: 0 0 12px #e6394680;
+      backdrop-filter: blur(5px);
+      letter-spacing: 2px;
+    }
+
+    .maintainer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #ffb38a;
+      font-family: var(--font-mono);
+      font-size: 1rem;
+    }
+
+    /* Layout principal */
+    .build-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2.5rem;
+      margin: 2rem 0 1.5rem;
+    }
+
+    @media (max-width: 720px) {
+      .build-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .cr-container { padding: 2rem 1.5rem; }
+      .cr-title { font-size: 2rem; }
+    }
+
+    /* Panel info dispositivo */
+    .device-panel-cr {
+      background: rgba(25, 8, 0, 0.5);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(255, 100, 0, 0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 35px #00000099, 0 12px 30px -8px #000;
+    }
+
+    .device-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.8rem;
+    }
+
+    .device-header i {
+      font-size: 2.5rem;
+      color: var(--cr-orange);
+      filter: drop-shadow(0 0 12px #ff7700);
+    }
+
+    .device-name-cr {
+      font-size: 2.1rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #ffe0cc, #ffa25e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .codename-cr {
+      font-family: var(--font-mono);
+      color: var(--cr-amber);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      border-left: 4px solid var(--cr-red);
+      padding-left: 15px;
+      margin: 8px 0 25px;
+    }
+
+    .spec-item {
+      display: flex;
+      margin: 16px 0;
+      font-family: var(--font-mono);
+      border-bottom: 1px dotted #5f3a1f;
+      padding-bottom: 10px;
+    }
+
+    .spec-label-cr {
+      width: 110px;
+      color: #c9a78b;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .spec-value-cr {
+      font-weight: 600;
+      color: #ffeadd;
+    }
+
+    .highlight-cr {
+      color: #ffb56b;
+      text-shadow: 0 0 6px #ff9900;
+    }
+
+    /* Panel descarga */
+    .download-panel-cr {
+      background: rgba(35, 10, 0, 0.55);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1.5px solid var(--cr-orange);
+      box-shadow: 0 0 40px #ff440022, inset 0 0 40px #000000;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      transition: 0.25s;
+    }
+
+    .download-panel-cr:hover {
+      border-color: #ff9900;
+      box-shadow: 0 0 55px #ff770055, inset 0 0 40px #000;
+    }
+
+    .build-name-cr {
+      font-family: 'Raleway', monospace;
+      background: #1c0d02;
+      padding: 1rem 1.2rem;
+      border-radius: 24px;
+      border: 1px solid #b45f1a;
+      color: #ffd7b0;
+      font-size: 1.1rem;
+      word-break: break-word;
+      margin: 1.5rem 0;
+      text-align: center;
+      box-shadow: inset 0 0 20px #000, 0 2px 0 #d96f00;
+    }
+
+    .btn-crdroid {
+      background: transparent;
+      border: 2.5px solid var(--cr-orange);
+      color: #ffb67a;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      padding: 1.2rem 0.5rem;
+      border-radius: 70px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      backdrop-filter: blur(12px);
+      background: rgba(50, 15, 0, 0.4);
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px #ff7700aa, inset 0 0 12px #ff550044;
+      margin-top: 15px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-crdroid i {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px #ff7700);
+    }
+
+    .btn-crdroid:hover {
+      background: var(--cr-orange);
+      color: #0a0200;
+      box-shadow: 0 0 60px #ff7700, 0 0 100px #ff5500;
+      border-color: #fff0d0;
+      transform: scale(1.02);
+      letter-spacing: 7px;
+    }
+
+    .btn-crdroid::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,200,100,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: rotate(30deg);
+    }
+
+    .btn-crdroid:hover::after {
+      opacity: 0.3;
+    }
+
+    .warning-message {
+      background: rgba(230, 57, 70, 0.1);
+      border: 1px solid #e63946;
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      margin: 1.5rem 0 0.5rem;
+      color: #ffac9f;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    .warning-message i {
+      color: #ff5555;
+      font-size: 1.5rem;
+    }
+
+    /* Footer */
+    .cr-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.8rem;
+      flex-wrap: wrap;
+      border-top: 1px dashed #b85e1a;
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .hash-info {
+      color: #c9a78b;
+      display: flex;
+      gap: 25px;
+    }
+
+    .signature-cr {
+      color: var(--cr-amber);
+      font-weight: 600;
+      text-shadow: 0 0 6px #ff7700;
+    }
+
+    /* cursor estilo hacker */
+    .cursor-cr {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><polygon points="2,2 22,2 24,10 18,14 16,26 10,22 6,28 4,22 2,18" fill="none" stroke="%23ff6b00" stroke-width="1.8"/><circle cx="12" cy="8" r="3" fill="%23ff8800" opacity="0.6"/></svg>') 8 8, crosshair;
+    }
+
+    /* instrucción terminal */
+    .term-note {
+      margin-top: 30px;
+      background: #0a0400;
+      border-radius: 18px;
+      padding: 1rem 1.8rem;
+      border-left: 6px solid var(--cr-orange);
+      font-family: 'Raleway';
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body class="cursor-cr">
+  <div class="cr-container">
+    
+    <!-- CABECERA con logo crDroid -->
+    <div class="cr-header">
+      <div class="logo-area">
+        <img class="cr-logo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrq_K1JgSfH_99udG_cWvxCX0S1EQzTZCnVw&s" alt="crDroid Logo">
+        <span class="cr-title">crDroid</span>
+      </div>
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <span class="test-badge"><i class="fas fa-flask" style="margin-right: 8px;"></i>TEST BUILD</span>
+        <div class="maintainer-badge">
+          <i class="fas fa-user-astronaut"></i>
+          <span>@pipecitooficial</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRID PRINCIPAL -->
+    <div class="build-grid">
+      <!-- LADO IZQUIERDO: DISPOSITIVO + DETALLES -->
+      <div class="device-panel-cr">
+        <div class="device-header">
+          <i class="fas fa-microchip"></i>
+          <span class="device-name-cr">LG V50 ThinQ</span>
+        </div>
+        <div class="codename-cr">
+          <i class="fas fa-terminal"></i> flashlmdd · 5G
+        </div>
+        
+        <div class="spec-item">
+          <span class="spec-label-cr">ROM</span>
+          <span class="spec-value-cr highlight-cr">crDroid 11.15</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-cr">ANDROID</span>
+          <span class="spec-value-cr">15 (Vanilla)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-cr">BUILD DATE</span>
+          <span class="spec-value-cr"><i class="far fa-calendar-alt" style="margin-right: 8px;"></i>2026-04-17</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-cr">VARIANT</span>
+          <span class="spec-value-cr">v11.15 · UNOFFICIAL</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-cr">STATUS</span>
+          <span class="spec-value-cr" style="color: #ff9966; text-shadow: 0 0 5px #ff6600;">⚠️ ALPHA / TESTING</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-cr">MAINTAINER</span>
+          <span class="spec-value-cr">pipecitooficial</span>
+        </div>
+        <div style="margin-top: 25px; display: flex; gap: 20px; color: #dbb594;">
+          <i class="fas fa-shield"></i> <span>SELinux Permissive</span>
+          <i class="fas fa-code-branch"></i> <span>4.14 kernel</span>
+        </div>
+      </div>
+
+      <!-- LADO DERECHO: DESCARGA + ADVERTENCIA -->
+      <div class="download-panel-cr">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="fas fa-cube" style="color: var(--cr-orange); font-size: 2rem; filter: drop-shadow(0 0 8px #ff7700);"></i>
+          <h3 style="font-weight: 600; letter-spacing: 2px; color: #ffcfaa;">TEST BUILD</h3>
+        </div>
+        
+        <div class="build-name-cr">
+          <i class="fas fa-file-zipper" style="margin-right: 10px; color: #ff884d;"></i>
+          crDroidAndroid-15.0-20260417-flashlmdd-v11.15.zip
+        </div>
+
+        <!-- ADVERTENCIA EXPLÍCITA (test build) -->
+        <div class="warning-message">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div>
+            <strong style="color: #ff8a7a;">VERSIÓN TEMPRANA EN PRUEBAS</strong><br>
+            Esta compilación es inestable. Puede tener bugs, reinicios o funciones rotas. 
+            Solo para testers y desarrolladores. ¡Haz backup antes de flashear!
+          </div>
+        </div>
+
+        <!-- BOTÓN DESCARGA DIRECTA (archivo zip) -->
+        <a href="https://www.mediafire.com/file/gk9djyp505ajzdy/crDroidAndroid-15.0-20260417-flashlmdd-v11.15.zip/file" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-crdroid">
+          <i class="fas fa-download"></i> DESCARGAR
+          <i class="fas fa-external-link-alt"></i>
+        </a>
+
+        <div style="margin-top: 18px; display: flex; justify-content: center; gap: 12px; color: #e6b38a; font-size: 0.9rem;">
+          <span><i class="far fa-hdd"></i> MediaFire directo</span>
+          <span><i class="fas fa-weight-hanging"></i> ~1.4 GB</span>
+        </div>
+        <div style="margin-top: 12px; font-size: 0.8rem; text-align: center; color: #b08968;">
+          <i class="far fa-clock"></i> 2026-04-17 · crDroid 11.15
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN INFERIOR: instrucciones rápidas -->
+    <div class="cr-footer">
+      <div class="hash-info">
+        <span><i class="fas fa-key"></i> signed: pipecito</span>
+        <span><i class="fas fa-microchip"></i> LG V50 (flashlmdd)</span>
+      </div>
+      <div class="signature-cr">
+        <i class="fas fa-bolt"></i> #crDroid <i class="fas fa-fire"></i> TESTING <i class="fas fa-bolt"></i>
+      </div>
+    </div>
+
+    <!-- NOTA TERMINAL -->
+    <div class="term-note">
+      <i class="fas fa-chevron-right" style="color: #ff7700; margin-right: 12px;"></i>
+      <span style="color: #ffcfb0;">fastboot flash boot boot.img · adb sideload crDroid*.zip</span>
+      <span style="display: block; margin-top: 6px; color: #c99f7a;"><i class="far fa-clipboard"></i> Se requiere desbloqueo de bootloader. Flashea GApps por separado (no incluido).</span>
+    </div>
+  </div>
+
+  <!-- detalles flotantes -->
+  <div style="position: fixed; bottom: 20px; right: 25px; opacity: 0.3; pointer-events: none; z-index: 2;">
+    <i class="fas fa-circle" style="color: #ff5500; font-size: 6px; margin: 0 8px; animation: pulseCr 3s infinite;"></i>
+    <i class="fas fa-circle" style="color: #ffaa00; font-size: 4px; margin: 0 8px; animation: pulseCr 4s infinite reverse;"></i>
+  </div>
+  <style>
+    @keyframes pulseCr {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.7); }
+    }
+  </style>
+</body>
+</html>
