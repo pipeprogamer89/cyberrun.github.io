@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Evolution X · TEST BUILD · LG V50 (flashlmdd)</title>
+  <!-- Fuentes Outfit + Raleway -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Raleway:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --oled-black: #000205;
+      --deep-blue: #021024;
+      --bright-blue: #1e90ff;
+      --neon-cyan: #00e5ff;
+      --electric-blue: #0066ff;
+      --glass-blue: rgba(30, 144, 255, 0.15);
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'Raleway', monospace;
+    }
+
+    body {
+      background-color: var(--oled-black);
+      background-image: 
+        radial-gradient(circle at 30% 30%, rgba(0, 100, 255, 0.06) 0%, transparent 45%),
+        linear-gradient(rgba(0, 160, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 45px 45px, 45px 45px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      color: #d4eaff;
+      padding: 1.8rem;
+      position: relative;
+      animation: bgPulseBlue 8s infinite alternate;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-radial-gradient(circle at 70% 20%, rgba(0,180,255,0.03) 0%, transparent 12%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulseBlue {
+      0% { background-color: #00060f; }
+      100% { background-color: #010a1a; }
+    }
+
+    .evo-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(2, 15, 30, 0.6);
+      border: 1px solid rgba(30, 144, 255, 0.35);
+      border-radius: 40px;
+      padding: 2.5rem 2.5rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(30, 144, 255, 0.2), inset 0 0 60px rgba(0, 100, 255, 0.05);
+      transition: box-shadow 0.3s;
+      animation: floatIn 0.8s ease-out;
+    }
+
+    .evo-container:hover {
+      box-shadow: 0 30px 70px #000, 0 0 0 1.5px var(--bright-blue), inset 0 0 80px rgba(0, 150, 255, 0.1);
+    }
+
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header con logo centrado GRANDE */
+    .logo-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .evo-logo-large {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 30px #1e90ff) brightness(1.2);
+      transition: transform 0.3s, filter 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .evo-logo-large:hover {
+      filter: drop-shadow(0 0 45px #00aaff) brightness(1.4);
+      transform: scale(1.02);
+    }
+
+    .evo-sub {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 10px 0 5px;
+    }
+
+    .test-badge {
+      background: rgba(30, 144, 255, 0.1);
+      border: 1.5px solid var(--bright-blue);
+      border-radius: 60px;
+      padding: 0.3rem 1.6rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #b0e0ff;
+      box-shadow: 0 0 15px #1e90ff;
+      backdrop-filter: blur(5px);
+      letter-spacing: 2px;
+    }
+
+    .maintainer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #aad0ff;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+    }
+
+    /* título Evolution X */
+    .evo-title-main {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 2.8rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      background: linear-gradient(145deg, #c0e4ff, #3ea6ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 30px #0066ff;
+      margin-top: 0px;
+    }
+
+    /* Grid */
+    .evo-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2.5rem;
+      margin: 2rem 0 1.5rem;
+    }
+
+    @media (max-width: 750px) {
+      .evo-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .evo-container { padding: 2rem 1.5rem; }
+      .evo-title-main { font-size: 2.2rem; }
+      .evo-logo-large { width: 130px; height: 130px; }
+    }
+
+    /* Panel info dispositivo */
+    .device-panel-evo {
+      background: rgba(2, 20, 40, 0.45);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(30, 144, 255, 0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 35px #000000b3, 0 12px 30px -8px #000;
+    }
+
+    .device-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.8rem;
+    }
+
+    .device-header i {
+      font-size: 2.5rem;
+      color: var(--bright-blue);
+      filter: drop-shadow(0 0 15px #1e90ff);
+    }
+
+    .device-name-evo {
+      font-size: 2.1rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #d0e8ff, #7abfff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .codename-evo {
+      font-family: var(--font-mono);
+      color: var(--neon-cyan);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      border-left: 4px solid var(--bright-blue);
+      padding-left: 15px;
+      margin: 8px 0 25px;
+    }
+
+    .spec-item {
+      display: flex;
+      margin: 16px 0;
+      font-family: var(--font-mono);
+      border-bottom: 1px dotted #1a4a7a;
+      padding-bottom: 10px;
+    }
+
+    .spec-label-evo {
+      width: 110px;
+      color: #8fb6d5;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .spec-value-evo {
+      font-weight: 600;
+      color: #e2f0ff;
+    }
+
+    .highlight-evo {
+      color: #a0d0ff;
+      text-shadow: 0 0 6px #0088ff;
+    }
+
+    /* Panel descarga */
+    .download-panel-evo {
+      background: rgba(5, 25, 45, 0.55);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1.5px solid var(--bright-blue);
+      box-shadow: 0 0 40px #1e90ff22, inset 0 0 40px #000000;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      transition: 0.25s;
+    }
+
+    .download-panel-evo:hover {
+      border-color: #80c0ff;
+      box-shadow: 0 0 55px #1e90ff55, inset 0 0 40px #000;
+    }
+
+    .build-name-evo {
+      font-family: 'Raleway', monospace;
+      background: #0a1a2a;
+      padding: 1rem 1.2rem;
+      border-radius: 24px;
+      border: 1px solid #1e6fbf;
+      color: #c0e0ff;
+      font-size: 1.05rem;
+      word-break: break-word;
+      margin: 1.5rem 0;
+      text-align: center;
+      box-shadow: inset 0 0 20px #000, 0 2px 0 #0066cc;
+    }
+
+    .btn-evo {
+      background: transparent;
+      border: 2.5px solid var(--bright-blue);
+      color: #b0daff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      padding: 1.2rem 0.5rem;
+      border-radius: 70px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      backdrop-filter: blur(12px);
+      background: rgba(0, 40, 80, 0.4);
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px #1e90ffaa, inset 0 0 12px #1e90ff33;
+      margin-top: 15px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-evo i {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px #0088ff);
+    }
+
+    .btn-evo:hover {
+      background: var(--bright-blue);
+      color: #000c1a;
+      box-shadow: 0 0 60px #1e90ff, 0 0 100px #0077ff;
+      border-color: #ffffff;
+      transform: scale(1.02);
+      letter-spacing: 7px;
+    }
+
+    .btn-evo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(200,225,255,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: rotate(30deg);
+    }
+
+    .btn-evo:hover::after {
+      opacity: 0.25;
+    }
+
+    .vanilla-note {
+      background: rgba(30, 144, 255, 0.08);
+      border: 1px solid #1e6fbf;
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0 0.5rem;
+      color: #c0e0ff;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    .warning-message {
+      background: rgba(230, 57, 70, 0.08);
+      border: 1px solid #e63946;
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0 0.5rem;
+      color: #ffbcb0;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    /* Footer */
+    .evo-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      border-top: 1px dashed #1e6fbf;
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .hash-info {
+      color: #8fb6d5;
+      display: flex;
+      gap: 25px;
+    }
+
+    .signature-evo {
+      color: var(--bright-blue);
+      font-weight: 600;
+      text-shadow: 0 0 8px #0066ff;
+    }
+
+    .cursor-evo {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><polygon points="4,4 24,4 22,14 14,18 12,28 8,22 4,20" fill="none" stroke="%231e90ff" stroke-width="1.8"/><circle cx="10" cy="10" r="3" fill="%230088ff" opacity="0.6"/></svg>') 8 8, crosshair;
+    }
+
+    .term-note {
+      margin-top: 30px;
+      background: #021220;
+      border-radius: 18px;
+      padding: 1rem 1.8rem;
+      border-left: 6px solid var(--bright-blue);
+      font-family: 'Raleway';
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body class="cursor-evo">
+  <div class="evo-container">
+    
+    <!-- LOGO CENTRADO GRANDE (Evolution X) -->
+    <div class="logo-hero">
+      <img class="evo-logo-large" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQorvAih4efkwzxF_t_AdO9my_qOZB4LSp08g&s" alt="Evolution X Logo">
+      <div class="evo-sub">
+        <span class="test-badge"><i class="fas fa-flask" style="margin-right: 8px;"></i>PRIMER BUILD · TEST</span>
+        <div class="maintainer-badge">
+          <i class="fas fa-user-ninja"></i>
+          <span>pipecitooficial</span>
+        </div>
+      </div>
+      <div class="evo-title-main">Evolution X</div>
+    </div>
+
+    <!-- GRID PRINCIPAL -->
+    <div class="evo-grid">
+      <!-- PANEL IZQUIERDO: DISPOSITIVO Y ESPECIFICACIONES -->
+      <div class="device-panel-evo">
+        <div class="device-header">
+          <i class="fas fa-microchip"></i>
+          <span class="device-name-evo">LG V50 ThinQ</span>
+        </div>
+        <div class="codename-evo">
+          <i class="fas fa-terminal"></i> flashlmdd · 5G
+        </div>
+        
+        <div class="spec-item">
+          <span class="spec-label-evo">ROM</span>
+          <span class="spec-value-evo highlight-evo">Evolution X 10.16</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-evo">ANDROID</span>
+          <span class="spec-value-evo">15 (Vanilla)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-evo">BUILD DATE</span>
+          <span class="spec-value-evo"><i class="far fa-calendar-alt" style="margin-right: 8px;"></i>2026-04-20</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-evo">VARIANT</span>
+          <span class="spec-value-evo">Vanilla · Unofficial</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-evo">STATUS</span>
+          <span class="spec-value-evo" style="color: #ffbb88; text-shadow: 0 0 5px #ffaa33;">⚠️ EXPERIMENTAL</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-evo">MAINTAINER</span>
+          <span class="spec-value-evo">pipecitooficial</span>
+        </div>
+        <div style="margin-top: 25px; display: flex; gap: 20px; color: #9ac0e0;">
+          <i class="fas fa-shield"></i> <span>SELinux Enforcing</span>
+          <i class="fas fa-code-branch"></i> <span>Kernel 4.14</span>
+        </div>
+        <div style="margin-top: 18px; font-size: 0.85rem; background: #0a1a2a; border-radius: 16px; padding: 10px 15px; color: #b5d5f5;">
+          <i class="fas fa-info-circle" style="margin-right: 8px; color: var(--bright-blue);"></i>
+          Primer build de prueba. Puede contener fallos. Reporta bugs en el grupo de Telegram.
+        </div>
+      </div>
+
+      <!-- PANEL DERECHO: DESCARGA + ADVERTENCIAS -->
+      <div class="download-panel-evo">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="fas fa-box-open" style="color: var(--bright-blue); font-size: 2rem; filter: drop-shadow(0 0 10px #1e90ff);"></i>
+          <h3 style="font-weight: 600; letter-spacing: 2px; color: #c0dfff;">DESCARGA</h3>
+        </div>
+        
+        <div class="build-name-evo">
+          <i class="fas fa-file-archive" style="margin-right: 10px; color: #1e90ff;"></i>
+          EvolutionX-15.0-20260420-flashlmdd-10.16-Vanilla-Unofficial
+        </div>
+
+        <!-- ADVERTENCIA EXPERIMENTAL -->
+        <div class="warning-message">
+          <i class="fas fa-exclamation-triangle" style="color: #ff7777;"></i>
+          <div>
+            <strong style="color: #ffaa99;">BUILD EXPERIMENTAL · USO TEMPRANO</strong><br>
+            Primera compilación de Evolution X para flashlmdd. Inestabilidad esperada. Haz backup completo.
+          </div>
+        </div>
+
+        <!-- NOTA VANILLA + GAPPS -->
+        <div class="vanilla-note">
+          <i class="fas fa-cube" style="color: #3ea6ff;"></i>
+          <div>
+            <strong>Build Vanilla · sin GApps</strong><br>
+            Para mayor libertad del usuario. Si necesitas Google Apps, flashea el paquete desde el recovery (Apply Update) vía ADB sideload o desde microSD.
+          </div>
+        </div>
+
+        <!-- BOTÓN DESCARGA (carpeta MediaFire) -->
+        <a href="https://www.mediafire.com/folder/un4bd97ixkbwc/EvolutionX" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-evo">
+          <i class="fas fa-download"></i> DESCARGAR
+          <i class="fas fa-folder-open"></i>
+        </a>
+
+        <div style="margin-top: 18px; display: flex; justify-content: center; gap: 15px; color: #b0d0f0; font-size: 0.9rem;">
+          <span><i class="fas fa-cloud"></i> MediaFire folder</span>
+          <span><i class="fas fa-hdd"></i> ROM + boot.img</span>
+        </div>
+        <div style="margin-top: 10px; font-size: 0.8rem; text-align: center; color: #8fb6d5;">
+          <i class="far fa-clock"></i> 2026-04-20 · Evolution X 10.16
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="evo-footer">
+      <div class="hash-info">
+        <span><i class="fas fa-key"></i> signed: pipecito</span>
+        <span><i class="fas fa-microchip"></i> LG V50 (flashlmdd)</span>
+      </div>
+      <div class="signature-evo">
+        <i class="fas fa-bolt"></i> #EvolutionX <i class="fas fa-dragon"></i> TEST <i class="fas fa-bolt"></i>
+      </div>
+    </div>
+
+    <!-- INSTRUCCIONES RÁPIDAS (terminal) -->
+    <div class="term-note">
+      <i class="fas fa-chevron-right" style="color: #1e90ff; margin-right: 12px;"></i>
+      <span style="color: #c0dfff;">fastboot flash boot boot.img · adb sideload EvolutionX*.zip</span>
+      <span style="display: block; margin-top: 6px; color: #9ac0e0;"><i class="far fa-clipboard"></i> GApps: descarga aparte y flashea tras la ROM (recovery > Apply Update).</span>
+    </div>
+  </div>
+
+  <!-- Detalles flotantes -->
+  <div style="position: fixed; bottom: 20px; right: 25px; opacity: 0.25; pointer-events: none; z-index: 2;">
+    <i class="fas fa-circle" style="color: #1e90ff; font-size: 6px; margin: 0 8px; animation: pulseBlue 3s infinite;"></i>
+    <i class="fas fa-circle" style="color: #00aaff; font-size: 4px; margin: 0 8px; animation: pulseBlue 4s infinite reverse;"></i>
+  </div>
+  <style>
+    @keyframes pulseBlue {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.7); }
+    }
+  </style>
+</body>
+</html>
