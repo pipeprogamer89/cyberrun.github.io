@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bliss ROM · TEST BUILD · LG V50 (flashlmdd)</title>
+  <!-- Fuentes Outfit + Raleway -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Raleway:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --oled-black: #000003;
+      --deep-purple: #0b0015;
+      --bliss-purple: #b366ff;
+      --bliss-magenta: #cc33ff;
+      --cyber-cyan: #00f0ff;
+      --neon-pink: #ff55bb;
+      --glass-bliss: rgba(179, 102, 255, 0.15);
+      --font-display: 'Outfit', sans-serif;
+      --font-mono: 'Raleway', monospace;
+    }
+
+    body {
+      background-color: var(--oled-black);
+      background-image: 
+        radial-gradient(circle at 30% 40%, rgba(179, 102, 255, 0.05) 0%, transparent 45%),
+        linear-gradient(rgba(200, 100, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 45px 45px, 45px 45px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      color: #eeddff;
+      padding: 1.8rem;
+      position: relative;
+      animation: bgPulseBliss 8s infinite alternate;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: repeating-radial-gradient(circle at 70% 20%, rgba(179,102,255,0.03) 0%, transparent 12%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulseBliss {
+      0% { background-color: #000008; }
+      100% { background-color: #030012; }
+    }
+
+    .bliss-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(15, 5, 30, 0.6);
+      border: 1px solid rgba(179, 102, 255, 0.35);
+      border-radius: 40px;
+      padding: 2.5rem 2.5rem;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.9), 0 0 0 1px rgba(179, 102, 255, 0.2), inset 0 0 60px rgba(140, 60, 255, 0.05);
+      transition: box-shadow 0.3s;
+      animation: floatIn 0.8s ease-out;
+    }
+
+    .bliss-container:hover {
+      box-shadow: 0 30px 70px #000, 0 0 0 1.5px var(--bliss-purple), inset 0 0 80px rgba(179, 102, 255, 0.1);
+    }
+
+    @keyframes floatIn {
+      0% { opacity: 0; transform: translateY(30px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Logo centrado grande */
+    .logo-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .bliss-logo-large {
+      width: 160px;
+      height: 160px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 35px #b366ff) brightness(1.2);
+      transition: transform 0.3s, filter 0.3s;
+      margin-bottom: 10px;
+    }
+
+    .bliss-logo-large:hover {
+      filter: drop-shadow(0 0 50px #cc66ff) brightness(1.4);
+      transform: scale(1.03);
+    }
+
+    .bliss-sub {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 10px 0 5px;
+    }
+
+    .test-badge {
+      background: rgba(179, 102, 255, 0.1);
+      border: 1.5px solid var(--bliss-purple);
+      border-radius: 60px;
+      padding: 0.3rem 1.6rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1rem;
+      color: #d9b3ff;
+      box-shadow: 0 0 15px #b366ff;
+      backdrop-filter: blur(5px);
+      letter-spacing: 2px;
+    }
+
+    .maintainer-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #d0b0ff;
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+    }
+
+    .bliss-title-main {
+      font-family: var(--font-display);
+      font-weight: 900;
+      font-size: 3rem;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      background: linear-gradient(145deg, #e0c8ff, #b366ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 35px #b366ff;
+      margin-top: 5px;
+    }
+
+    /* Grid */
+    .bliss-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2.5rem;
+      margin: 2rem 0 1.5rem;
+    }
+
+    @media (max-width: 750px) {
+      .bliss-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .bliss-container { padding: 2rem 1.5rem; }
+      .bliss-title-main { font-size: 2.2rem; }
+      .bliss-logo-large { width: 130px; height: 130px; }
+    }
+
+    /* Panel info dispositivo */
+    .device-panel-bliss {
+      background: rgba(15, 5, 35, 0.45);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1px solid rgba(179, 102, 255, 0.25);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 0 35px #000000b3, 0 12px 30px -8px #000;
+    }
+
+    .device-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.8rem;
+    }
+
+    .device-header i {
+      font-size: 2.5rem;
+      color: var(--bliss-purple);
+      filter: drop-shadow(0 0 15px #b366ff);
+    }
+
+    .device-name-bliss {
+      font-size: 2.1rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #e8d5ff, #bf80ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .codename-bliss {
+      font-family: var(--font-mono);
+      color: var(--cyber-cyan);
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      border-left: 4px solid var(--bliss-purple);
+      padding-left: 15px;
+      margin: 8px 0 25px;
+    }
+
+    .spec-item {
+      display: flex;
+      margin: 16px 0;
+      font-family: var(--font-mono);
+      border-bottom: 1px dotted #4a2a6a;
+      padding-bottom: 10px;
+    }
+
+    .spec-label-bliss {
+      width: 110px;
+      color: #b699d5;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .spec-value-bliss {
+      font-weight: 600;
+      color: #f0ddff;
+    }
+
+    .highlight-bliss {
+      color: #d6b3ff;
+      text-shadow: 0 0 6px #b366ff;
+    }
+
+    /* Panel descarga */
+    .download-panel-bliss {
+      background: rgba(8, 2, 20, 0.55);
+      border-radius: 32px;
+      padding: 2rem 1.8rem;
+      border: 1.5px solid var(--bliss-purple);
+      box-shadow: 0 0 40px #b366ff22, inset 0 0 40px #000000;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      transition: 0.25s;
+    }
+
+    .download-panel-bliss:hover {
+      border-color: #d9b3ff;
+      box-shadow: 0 0 55px #b366ff55, inset 0 0 40px #000;
+    }
+
+    .build-name-bliss {
+      font-family: 'Raleway', monospace;
+      background: #1a0a2e;
+      padding: 1rem 1.2rem;
+      border-radius: 24px;
+      border: 1px solid #7a4aaa;
+      color: #e0c8ff;
+      font-size: 1.05rem;
+      word-break: break-word;
+      margin: 1.5rem 0;
+      text-align: center;
+      box-shadow: inset 0 0 20px #000, 0 2px 0 #8833cc;
+    }
+
+    .btn-bliss {
+      background: transparent;
+      border: 2.5px solid var(--bliss-purple);
+      color: #d9b3ff;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 2rem;
+      padding: 1.2rem 0.5rem;
+      border-radius: 70px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      backdrop-filter: blur(12px);
+      background: rgba(40, 10, 60, 0.4);
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px #b366ffaa, inset 0 0 12px #b366ff33;
+      margin-top: 15px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-bliss i {
+      font-size: 2rem;
+      filter: drop-shadow(0 0 10px #b366ff);
+    }
+
+    .btn-bliss:hover {
+      background: var(--bliss-purple);
+      color: #0b0015;
+      box-shadow: 0 0 60px #b366ff, 0 0 100px #aa44ff;
+      border-color: #ffffff;
+      transform: scale(1.02);
+      letter-spacing: 7px;
+    }
+
+    .btn-bliss::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(230,200,255,0.4) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      transform: rotate(30deg);
+    }
+
+    .btn-bliss:hover::after {
+      opacity: 0.25;
+    }
+
+    .vanilla-note {
+      background: rgba(179, 102, 255, 0.08);
+      border: 1px solid #7a4aaa;
+      border-radius: 20px;
+      padding: 1rem 1.2rem;
+      margin: 1.2rem 0 0.5rem;
+      color: #e0c8ff;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      backdrop-filter: blur(4px);
+    }
+
+    .warning-message {
+      background: rgba(230, 57, 70, 0.08);
+      border: 1px solid #e63946;
+      border-radius: 20px;
+      padding: 0.9rem 1.2rem;
+      margin: 1rem 0 0.5rem;
+      color: #ffbcb0;
+      font-family: var(--font-mono);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    /* Footer */
+    .bliss-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      border-top: 1px dashed #7a4aaa;
+      padding-top: 1.5rem;
+      font-family: var(--font-mono);
+    }
+
+    .hash-info {
+      color: #b699d5;
+      display: flex;
+      gap: 25px;
+    }
+
+    .signature-bliss {
+      color: var(--bliss-purple);
+      font-weight: 600;
+      text-shadow: 0 0 8px #b366ff;
+    }
+
+    .cursor-bliss {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="30" viewBox="0 0 26 30"><polygon points="4,4 24,4 22,14 14,18 12,28 8,22 4,20" fill="none" stroke="%23b366ff" stroke-width="1.8"/><circle cx="10" cy="10" r="3" fill="%23aa44ff" opacity="0.6"/></svg>') 8 8, crosshair;
+    }
+
+    .term-note {
+      margin-top: 30px;
+      background: #0b0018;
+      border-radius: 18px;
+      padding: 1rem 1.8rem;
+      border-left: 6px solid var(--bliss-purple);
+      font-family: 'Raleway';
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body class="cursor-bliss">
+  <div class="bliss-container">
+    
+    <!-- LOGO CENTRADO GRANDE (Bliss ROM) -->
+    <div class="logo-hero">
+      <img class="bliss-logo-large" src="https://avatars.githubusercontent.com/u/16156670?s=200&v=4" alt="Bliss ROM Logo">
+      <div class="bliss-sub">
+        <span class="test-badge"><i class="fas fa-flask" style="margin-right: 8px;"></i>PRIMER BUILD · TEST</span>
+        <div class="maintainer-badge">
+          <i class="fas fa-user-ninja"></i>
+          <span>pipecitooficial</span>
+        </div>
+      </div>
+      <div class="bliss-title-main">Bliss ROM</div>
+    </div>
+
+    <!-- GRID PRINCIPAL -->
+    <div class="bliss-grid">
+      <!-- PANEL IZQUIERDO: DISPOSITIVO Y ESPECIFICACIONES -->
+      <div class="device-panel-bliss">
+        <div class="device-header">
+          <i class="fas fa-microchip"></i>
+          <span class="device-name-bliss">LG V50 ThinQ</span>
+        </div>
+        <div class="codename-bliss">
+          <i class="fas fa-terminal"></i> flashlmdd · 5G
+        </div>
+        
+        <div class="spec-item">
+          <span class="spec-label-bliss">ROM</span>
+          <span class="spec-value-bliss highlight-bliss">Bliss v18.5</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-bliss">ANDROID</span>
+          <span class="spec-value-bliss">15 (Vanilla)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-bliss">BUILD DATE</span>
+          <span class="spec-value-bliss"><i class="far fa-calendar-alt" style="margin-right: 8px;"></i>2026-04-25</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-bliss">VARIANT</span>
+          <span class="spec-value-bliss">Vanilla · UNOFFICIAL</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-bliss">STATUS</span>
+          <span class="spec-value-bliss" style="color: #ffbb88; text-shadow: 0 0 5px #ffaa33;">⚠️ EXPERIMENTAL</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label-bliss">MAINTAINER</span>
+          <span class="spec-value-bliss">pipecitooficial</span>
+        </div>
+        <div style="margin-top: 25px; display: flex; gap: 20px; color: #c0aadd;">
+          <i class="fas fa-shield"></i> <span>SELinux Enforcing</span>
+          <i class="fas fa-code-branch"></i> <span>Kernel 4.14</span>
+        </div>
+        <div style="margin-top: 18px; font-size: 0.85rem; background: #1a0a2e; border-radius: 16px; padding: 10px 15px; color: #d4b8f0;">
+          <i class="fas fa-info-circle" style="margin-right: 8px; color: var(--bliss-purple);"></i>
+          Primera build de prueba. Reporta bugs en el grupo de Telegram.
+        </div>
+      </div>
+
+      <!-- PANEL DERECHO: DESCARGA + ADVERTENCIAS -->
+      <div class="download-panel-bliss">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="fas fa-box-open" style="color: var(--bliss-purple); font-size: 2rem; filter: drop-shadow(0 0 10px #b366ff);"></i>
+          <h3 style="font-weight: 600; letter-spacing: 2px; color: #e0c8ff;">DESCARGA</h3>
+        </div>
+        
+        <div class="build-name-bliss">
+          <i class="fas fa-file-archive" style="margin-right: 10px; color: #b366ff;"></i>
+          Bliss-v18.5-flashlmdd-UNOFFICIAL-vanilla-20260425
+        </div>
+
+        <!-- ADVERTENCIA EXPERIMENTAL -->
+        <div class="warning-message">
+          <i class="fas fa-exclamation-triangle" style="color: #ff7777;"></i>
+          <div>
+            <strong style="color: #ffaa99;">PRIMERA VERSIÓN · USO TEMPRANO</strong><br>
+            Build experimental de Bliss ROM para flashlmdd. Inestabilidad esperada. Realiza backup completo antes de flashear.
+          </div>
+        </div>
+
+        <!-- NOTA VANILLA -->
+        <div class="vanilla-note">
+          <i class="fas fa-cube" style="color: #b366ff;"></i>
+          <div>
+            <strong>Build Vanilla</strong><br>
+            Sin GApps incluidos. Si deseas Google Apps, flashea el paquete después de la ROM desde el recovery.
+          </div>
+        </div>
+
+        <!-- BOTÓN DESCARGA (archivo directo) -->
+        <a href="https://www.mediafire.com/file/rgymk9wp030957n/Bliss-v18.5-flashlmdd-UNOFFICIAL-vanilla-20260425.zip/file" 
+           target="_blank" 
+           rel="noopener noreferrer" 
+           class="btn-bliss">
+          <i class="fas fa-download"></i> DESCARGAR
+          <i class="fas fa-file-zipper"></i>
+        </a>
+
+        <div style="margin-top: 18px; display: flex; justify-content: center; gap: 15px; color: #d0b8f0; font-size: 0.9rem;">
+          <span><i class="fas fa-cloud"></i> MediaFire directo</span>
+          <span><i class="fas fa-hdd"></i> ROM .zip</span>
+        </div>
+        <div style="margin-top: 10px; font-size: 0.8rem; text-align: center; color: #b699d5;">
+          <i class="far fa-clock"></i> 2026-04-25 · Bliss v18.5
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="bliss-footer">
+      <div class="hash-info">
+        <span><i class="fas fa-key"></i> signed: pipecito</span>
+        <span><i class="fas fa-microchip"></i> LG V50 (flashlmdd)</span>
+      </div>
+      <div class="signature-bliss">
+        <i class="fas fa-bolt"></i> #BlissROM <i class="fas fa-feather"></i> TEST <i class="fas fa-bolt"></i>
+      </div>
+    </div>
+
+    <!-- INSTRUCCIONES RÁPIDAS (terminal) -->
+    <div class="term-note">
+      <i class="fas fa-chevron-right" style="color: #b366ff; margin-right: 12px;"></i>
+      <span style="color: #e0c8ff;">fastboot flash boot boot.img · adb sideload Bliss*.zip</span>
+      <span style="display: block; margin-top: 6px; color: #c0aadd;"><i class="far fa-clipboard"></i> GApps: descarga aparte y flashea tras la ROM (recovery > Apply Update).</span>
+    </div>
+  </div>
+
+  <!-- Detalles flotantes -->
+  <div style="position: fixed; bottom: 20px; right: 25px; opacity: 0.25; pointer-events: none; z-index: 2;">
+    <i class="fas fa-circle" style="color: #b366ff; font-size: 6px; margin: 0 8px; animation: pulseBliss 3s infinite;"></i>
+    <i class="fas fa-circle" style="color: #cc66ff; font-size: 4px; margin: 0 8px; animation: pulseBliss 4s infinite reverse;"></i>
+  </div>
+  <style>
+    @keyframes pulseBliss {
+      0%,100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.7); }
+    }
+  </style>
+</body>
+</html>
