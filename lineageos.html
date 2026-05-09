@@ -387,6 +387,25 @@
       border-color: #fff0c0;
     }
 
+    .new-update-badge {
+      background: rgba(0, 255, 100, 0.1);
+      border: 1px solid #00ff88;
+      border-radius: 30px;
+      padding: 0.2rem 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: #a0ffc0;
+      box-shadow: 0 0 8px #00ff88;
+      backdrop-filter: blur(5px);
+      letter-spacing: 1px;
+      animation: pulseNew 2s infinite;
+    }
+
+    @keyframes pulseNew {
+      0%,100% { box-shadow: 0 0 8px #00ff88; }
+      50% { box-shadow: 0 0 20px #00ffaa, 0 0 35px #00ff8855; }
+    }
+
     .repo-footer {
       display: flex;
       justify-content: space-between;
@@ -411,7 +430,6 @@
       text-shadow: 0 0 5px #b44cff;
     }
 
-    /* cursor personalizado */
     .cursor-glow {
       cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="28" viewBox="0 0 24 28"><circle cx="12" cy="12" r="10" fill="none" stroke="%2300f0ff" stroke-width="1.5" /><line x1="12" y1="2" x2="12" y2="8" stroke="%2300ffc3" stroke-width="2"/><line x1="12" y1="16" x2="12" y2="22" stroke="%2300ffc3" stroke-width="2"/><line x1="2" y1="12" x2="8" y2="12" stroke="%2300ffc3" stroke-width="2"/><line x1="16" y1="12" x2="22" y2="12" stroke="%2300ffc3" stroke-width="2"/></svg>') 12 12, crosshair;
     }
@@ -501,14 +519,15 @@
       </div>
     </div>
 
-    <!-- SEPARADOR + TÍTULO EXPERIMENTAL -->
-    <div style="margin: 2.5rem 0 0.5rem; display: flex; align-items: center; gap: 15px;">
+    <!-- SEPARADOR + TÍTULO EXPERIMENTAL 22.2 -->
+    <div style="margin: 2.5rem 0 0.5rem; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
       <i class="fas fa-flask" style="color: #ffaa33; font-size: 2rem; filter: drop-shadow(0 0 6px #ff9900);"></i>
       <h2 style="font-family: Outfit; font-weight: 600; color: #ffcc99; text-shadow: 0 0 8px #ff7700;">LineageOS 22.2 · EXPERIMENTAL</h2>
       <span style="background: #552200; color: #ffaa33; padding: 4px 14px; border-radius: 30px; font-size: 0.8rem; border: 1px solid #ffaa33; letter-spacing: 1px;">UNSTABLE</span>
+      <span class="new-update-badge"><i class="fas fa-star" style="margin-right: 6px;"></i>NUEVA ACTUALIZACIÓN</span>
     </div>
 
-    <!-- BUILD EXPERIMENTAL 22.2 -->
+    <!-- BUILD EXPERIMENTAL 22.2 (ACTUALIZADO 2026-05-09) -->
     <div class="exp-grid">
       <div class="device-panel" style="border-left: 3px solid #ff8800;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 1.2rem;">
@@ -528,7 +547,11 @@
         </div>
         <div class="spec-row">
           <span class="spec-label">BUILD</span>
-          <span class="spec-value"><i class="far fa-calendar-alt"></i> 2026-04-17</span>
+          <span class="spec-value"><i class="far fa-calendar-alt"></i> 2026-05-09</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">PARCHE</span>
+          <span class="spec-value" style="color: #ffcc88;">Mayo 2026</span>
         </div>
         <div class="spec-row">
           <span class="spec-label">MAINTAINER</span>
@@ -536,21 +559,21 @@
         </div>
         <div class="spec-row">
           <span class="spec-label">ESTADO</span>
-          <span class="spec-value" style="color: #ff9966; text-shadow: 0 0 5px #ff5500;">⚠️ EXPERIMENTAL</span>
+          <span class="spec-value" style="color: #ff9966; text-shadow: 0 0 5px #ff5500;">⚠️ EXPERIMENTAL · NUEVA ACTUALIZACIÓN</span>
         </div>
         <div style="margin-top: 15px; color: #bbccff; font-size: 0.85rem;">
-          <i class="fas fa-info-circle"></i> Basado en Android 15 · ramdisk modificado
+          <i class="fas fa-shield-alt"></i> Parches de seguridad de mayo · ramdisk modificado
         </div>
       </div>
 
       <div class="download-panel" style="border-color: #ff8c00;">
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
           <i class="fas fa-skull" style="color: #ff884d;"></i>
-          <span style="font-weight: 500; color: #ffd29e;">BUILD EXPERIMENTAL</span>
+          <span style="font-weight: 500; color: #ffd29e;">NUEVA ACTUALIZACIÓN · MAYO 2026</span>
         </div>
         <div class="build-filename" style="background: #1a140a; border-color: #b85e00; color: #ffdead;">
           <i class="fas fa-file-code" style="margin-right: 8px; color: #ff9933;"></i>
-          lineage-22.2-20260417-UNOFFICIAL-flashlmdd
+          lineage-22.2-20260509-UNOFFICIAL-flashlmdd
         </div>
 
         <!-- ADVERTENCIA EXPLÍCITA -->
@@ -559,7 +582,7 @@
           <span><strong>Experimental:</strong> puede contener bugs, inestabilidad o funciones rotas. No se recomienda como daily driver. Flashea bajo tu propio riesgo.</span>
         </div>
 
-        <a href="https://www.mediafire.com/folder/aqqrc4rji5k0b/lineage-22.2-20260417-UNOFFICIAL-flashlmdd" target="_blank" rel="noopener noreferrer" class="btn-download exp">
+        <a href="https://www.mediafire.com/folder/tpl0c0j9wq3ve/lineage-22.2-20260509-UNOFFICIAL-flashlmdd" target="_blank" rel="noopener noreferrer" class="btn-download exp">
           <i class="fas fa-download"></i> DESCARGAR 22.2
           <i class="fas fa-external-link-alt"></i>
         </a>
@@ -568,7 +591,7 @@
           <span>MediaFire · experimental build</span>
         </div>
         <div style="margin-top: 8px; font-size: 0.75rem; opacity: 0.8; text-align: center; color: #bbaa99;">
-          <i class="far fa-clock"></i> 2026-04-17 · lineage-22.2
+          <i class="far fa-clock"></i> 2026-05-09 · lineage-22.2
         </div>
       </div>
     </div>
